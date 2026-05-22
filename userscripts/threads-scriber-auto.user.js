@@ -1729,7 +1729,7 @@
       }
     },
 
-    async unsaveSelected() {
+    async unsaveSelected({ skipConfirm = false } = {}) {
       if (state.aiHighlightsActive) {
         this.syncHighlights();
         const addedHighlightedCount = this.addHighlightedEntriesToSelection();
@@ -1749,11 +1749,13 @@
       }
 
       const selectedCount = state.selectedAiKeys.size;
-      const confirmed = window.confirm(
-        `即將自動從頁面頂部往下巡覽，取消儲存 ${selectedCount} 篇已選取貼文。\nThreads 頁面通常不會立即反映結果，腳本會把已點擊的貼文標記為待重新整理確認。是否繼續？`
-      );
-      if (!confirmed) {
-        return;
+      if (!skipConfirm) {
+        const confirmed = window.confirm(
+          `即將自動從頁面頂部往下巡覽，取消儲存 ${selectedCount} 篇已選取貼文。\nThreads 頁面通常不會立即反映結果，腳本會把已點擊的貼文標記為待重新整理確認。是否繼續？`
+        );
+        if (!confirmed) {
+          return;
+        }
       }
 
       setError("");
@@ -3717,7 +3719,7 @@
         console.info("[crawl-the-threads] auto-unsave starting:", {
           selectedCount: state.selectedAiKeys.size,
         });
-        await AiReviewUtils.unsaveSelected();
+        await AiReviewUtils.unsaveSelected({ skipConfirm: true });
         console.info("[crawl-the-threads] auto-unsave finished:", {
           verified: state.unsaveVerifiedKeys.size,
           attempted: state.unsaveAttemptedKeys.size,
