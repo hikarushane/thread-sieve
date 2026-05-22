@@ -22,10 +22,10 @@ SAMPLE_POSTS = [
 ALL_CATEGORIES = ["AI", "科技", "Claude Code", "美食", "好笑的", "LingOrm", "職場", "心理健康"]
 
 
-def make_config(ai_categories: set[str] | None = None) -> mod.ClassifyConfig:
+def make_config(unsaved_categories: set[str] | None = None) -> mod.ClassifyConfig:
     return mod.ClassifyConfig(
         categories=ALL_CATEGORIES,
-        ai_categories=ai_categories if ai_categories is not None else {"AI", "科技"},
+        unsaved_categories=unsaved_categories if unsaved_categories is not None else {"AI", "科技"},
         hints=[],
     )
 
@@ -115,7 +115,7 @@ def test_classifier_exception_marks_failed():
     assert payload["items"] == []
 
 
-def test_custom_ai_categories():
+def test_custom_unsaved_categories():
     config = make_config({"美食"})
     client = make_client({"p_ai": "AI", "p_tech": "科技", "p_food": "美食"})
     classified = [
@@ -142,14 +142,14 @@ def test_load_config(tmp_path):
     cfg_file.write_text(
         json.dumps({
             "categories": ["AI", "美食"],
-            "ai_categories": ["AI"],
+            "unsaved-categories": ["AI"],
             "hints": ["some hint"],
         }),
         encoding="utf-8",
     )
     config = mod.load_config(cfg_file)
     assert config.categories == ["AI", "美食"]
-    assert config.ai_categories == {"AI"}
+    assert config.unsaved_categories == {"AI"}
     assert config.hints == ["some hint"]
     assert config.category_set == {"AI", "美食"}
     assert config.canonical_by_casefold == {"ai": "AI", "美食": "美食"}

@@ -25,7 +25,7 @@ DEFAULT_CONFIG_PATH = "classify_config.json"
 @dataclass
 class ClassifyConfig:
     categories: list[str]
-    ai_categories: set[str]
+    unsaved_categories: set[str]
     hints: list[str]
     category_set: set[str] = field(init=False, repr=False)
     canonical_by_casefold: dict[str, str] = field(init=False, repr=False)
@@ -49,7 +49,7 @@ def load_config(path: Path) -> ClassifyConfig:
     data = json.loads(path.read_text(encoding="utf-8"))
     return ClassifyConfig(
         categories=data["categories"],
-        ai_categories=set(data.get("ai_categories", [])),
+        unsaved_categories=set(data.get("unsaved-categories", [])),
         hints=data.get("hints", []),
     )
 
@@ -152,7 +152,7 @@ def classify_post(
             "",
         )
 
-    decision = "ai" if category in config.ai_categories else "not_ai"
+    decision = "ai" if category in config.unsaved_categories else "not_ai"
     return (
         ClassifiedItem(
             post_id=post_id,
@@ -205,7 +205,7 @@ def build_output_payload(
         "sourceFile": source_file,
         "generatedAt": timestamp(),
         "backend": f"crawl-the-threads/category_classifier ({model})",
-        "aiCategories": sorted(config.ai_categories),
+        "unsavedCategories": sorted(config.unsaved_categories),
         "summary": {
             "total": len(posts),
             "ai": ai_count,
@@ -232,7 +232,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", default=None)
     parser.add_argument("--model", default=None)
     parser.add_argument("--api-key", default="")
-    parser.add_argument("--ai-categories", default=None, help="override config ai_categories (comma-separated)")
+    parser.add_argument("--unsaved-categories", default=None, help="override config unsaved-categories (comma-separated)")
     parser.add_argument("--config", default=None, help=f"path to classify_config.json (default: {DEFAULT_CONFIG_PATH})")
     parser.add_argument("--env-file", default=".env")
     return parser.parse_args()
@@ -257,8 +257,8 @@ def main() -> int:
         return 2
     config = load_config(config_path)
 
-    if args.ai_categories and args.ai_categories.strip():
-        config.ai_categories = {t.strip() for t in args.ai_categories.split(",") if t.strip()}
+    if args.unsaved_categories and args.unsaved_categories.strip():
+        config.unsaved_categories = {t.strip() for t in args.unsaved_categories.split(",") if t.strip()}
 
     input_path = Path(args.input or os.environ.get("SCRIBE_PATH", "data/scribe.json"))
     output_path = Path(args.output or os.environ.get("SCRIBE_AI_PATH", "data/scribe-ai.json"))

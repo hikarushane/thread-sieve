@@ -19,7 +19,7 @@
     "AI",
     "Threads"
   ],
-  "ai_categories": ["AI", "科技", "Claude Code"],
+  "unsaved-categories": ["AI", "科技", "Claude Code"],
   "hints": [
     "LingOrm：與泰國藝人／CP Ling、Orm、00k、หลิง、ออม、LingOrm 相關的粉絲內容、劇情對話、訪談、剪輯、花絮、互動、迷因，都歸類為 LingOrm；即使內容同時很好笑，也優先輸出 LingOrm，不要輸出 好笑的。",
     "如果內容是戀愛、情侶、放閃、曖昧、超甜、愛情故事這類 romance / CP 內容，優先輸出 LingOrm。",
