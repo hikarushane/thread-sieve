@@ -106,7 +106,7 @@ Should return a JSON list of open tabs.
 ### 1. Python side
 
 ```powershell
-cd D:\shane_yeh\Documents\_Claude_Code\crawl-the-threads
+cd path\to\crawl-the-threads
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
@@ -136,7 +136,7 @@ The note project must already be set up (its own `.env`, `THREADS_GEMINI_*` keys
 ### Terminal A — start the watcher (keep running)
 
 ```powershell
-cd D:\shane_yeh\Documents\_Claude_Code\crawl-the-threads
+cd path\to\crawl-the-threads
 .\start_pipeline.ps1
 ```
 
@@ -241,7 +241,7 @@ Override `unsaved-categories` for a single run: `python scripts/classify_to_scri
 ## Tests
 
 ```powershell
-cd D:\shane_yeh\Documents\_Claude_Code\crawl-the-threads
+cd path\to\crawl-the-threads
 .\.venv\Scripts\Activate.ps1
 pip install pytest
 pytest tests/

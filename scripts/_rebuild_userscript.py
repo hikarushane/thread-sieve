@@ -8,12 +8,32 @@ injection into _appendEventNow.
 """
 from __future__ import annotations
 
+import os
 import re
+import sys
 from pathlib import Path
 
+
+def _load_dotenv(path: Path) -> None:
+    if not path.exists():
+        return
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, val = line.split("=", 1)
+        key = key.strip()
+        if key and key not in os.environ:
+            os.environ[key] = val.strip()
+
+
 ROOT = Path(__file__).resolve().parent.parent
-BASE_PATH = Path(r"D:\shane_yeh\Documents\_Claude_Code\threads-scriber\threads-scriber.user.js")
+_load_dotenv(ROOT / ".env")
+
 AUTO_PATH = ROOT / "userscripts" / "threads-scriber-auto.user.js"
+BASE_PATH = Path(
+    os.environ.get("THREADS_SCRIBER_PATH", str(ROOT.parent / "threads-scriber" / "threads-scriber.user.js"))
+)
 NEW_VERSION = "0.3.0"
 
 
