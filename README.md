@@ -12,7 +12,7 @@ Bundles the entire pipeline into a single project that orchestrates two existing
 ## What it does
 
 ```
-[Browser scrape via forked userscript] ─→ scribe.json (fixed path)
+[Browser scrape via forked userscript] ─→ catch.json (fixed path)
                                               │
                                               ▼ (mtime + debounce)
                           scripts/watch_pipeline.py
@@ -23,7 +23,7 @@ Bundles the entire pipeline into a single project that orchestrates two existing
    (Gemini classifier, AI+科技 filter)          (PROJECT_threads-to-note)
                           │                                       │
                           ▼                                       ▼
-                  scribe-ai.json                          markdown notes
+                  unsave.json                          markdown notes
                           │
                           ▼ (FS Access API poll lastModified)
    forked userscript: auto-load + auto-unsave
@@ -111,7 +111,7 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 copy .env.example .env
-# edit .env: fill GEMINI_API_KEY and CHROME_WS_PATH; verify SCRIBE_PATH / SCRIBE_AI_PATH / NOTE_PROJECT_PATH
+# edit .env: fill GEMINI_API_KEY and CHROME_WS_PATH; verify CATCH_PATH / UNSAVE_PATH / MARKDOWN_PATH
 ```
 
 The note project must already be set up (its own `.env`, `THREADS_GEMINI_*` keys, output dir, etc.). See `PROJECT_threads-to-note/README.md`.
@@ -124,9 +124,9 @@ The note project must already be set up (its own `.env`, `THREADS_GEMINI_*` keys
 4. Disable the original `threads-scriber.user.js` if it is installed.
 5. Open `userscripts/threads-scriber-auto.user.js` and click "Install" in Tampermonkey.
 6. Reload the `/saved` tab. A floating panel "crawl-the-threads · Auto AI Sync" appears bottom-right.
-7. In the **Threads Scriber panel**: click **設定自動存檔** → pick `data/scribe.json`. (Write permission, persists across reloads.)
-8. In the **AutoAiSync panel**: click **綁定 scribe-ai.json** → pick `data/scribe-ai.json`. (Read permission, one-time per profile.)
-9. Tick **自動載入 scribe-ai.json** and **載入後自動取消儲存** when ready for the fully automated flow.
+7. In the **Threads Scriber panel**: click **設定自動存檔** → pick `data/catch.json`. (Write permission, persists across reloads.)
+8. In the **AutoAiSync panel**: click **綁定 unsave.json** → pick `data/unsave.json`. (Read permission, one-time per profile.)
+9. Tick **自動載入 unsave.json** and **載入後自動取消儲存** when ready for the fully automated flow.
 10. Confirm setup: `python scripts/agent_driver.py probe` should print `OK: panel ready for agent-driven scrape`.
 
 ---
@@ -160,8 +160,8 @@ Expected output ends with `OK: panel ready for agent-driven scrape`.
 | --- | --- |
 | `panel missing` | Reload the `/saved` tab; wait for Tampermonkey to inject |
 | `scriptVersion=X expected 0.3.0` | Re-install `userscripts/threads-scriber-auto.user.js` in Tampermonkey |
-| `autosave (scribe.json) not bound` | Click **設定自動存檔** in the panel, pick `data/scribe.json`; re-run probe |
-| `scribe-ai.json handle not bound in AutoAiSync panel` | Click **綁定 scribe-ai.json** in the AutoAiSync panel, pick `data/scribe-ai.json`; re-run probe |
+| `autosave (catch.json) not bound` | Click **設定自動存檔** in the panel, pick `data/catch.json`; re-run probe |
+| `unsave.json handle not bound in AutoAiSync panel` | Click **綁定 unsave.json** in the AutoAiSync panel, pick `data/unsave.json`; re-run probe |
 | `AutoAiSync panel missing` | Reload `/saved` tab |
 
 #### Step 2 · Trigger scrape
@@ -179,7 +179,7 @@ python scripts/agent_driver.py scrape --cutoff 2025-01-01 --wait-seconds 120
 
 #### Step 3 · Wait for pipeline
 
-Watch Terminal A. After `scribe.json` stabilises, the watcher fires both jobs:
+Watch Terminal A. After `catch.json` stabilises, the watcher fires both jobs:
 
 ```
 pipeline starting: items=N
@@ -187,11 +187,11 @@ pipeline starting: items=N
 [notes]    exit code: 0
 ```
 
-`scribe-ai.json` and markdown notes are both ready at this point.
+`unsave.json` and markdown notes are both ready at this point.
 
 #### Step 4 · AutoAiSync auto-unsave
 
-The forked userscript polls `scribe-ai.json` every 3 s. When `lastModified` changes it auto-loads the AI results. If **載入後自動取消儲存** is ticked, the unsave flow starts immediately — no further action needed.
+The forked userscript polls `unsave.json` every 3 s. When `lastModified` changes it auto-loads the AI results. If **載入後自動取消儲存** is ticked, the unsave flow starts immediately — no further action needed.
 
 To verify the load happened, check the AutoAiSync panel status line; it should show the loaded `generatedAt` timestamp and the count of AI-tagged items.
 
@@ -215,9 +215,9 @@ python scripts/agent_driver.py click unsave-selected
 
 | Key | Default | Used by |
 | --- | --- | --- |
-| `SCRIBE_PATH` | `data/scribe.json` | classifier, watcher, userscript handle |
-| `SCRIBE_AI_PATH` | `data/scribe-ai.json` | classifier, watcher, userscript handle |
-| `NOTE_PROJECT_PATH` | `..\PROJECT_threads-to-note` | watcher (subprocess cwd) |
+| `CATCH_PATH` | `data/catch.json` | classifier, watcher, userscript handle |
+| `UNSAVE_PATH` | `data/unsave.json` | classifier, watcher, userscript handle |
+| `MARKDOWN_PATH` | `..\PROJECT_threads-to-note` | watcher (subprocess cwd) |
 | `GEMINI_API_KEY` | _required_ | classifier |
 | `CHROME_WS_PATH` | _required_ | agent_driver — path to the `chrome-ws` CLI |
 | `CLASSIFIER_MODEL` | `gemini-2.5-flash` | classifier |
@@ -255,7 +255,7 @@ Tests cover:
 
 ## Known limitations
 
-- **Browser must be open + on the saved page** for auto-unsave to fire. The watcher will still produce `scribe-ai.json` and markdown notes regardless, but the unsave step is a no-op until you visit `/saved`.
+- **Browser must be open + on the saved page** for auto-unsave to fire. The watcher will still produce `unsave.json` and markdown notes regardless, but the unsave step is a no-op until you visit `/saved`.
 - **File System Access permission may expire** after a browser restart. The userscript panel will show "handle: not bound" and ignore polls until you re-bind via the button.
 - **Classifier duplication**: this project runs its own Gemini classifier whose categories and hints live in `classify_config.json`. If you change the prompt in `PROJECT_threads-to-note/services/category_classifier.py`, sync the category list in `classify_config.json` manually.
 - **Gemini quota**: each scrape triggers two Gemini-using subprocesses (this project's classifier + the note project's own classifier inside `app.py`). The shared category list is intentional — both run on the full scrape so neither blocks the other.
@@ -267,10 +267,10 @@ Tests cover:
 | Symptom | Likely cause | Fix |
 | --- | --- | --- |
 | Watcher prints "missing required config" | `.env` not loaded or paths empty | Verify `.env` exists next to `start_pipeline.ps1`; check key names match table above |
-| `scribe.json` written but watcher idle | mtime change happened during the debounce window of another run | Wait `DEBOUNCE_SECONDS`; or shrink `POLL_SECONDS` |
+| `catch.json` written but watcher idle | mtime change happened during the debounce window of another run | Wait `DEBOUNCE_SECONDS`; or shrink `POLL_SECONDS` |
 | `classify` subprocess fails with `GEMINI_API_KEY missing` | env not propagated to subprocess | Confirm key is in `.env` (not just shell), restart watcher |
-| Userscript panel never shows "auto-loaded" | handle not bound, permission revoked, or `autoLoad` off | Click 綁定 scribe-ai.json again; tick the toggle; check browser console for `[crawl-the-threads]` warnings |
+| Userscript panel never shows "auto-loaded" | handle not bound, permission revoked, or `autoLoad` off | Click 綁定 unsave.json again; tick the toggle; check browser console for `[crawl-the-threads]` warnings |
 | Auto-unsave skipped with "not on saved page" | Tab navigated away | Switch the tab back to `/saved` |
 | `probe` reports autosave not bound after browser restart | FS Access write permission revoked | Click **設定自動存檔** in panel to re-grant; permission is profile-scoped, not session-scoped — only lapses after profile wipe or extension update |
 | `scrape` exits 2 with timeout | Scrape still running (large backlog) or panel stalled | Increase `--wait-seconds`; check panel status with `python scripts/agent_driver.py status` |
-| `scribe.json` stays 0 bytes after scrape | Autosave handle not bound | Re-grant via 設定自動存檔, then re-run scrape |
+| `catch.json` stays 0 bytes after scrape | Autosave handle not bound | Re-grant via 設定自動存檔, then re-run scrape |

@@ -53,7 +53,7 @@ def test_decision_filter_keeps_only_ai_and_tech():
         for p in SAMPLE_POSTS
     ]
     payload = mod.build_output_payload(
-        source_file="scribe.json", model="m", posts=SAMPLE_POSTS, classified=classified, config=config,
+        source_file="catch.json", model="m", posts=SAMPLE_POSTS, classified=classified, config=config,
     )
 
     item_ids = [item["postId"] for item in payload["items"]]
@@ -71,7 +71,7 @@ def test_output_item_schema_fields_present():
         for p in SAMPLE_POSTS
     ]
     payload = mod.build_output_payload(
-        source_file="scribe.json", model="gemini-test", posts=SAMPLE_POSTS, classified=classified, config=config,
+        source_file="catch.json", model="gemini-test", posts=SAMPLE_POSTS, classified=classified, config=config,
     )
     required_fields = {"postId", "postUrl", "decision", "confidence", "reason", "model", "classifiedAt"}
     for item in payload["items"]:
@@ -90,7 +90,7 @@ def test_invalid_category_falls_into_unsure_failed_buckets():
         for p in SAMPLE_POSTS
     ]
     payload = mod.build_output_payload(
-        source_file="scribe.json", model="m", posts=SAMPLE_POSTS, classified=classified, config=config,
+        source_file="catch.json", model="m", posts=SAMPLE_POSTS, classified=classified, config=config,
     )
     assert payload["summary"]["ai"] == 0
     assert payload["summary"]["unsure"] == 3
@@ -107,7 +107,7 @@ def test_classifier_exception_marks_failed():
         for p in SAMPLE_POSTS
     ]
     payload = mod.build_output_payload(
-        source_file="scribe.json", model="m", posts=SAMPLE_POSTS, classified=classified, config=config,
+        source_file="catch.json", model="m", posts=SAMPLE_POSTS, classified=classified, config=config,
     )
     assert payload["summary"]["ai"] == 0
     assert payload["summary"]["unsure"] == 3
@@ -123,7 +123,7 @@ def test_custom_unsaved_categories():
         for p in SAMPLE_POSTS
     ]
     payload = mod.build_output_payload(
-        source_file="scribe.json", model="m", posts=SAMPLE_POSTS, classified=classified, config=config,
+        source_file="catch.json", model="m", posts=SAMPLE_POSTS, classified=classified, config=config,
     )
     item_ids = [item["postId"] for item in payload["items"]]
     assert item_ids == ["p_food"]

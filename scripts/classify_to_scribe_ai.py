@@ -227,7 +227,7 @@ def _pre_scan_env_file(argv: list[str]) -> str:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Classify scribe.json posts via Gemini, emit scribe-ai.json")
+    parser = argparse.ArgumentParser(description="Classify catch.json posts via Gemini, emit unsave.json")
     parser.add_argument("--input", default=None)
     parser.add_argument("--output", default=None)
     parser.add_argument("--model", default=None)
@@ -260,8 +260,8 @@ def main() -> int:
     if args.unsaved_categories and args.unsaved_categories.strip():
         config.unsaved_categories = {t.strip() for t in args.unsaved_categories.split(",") if t.strip()}
 
-    input_path = Path(args.input or os.environ.get("SCRIBE_PATH", "data/scribe.json"))
-    output_path = Path(args.output or os.environ.get("SCRIBE_AI_PATH", "data/scribe-ai.json"))
+    input_path = Path(args.input or os.environ.get("CATCH_PATH", "data/catch.json"))
+    output_path = Path(args.output or os.environ.get("UNSAVE_PATH", "data/unsave.json"))
     model = args.model or os.environ.get("CLASSIFIER_MODEL", DEFAULT_MODEL)
 
     posts = load_posts(input_path)

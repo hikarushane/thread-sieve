@@ -74,7 +74,7 @@ def main() -> int:
     base = re.sub(r"// @version      0\.1\.3\n",
                   f"// @version      {NEW_VERSION}\n", base, count=1)
     base = re.sub(r"// @description  Export saved Threads posts from the web UI to CSV or JSON\.\n",
-                  "// @description  Fork of Threads Scriber that auto-loads scribe-ai.json on disk change and (optionally) auto-runs the unsave flow. Part of the crawl-the-threads project.\n",
+                  "// @description  Fork of Threads Scriber that auto-loads unsave.json on disk change and (optionally) auto-runs the unsave flow. Part of the crawl-the-threads project.\n",
                   base, count=1)
     base = re.sub(r"// @author       Codex\n",
                   "// @author       crawl-the-threads\n", base, count=1)

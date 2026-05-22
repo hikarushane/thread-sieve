@@ -2,7 +2,7 @@
 // @name         Threads Scriber (Auto, crawl-the-threads)
 // @namespace    https://local-only.example/crawl-the-threads/
 // @version      0.3.0
-// @description  Fork of Threads Scriber that auto-loads scribe-ai.json on disk change and (optionally) auto-runs the unsave flow. Part of the crawl-the-threads project.
+// @description  Fork of Threads Scriber that auto-loads unsave.json on disk change and (optionally) auto-runs the unsave flow. Part of the crawl-the-threads project.
 // @author       crawl-the-threads
 // @match        https://threads.com/*
 // @match        https://www.threads.com/*
@@ -262,7 +262,7 @@
         throw new Error("目前瀏覽器不支援 File System Access API。");
       }
       const handle = await window.showSaveFilePicker({
-        suggestedName: "scribe.json",
+        suggestedName: "catch.json",
         types: [
           {
             description: "JSON file",
@@ -281,7 +281,7 @@
       await this.setStoredHandle(handle);
       this.runtimeHandle = handle;
       this.runtimeHandleWritable = true;
-      state.autoSaveFileName = handle.name || "scribe.json";
+      state.autoSaveFileName = handle.name || "catch.json";
       state.autoSaveReady = true;
       UI.update();
       return handle;
@@ -291,7 +291,7 @@
       const { allowPrompt = false } = options;
       if (this.runtimeHandle && this.runtimeHandleWritable) {
         state.autoSaveReady = true;
-        state.autoSaveFileName = this.runtimeHandle.name || state.autoSaveFileName || "scribe.json";
+        state.autoSaveFileName = this.runtimeHandle.name || state.autoSaveFileName || "catch.json";
         return this.runtimeHandle;
       }
 
@@ -303,7 +303,7 @@
       }
       const granted = await this.verifyPermission(handle, true, allowPrompt);
       state.autoSaveReady = granted;
-      state.autoSaveFileName = handle.name || "scribe.json";
+      state.autoSaveFileName = handle.name || "catch.json";
       if (granted) {
         this.runtimeHandle = handle;
         this.runtimeHandleWritable = true;
@@ -344,7 +344,7 @@
         throw error;
       }
 
-      state.autoSaveLastResult = `已寫入 ${handle.name || "scribe.json"}`;
+      state.autoSaveLastResult = `已寫入 ${handle.name || "catch.json"}`;
       state.autoSaveReady = true;
       UI.update();
       return true;
@@ -588,7 +588,7 @@
       state.aiIndexMap = this.buildAiIndexMap(items);
       const payloadSummary = payload?.summary && typeof payload.summary === "object" ? payload.summary : null;
       state.aiLoadStatus = `已載入 ${items.length} 筆 AI 結果`;
-      state.aiResultFileName = fileHandle.name || "scribe-ai.json";
+      state.aiResultFileName = fileHandle.name || "unsave.json";
       state.aiResultGeneratedAt = typeof payload?.generatedAt === "string" ? payload.generatedAt : "";
       state.aiResultBackend = typeof payload?.backend === "string" ? payload.backend : "";
       state.aiResultSourceFile = typeof payload?.sourceFile === "string" ? payload.sourceFile : "";
@@ -1164,7 +1164,7 @@
 
     applyHighlights() {
       if (state.aiItems.length === 0) {
-        setError("請先載入 scribe-ai.json。");
+        setError("請先載入 unsave.json。");
         return;
       }
 
@@ -2866,7 +2866,7 @@
       this.elements.autosave.addEventListener("click", async () => {
         try {
           await AutoSaveUtils.chooseFileHandle();
-          state.autoSaveLastResult = `已設定自動存檔: ${state.autoSaveFileName || "scribe.json"}`;
+          state.autoSaveLastResult = `已設定自動存檔: ${state.autoSaveFileName || "catch.json"}`;
           UI.update();
         } catch (error) {
           setError(`自動存檔設定失敗: ${error instanceof Error ? error.message : String(error)}`);
@@ -3430,7 +3430,7 @@
 
   function getAutoSaveStatusText() {
     if (state.autoSaveReady) {
-      return `已設定 (${state.autoSaveFileName || "scribe.json"})`;
+      return `已設定 (${state.autoSaveFileName || "catch.json"})`;
     }
     if (state.autoSaveFileName) {
       return `已設定但需重授權 (${state.autoSaveFileName})`;
@@ -3602,7 +3602,7 @@
   // ───────────────────────────────────────────────────────────────────────
   // AutoAiSync — crawl-the-threads addition
   //
-  // Polls the persisted scribe-ai.json file handle for lastModified changes,
+  // Polls the persisted unsave.json file handle for lastModified changes,
   // auto-reloads it via AiReviewUtils, and optionally triggers the existing
   // unsave flow (selectHighConfidence → unsaveSelected).
   //
@@ -3687,7 +3687,7 @@
           return;
         }
         await AiReviewUtils.loadAiResultsFromHandle(handle);
-        console.info("[crawl-the-threads] auto-loaded scribe-ai.json", {
+        console.info("[crawl-the-threads] auto-loaded unsave.json", {
           fileName: handle.name,
           lastModified: this.lastModified,
         });
@@ -3786,7 +3786,7 @@
         this.refreshControls();
       } catch (error) {
         if (error?.name !== "AbortError") {
-          alert(`綁定 scribe-ai.json 失敗: ${error?.message || error}`);
+          alert(`綁定 unsave.json 失敗: ${error?.message || error}`);
         }
       }
     },
@@ -3814,12 +3814,12 @@
       panel.innerHTML = `
         <div style="font-weight:600;margin-bottom:6px;">crawl-the-threads · Auto AI Sync</div>
         <label style="display:flex;gap:6px;align-items:center;margin:4px 0;">
-          <input type="checkbox" data-key="autoLoad" /> 自動載入 scribe-ai.json
+          <input type="checkbox" data-key="autoLoad" /> 自動載入 unsave.json
         </label>
         <label style="display:flex;gap:6px;align-items:center;margin:4px 0;">
           <input type="checkbox" data-key="autoUnsave" /> 載入後自動取消儲存
         </label>
-        <button type="button" data-action="bind" style="margin:6px 4px 4px 0;padding:4px 8px;cursor:pointer;">綁定 scribe-ai.json</button>
+        <button type="button" data-action="bind" style="margin:6px 4px 4px 0;padding:4px 8px;cursor:pointer;">綁定 unsave.json</button>
         <button type="button" data-action="tick" style="margin:6px 0 4px 0;padding:4px 8px;cursor:pointer;">立即檢查</button>
         <div data-role="status" style="margin-top:6px;opacity:0.8;font-size:11px;"></div>
       `;

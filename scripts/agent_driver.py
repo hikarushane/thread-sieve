@@ -2,7 +2,7 @@
 
 Wraps the bundled superpowers-chrome `chrome-ws` CLI so an agent (or this
 script invoked directly) can trigger the scrape from outside the browser.
-The rest of the pipeline (classify -> notes -> scribe-ai.json -> AutoAiSync
+The rest of the pipeline (classify -> notes -> unsave.json -> AutoAiSync
 auto-load -> auto-unsave) happens automatically once the Tampermonkey panel
 finishes the scrape.
 
@@ -102,12 +102,12 @@ def cmd_probe() -> int:
     if result.get("scriptVersion") != EXPECTED_VERSION:
         problems.append(f"scriptVersion={result.get('scriptVersion')} expected {EXPECTED_VERSION}")
     if not result.get("autoSaveBound"):
-        problems.append("autosave (scribe.json) not bound")
+        problems.append("autosave (catch.json) not bound")
     if not result.get("autoPanelPresent"):
         problems.append("AutoAiSync panel missing")
     autostatus = result.get("autoStatus", "")
     if "handle: not bound" in autostatus or autostatus.startswith("handle: not bound"):
-        problems.append("scribe-ai.json handle not bound in AutoAiSync panel")
+        problems.append("unsave.json handle not bound in AutoAiSync panel")
     buttons = result.get("buttons", {})
     missing_buttons = [k for k, v in buttons.items() if not v]
     if missing_buttons:

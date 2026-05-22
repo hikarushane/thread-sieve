@@ -12,13 +12,13 @@ import watch_pipeline as mod  # noqa: E402
 
 
 def test_is_stable_returns_true_when_file_unchanged(tmp_path):
-    target = tmp_path / "scribe.json"
+    target = tmp_path / "catch.json"
     target.write_text("[]", encoding="utf-8")
     assert mod.is_stable(target, debounce_seconds=0.4, poll_seconds=0.1) is True
 
 
 def test_is_stable_returns_false_when_file_keeps_changing(tmp_path):
-    target = tmp_path / "scribe.json"
+    target = tmp_path / "catch.json"
     target.write_text("[]", encoding="utf-8")
 
     def keep_writing():

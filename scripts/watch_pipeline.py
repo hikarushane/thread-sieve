@@ -97,20 +97,20 @@ def is_stable(path: Path, *, debounce_seconds: float, poll_seconds: float) -> bo
 
 
 def is_runnable_scribe(path: Path) -> tuple[bool, str]:
-    """Return (ok, reason). Skip pipeline when scribe.json is empty / not JSON / empty list."""
+    """Return (ok, reason). Skip pipeline when catch.json is empty / not JSON / empty list."""
     try:
         if path.stat().st_size == 0:
-            return False, "scribe.json is empty (0 bytes)"
+            return False, "catch.json is empty (0 bytes)"
     except FileNotFoundError:
-        return False, "scribe.json missing"
+        return False, "catch.json missing"
     try:
         import json as _json
         payload = _json.loads(path.read_text(encoding="utf-8"))
     except Exception as error:
-        return False, f"scribe.json not valid JSON: {error!r}"
+        return False, f"catch.json not valid JSON: {error!r}"
     items = payload if isinstance(payload, list) else payload.get("items") if isinstance(payload, dict) else None
     if not isinstance(items, list) or len(items) == 0:
-        return False, "scribe.json has no items"
+        return False, "catch.json has no items"
     return True, f"items={len(items)}"
 
 
@@ -124,8 +124,8 @@ def run_pipeline(
     parent_env = os.environ.copy()
 
     classify_env = parent_env.copy()
-    classify_env["SCRIBE_PATH"] = str(scribe_path)
-    classify_env["SCRIBE_AI_PATH"] = str(scribe_ai_path)
+    classify_env["CATCH_PATH"] = str(scribe_path)
+    classify_env["UNSAVE_PATH"] = str(scribe_ai_path)
     classify_args = [
         sys.executable,
         str(project_root / "scripts" / "classify_to_scribe_ai.py"),
@@ -188,10 +188,10 @@ def watch_loop(
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Watch scribe.json and run classifier + note-importer in parallel.")
-    parser.add_argument("--scribe", default=os.environ.get("SCRIBE_PATH", ""))
-    parser.add_argument("--scribe-ai", default=os.environ.get("SCRIBE_AI_PATH", ""))
-    parser.add_argument("--note-project", default=os.environ.get("NOTE_PROJECT_PATH", ""))
+    parser = argparse.ArgumentParser(description="Watch catch.json and run classifier + note-importer in parallel.")
+    parser.add_argument("--scribe", default=os.environ.get("CATCH_PATH", ""))
+    parser.add_argument("--scribe-ai", default=os.environ.get("UNSAVE_PATH", ""))
+    parser.add_argument("--note-project", default=os.environ.get("MARKDOWN_PATH", ""))
     parser.add_argument("--debounce", type=float, default=float(os.environ.get("DEBOUNCE_SECONDS", "2.0")))
     parser.add_argument("--poll", type=float, default=float(os.environ.get("POLL_SECONDS", "1.0")))
     parser.add_argument("--env-file", default=".env")
@@ -202,11 +202,11 @@ def main() -> int:
     args = parse_args()
     load_dotenv(PROJECT_ROOT / args.env_file)
 
-    scribe = args.scribe or os.environ.get("SCRIBE_PATH", "")
-    scribe_ai = args.scribe_ai or os.environ.get("SCRIBE_AI_PATH", "")
-    note_project = args.note_project or os.environ.get("NOTE_PROJECT_PATH", "")
+    scribe = args.scribe or os.environ.get("CATCH_PATH", "")
+    scribe_ai = args.scribe_ai or os.environ.get("UNSAVE_PATH", "")
+    note_project = args.note_project or os.environ.get("MARKDOWN_PATH", "")
 
-    missing = [name for name, value in [("SCRIBE_PATH", scribe), ("SCRIBE_AI_PATH", scribe_ai), ("NOTE_PROJECT_PATH", note_project)] if not value]
+    missing = [name for name, value in [("CATCH_PATH", scribe), ("UNSAVE_PATH", scribe_ai), ("MARKDOWN_PATH", note_project)] if not value]
     if missing:
         print(f"ERROR: missing required config: {', '.join(missing)}. Set in .env or pass via CLI.", file=sys.stderr)
         return 2
