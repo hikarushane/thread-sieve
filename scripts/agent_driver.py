@@ -30,10 +30,7 @@ import sys
 import time
 from pathlib import Path
 
-CHROME_WS = Path(os.environ.get(
-    "CHROME_WS_PATH",
-    r"C:\Users\shane_yeh\.claude\plugins\cache\superpowers-marketplace\superpowers-chrome\2.1.0\skills\browsing\chrome-ws",
-))
+CHROME_WS: Path | None = Path(os.environ["CHROME_WS_PATH"]) if os.environ.get("CHROME_WS_PATH") else None
 EXPECTED_VERSION = "0.3.0"
 PANEL_ID = "threads-saved-export-panel"
 SAVED_URL_SUBSTR = "/saved"
@@ -199,8 +196,8 @@ def main() -> int:
     sp_click.add_argument("button_key", help="e.g. start, load-ai, apply-ai, select-high, unsave-selected")
     args = parser.parse_args()
 
-    if not CHROME_WS.exists():
-        print(f"ERROR: chrome-ws not found at {CHROME_WS}. Set CHROME_WS_PATH env or update the constant.", file=sys.stderr)
+    if not CHROME_WS or not CHROME_WS.exists():
+        print(f"ERROR: CHROME_WS_PATH not set or path not found ({CHROME_WS}). Set CHROME_WS_PATH in .env.", file=sys.stderr)
         return 2
 
     if args.cmd == "probe":
