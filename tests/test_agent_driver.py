@@ -51,3 +51,31 @@ def test_scrape_status_poll_retries_after_chrome_eval_timeout(monkeypatch, capsy
 
     captured = capsys.readouterr()
     assert "WARN: status poll timed out; retrying" in captured.err
+
+
+def test_probe_allows_closed_auto_sync_panel_when_handle_is_bound(monkeypatch, capsys):
+    monkeypatch.setattr(mod, "find_saved_tab_index", lambda: 0)
+    monkeypatch.setattr(
+        mod,
+        "chrome_eval",
+        lambda _idx, _expr: {
+            "url": "https://www.threads.com/saved",
+            "scriptVersion": mod.EXPECTED_VERSION,
+            "autoSaveBound": True,
+            "autoPanelPresent": False,
+            "autoSyncBound": True,
+            "autoStatus": "handle: unsave.json · last seen: 2026-05-23T00:00:00.000Z",
+            "buttons": {
+                "start": True,
+                "load-ai": True,
+                "apply-ai": True,
+                "select-high": True,
+                "unsave-selected": True,
+                "autosave": True,
+            },
+        },
+    )
+
+    assert mod.cmd_probe() == 0
+    captured = capsys.readouterr()
+    assert "OK: panel ready for agent-driven scrape" in captured.err

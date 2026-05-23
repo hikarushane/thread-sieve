@@ -109,10 +109,11 @@ def cmd_probe() -> int:
         "const versionMatch=meta.match(/腳本版本:\\s*([0-9.]+)/);"
         "const autoSave=/自動存檔:\\s*已設定/.test(meta);"
         "const autoPanel=!!document.getElementById('crawl-the-threads-auto-panel');"
-        "const autoStatus=document.querySelector('#crawl-the-threads-auto-panel [data-role=\"status\"]')?.textContent||'';"
+        "const autoStatus=document.querySelector('#crawl-the-threads-auto-panel [data-role=\"status\"]')?.textContent||document.documentElement.dataset.crawlThreadsAutoAiSyncStatus||'';"
+        "const autoSyncBound=document.documentElement.dataset.crawlThreadsAutoAiSyncBound==='true'||(!autoPanel&&/handle:\\s*(?!not bound)/.test(autoStatus));"
         "const buttons={};['start','load-ai','apply-ai','select-high','unsave-selected','autosave']"
         ".forEach(k=>{buttons[k]=!!document.getElementById('" + PANEL_ID + "-'+k);});"
-        "return JSON.stringify({url:location.href,scriptVersion:versionMatch?versionMatch[1]:null,autoSaveBound:autoSave,autoPanelPresent:autoPanel,autoStatus:autoStatus.trim(),buttons});"
+        "return JSON.stringify({url:location.href,scriptVersion:versionMatch?versionMatch[1]:null,autoSaveBound:autoSave,autoPanelPresent:autoPanel,autoSyncBound:autoSyncBound,autoStatus:autoStatus.trim(),buttons});"
         "})()"
     )
     result = chrome_eval(idx, expr)
@@ -127,10 +128,10 @@ def cmd_probe() -> int:
         problems.append(f"scriptVersion={result.get('scriptVersion')} expected {EXPECTED_VERSION}")
     if not result.get("autoSaveBound"):
         problems.append("autosave (catch.json) not bound")
-    if not result.get("autoPanelPresent"):
+    if not result.get("autoPanelPresent") and not result.get("autoSyncBound"):
         problems.append("AutoAiSync panel missing")
     autostatus = result.get("autoStatus", "")
-    if "handle: not bound" in autostatus or autostatus.startswith("handle: not bound"):
+    if not result.get("autoSyncBound") and ("handle: not bound" in autostatus or autostatus.startswith("handle: not bound")):
         problems.append("unsave.json handle not bound in AutoAiSync panel")
     buttons = result.get("buttons", {})
     missing_buttons = [k for k, v in buttons.items() if not v]

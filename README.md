@@ -134,8 +134,8 @@ The note project must already be set up (its own `.env`, `THREADS_GEMINI_*` keys
 5. Open `userscripts/threads-scriber-auto.user.js` and click "Install" in Tampermonkey.
 6. Reload the `/saved` tab. A floating panel "crawl-the-threads · Auto AI Sync" appears bottom-right.
 7. In the **Threads Scriber panel**: click **設定自動存檔** → pick `data/catch.json`. (Write permission, persists across reloads.)
-8. In the **AutoAiSync panel**: click **綁定 unsave.json** → pick `data/unsave.json`. (Read permission, one-time per profile.)
-9. Tick **自動載入 unsave.json** and **載入後自動取消儲存** when ready for the fully automated flow.
+8. In the **Auto AI Sync panel**: click **綁定 unsave.json** → pick `data/unsave.json`. (Read permission, one-time per profile.)
+9. Tick **自動載入 unsave.json** and **載入後自動取消儲存** when ready for the fully automated flow. The **立即檢查** button forces one AI classification load; if it succeeds, the small Auto AI Sync panel closes so it no longer covers the main panel.
 10. Confirm setup: `python scripts/agent_driver.py probe` should print `OK: panel ready for agent-driven scrape`.
 
 ---
@@ -170,8 +170,8 @@ Expected output ends with `OK: panel ready for agent-driven scrape`.
 | `panel missing` | Reload the `/saved` tab; wait for Tampermonkey to inject |
 | `scriptVersion=X expected 0.3.0` | Re-install `userscripts/threads-scriber-auto.user.js` in Tampermonkey |
 | `autosave (catch.json) not bound` | Click **設定自動存檔** in the panel, pick `data/catch.json`; re-run probe |
-| `unsave.json handle not bound in AutoAiSync panel` | Click **綁定 unsave.json** in the AutoAiSync panel, pick `data/unsave.json`; re-run probe |
-| `AutoAiSync panel missing` | Reload `/saved` tab |
+| `unsave.json handle not bound in AutoAiSync panel` | Click **綁定 unsave.json** in the Auto AI Sync panel, pick `data/unsave.json`; re-run probe |
+| `AutoAiSync panel missing` | Reload `/saved` tab; this refers to the Auto AI Sync panel |
 
 #### Step 2 · Trigger scrape
 
@@ -199,11 +199,13 @@ pipeline starting: items=N
 
 `unsave.json` and markdown notes are both ready at this point.
 
-#### Step 4 · AutoAiSync auto-unsave
+#### Step 4 · Auto AI Sync auto-unsave
 
-The forked userscript polls `unsave.json` every 3 s. When `lastModified` changes it auto-loads the AI results. If **載入後自動取消儲存** is ticked, the unsave flow starts immediately — no further action needed.
+The forked userscript polls `unsave.json` every 3 s. When `lastModified` changes it auto-loads the AI classification. If **載入後自動取消儲存** is ticked, the unsave flow starts immediately — no further action needed.
 
-To verify the load happened, check the AutoAiSync panel status line; it should show the loaded `generatedAt` timestamp and the count of AI-tagged items.
+To verify the load happened, check the Auto AI Sync panel status line; it should show the loaded `generatedAt` timestamp and the candidate count. You can also click **立即檢查** to force one load; after a successful check, the small panel closes. `agent_driver.py probe` still works after that because the userscript exposes the bound-handle status on the page.
+
+Manual export, manual AI classification loading, manual selection, and debug tools are still available in the Threads Scriber panel, but they are collapsed under **手動工具** and **診斷** to keep the normal workflow uncluttered.
 
 ---
 
@@ -214,7 +216,7 @@ To verify the load happened, check the AutoAiSync panel status line; it should s
 python scripts/agent_driver.py status
 
 # Click an arbitrary panel button (e.g. stop):
-python scripts/agent_driver.py click unsave-selected
+python scripts/agent_driver.py click stop
 ```
 
 ---
@@ -266,7 +268,7 @@ Tests cover:
 ## Known limitations
 
 - **Browser must be open + on the saved page** for auto-unsave to fire. The watcher will still produce `unsave.json` and markdown notes regardless, but the unsave step is a no-op until you visit `/saved`.
-- **File System Access permission may expire** after a browser restart. The userscript panel will show "handle: not bound" and ignore polls until you re-bind via the button.
+- **File System Access permission may expire** after a browser restart. The Auto AI Sync panel status will show "handle: not bound" and ignore polls until you re-bind via the button.
 - **Classifier duplication**: this project runs its own Gemini classifier whose categories and hints live in `classify_config.json`. If you change the prompt in `PROJECT_threads-to-note/services/category_classifier.py`, sync the category list in `classify_config.json` manually.
 - **Gemini quota**: each scrape triggers two Gemini-using subprocesses (this project's classifier + the note project's own classifier inside `app.py`). The shared category list is intentional — both run on the full scrape so neither blocks the other.
 
@@ -279,7 +281,7 @@ Tests cover:
 | Watcher prints "missing required config" | `.env` not loaded or paths empty | Verify `.env` exists next to `start_pipeline.ps1`; check key names match table above |
 | `catch.json` written but watcher idle | mtime change happened during the debounce window of another run | Wait `DEBOUNCE_SECONDS`; or shrink `POLL_SECONDS` |
 | `classify` subprocess fails with `GEMINI_API_KEY missing` | env not propagated to subprocess | Confirm key is in `.env` (not just shell), restart watcher |
-| Userscript panel never shows "auto-loaded" | handle not bound, permission revoked, or `autoLoad` off | Click 綁定 unsave.json again; tick the toggle; check browser console for `[crawl-the-threads]` warnings |
+| Userscript panel never shows an AI classification load | handle not bound, permission revoked, or `autoLoad` off | Click **綁定 unsave.json** again, tick **自動載入 unsave.json**, or click **立即檢查**; check browser console for `[crawl-the-threads]` warnings |
 | Auto-unsave skipped with "not on saved page" | Tab navigated away | Switch the tab back to `/saved` |
 | `probe` reports autosave not bound after browser restart | FS Access write permission revoked | Click **設定自動存檔** in panel to re-grant; permission is profile-scoped, not session-scoped — only lapses after profile wipe or extension update |
 | `scrape` exits 2 with timeout | Scrape still running (large backlog) or panel stalled | Increase `--wait-seconds`; check panel status with `python scripts/agent_driver.py status` |

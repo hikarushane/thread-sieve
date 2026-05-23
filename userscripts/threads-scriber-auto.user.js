@@ -579,7 +579,7 @@
       const payload = JSON.parse(await file.text());
       const sourceItems = Array.isArray(payload) ? payload : Array.isArray(payload?.items) ? payload.items : null;
       if (!sourceItems) {
-        throw new Error("UNSAVE 結果格式不正確，找不到 items 陣列。");
+        throw new Error("AI 分類格式不正確，找不到 items 陣列。");
       }
 
       const items = sourceItems.map((item) => this.normalizeAiItem(item));
@@ -587,7 +587,7 @@
       state.aiMap = this.buildAiMap(items);
       state.aiIndexMap = this.buildAiIndexMap(items);
       const payloadSummary = payload?.summary && typeof payload.summary === "object" ? payload.summary : null;
-      state.aiLoadStatus = `已載入 ${items.length} 筆 UNSAVE 結果`;
+      state.aiLoadStatus = `已載入 ${items.length} 筆 AI 分類`;
       state.aiResultFileName = fileHandle.name || "unsave.json";
       state.aiResultGeneratedAt = typeof payload?.generatedAt === "string" ? payload.generatedAt : "";
       state.aiResultBackend = typeof payload?.backend === "string" ? payload.backend : "";
@@ -647,7 +647,7 @@
         postUrl: post?.postUrl || "",
         decision: "ai",
         confidence: 0.56,
-        reason: "本地關鍵詞判斷為 UNSAVE 候選；目前載入的 UNSAVE 結果未命中這個 DOM key，可能是瀏覽器載入舊檔或 Threads URL key 不一致。",
+        reason: "本地關鍵詞判斷為待取消候選；目前載入的 AI 分類未命中這個 DOM key，可能是瀏覽器載入舊檔或 Threads URL key 不一致。",
         localCandidate: true
       };
     },
@@ -842,7 +842,7 @@
 
     clearSuppressedKeys() {
       if (state.suppressedAiKeys.size === 0) {
-        setError("目前沒有 UNSAVE 排除項目需要重設。");
+        setError("目前沒有排除項目需要重設。");
         return;
       }
       const count = state.suppressedAiKeys.size;
@@ -851,7 +851,7 @@
       if (state.aiItems.length > 0) {
         this.selectHighConfidence();
       }
-      setError(`已重設 ${count} 筆 UNSAVE 排除項目。`);
+      setError(`已重設 ${count} 筆排除項目。`);
       DebugLogUtils.appendEvent("ai_suppressed_keys_cleared", {
         count
       }).catch(() => {});
@@ -911,12 +911,10 @@
     },
 
     makeBadgeText(aiItem, tier) {
-      const label = aiItem.decision === "unsure" ? "UNSURE" : "UNSAVE";
-      const suffix = typeof aiItem.confidence === "number" ? ` ${aiItem.confidence.toFixed(2)}` : "";
       if (aiItem.localCandidate) {
-        return `${label}${suffix} 候選`;
+        return "本地候選";
       }
-      return tier === "high" ? `${label}${suffix} 高信心` : `${label}${suffix}`;
+      return aiItem.decision === "unsure" ? "待確認" : "待取消";
     },
 
     getOutcomeText(key) {
@@ -1122,7 +1120,7 @@
         visibleEntries: visibleEntries.map((entry) => entry.key).slice(0, 20),
         diagnostics
       }).catch(() => {});
-      setError(`已寫入 ${diagnostics.length} 筆 UNSAVE key 診斷到 debug log。`);
+      setError(`已寫入 ${diagnostics.length} 筆分類 key 診斷到 debug log。`);
       UI.update();
     },
 
@@ -1172,7 +1170,7 @@
       const processedKeys = this.getSuppressedKeySet();
       state.selectedAiKeys = new Set(this.getSelectedReviewableItemKeys((tier) => tier === "high"));
       this.syncHighlights();
-      state.aiLoadStatus = `UNSAVE 標亮已啟用（總選取 ${state.selectedAiKeys.size} 筆；目前 DOM 隨捲動同步）`;
+      state.aiLoadStatus = `標亮已啟用（總選取 ${state.selectedAiKeys.size} 筆；目前 DOM 隨捲動同步）`;
       const itemCounts = this.countAiItemsByTier();
       DebugLogUtils.appendEvent("ai_highlights_activated", {
         selectedCount: state.selectedAiKeys.size,
@@ -1300,7 +1298,7 @@
       this.syncHighlights();
       state.aiReviewStats.selected = state.selectedAiKeys.size;
       if (state.selectedAiKeys.size === 0) {
-        setError("目前沒有高信心 UNSAVE 貼文。");
+        setError("目前沒有建議取消的貼文。");
       } else {
         setError("");
       }
@@ -1320,9 +1318,9 @@
       this.syncHighlights();
       state.aiReviewStats.selected = state.selectedAiKeys.size;
       if (state.selectedAiKeys.size === 0) {
-        setError("目前沒有可選取的 UNSAVE 標亮貼文。");
+        setError("目前沒有可選取的標亮貼文。");
       } else {
-        setError(`已選取 ${state.selectedAiKeys.size} 筆 UNSAVE/unsure 標亮貼文。`);
+        setError(`已選取 ${state.selectedAiKeys.size} 筆標亮貼文。`);
       }
       DebugLogUtils.appendEvent("ai_all_highlighted_selected", {
         selectedCount: state.selectedAiKeys.size,
@@ -2635,6 +2633,17 @@
           gap: 8px;
           margin-top: 10px;
         }
+        #${PANEL_ID} details {
+          margin-top: 10px;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          padding-top: 8px;
+        }
+        #${PANEL_ID} summary {
+          cursor: pointer;
+          color: #e8e8e8;
+          font-weight: 600;
+          list-style-position: inside;
+        }
         #${PANEL_ID} .meta {
           margin-top: 10px;
           padding: 10px;
@@ -2778,25 +2787,34 @@
         <div class="actions">
           <button id="${PANEL_ID}-start">開始抓取</button>
           <button id="${PANEL_ID}-stop">停止</button>
-          <button id="${PANEL_ID}-csv">下載 CSV</button>
-          <button id="${PANEL_ID}-json">下載 JSON</button>
           <button id="${PANEL_ID}-autosave">設定自動存檔</button>
           <button id="${PANEL_ID}-clear">清空結果</button>
-          <button id="${PANEL_ID}-copy">複製 JSON</button>
-        </div>
-        <div class="actions">
-          <button id="${PANEL_ID}-load-ai">載入 UNSAVE 結果</button>
-          <button id="${PANEL_ID}-apply-ai">套用標亮</button>
-          <button id="${PANEL_ID}-select-high">全選高信心</button>
-          <button id="${PANEL_ID}-select-all-highlighted">全選全部標亮</button>
-          <button id="${PANEL_ID}-clear-selection">清除 UNSAVE 勾選</button>
-          <button id="${PANEL_ID}-reset-ai-suppressed">重設 UNSAVE 排除</button>
-          <button id="${PANEL_ID}-diagnose-ai-keys">診斷指定貼文</button>
-          <button id="${PANEL_ID}-unsave-selected">取消儲存已選取</button>
-          <button id="${PANEL_ID}-debug-log">設定 Debug Log</button>
         </div>
         <div id="${PANEL_ID}-meta" class="meta"></div>
         <div id="${PANEL_ID}-error" class="error"></div>
+        <details>
+          <summary>手動工具</summary>
+          <div class="actions">
+            <button id="${PANEL_ID}-csv">下載 CSV</button>
+            <button id="${PANEL_ID}-json">下載 JSON</button>
+            <button id="${PANEL_ID}-copy">複製 JSON</button>
+            <button id="${PANEL_ID}-load-ai">載入 AI 分類</button>
+            <button id="${PANEL_ID}-apply-ai">套用標亮</button>
+            <button id="${PANEL_ID}-select-high">全選建議取消</button>
+            <button id="${PANEL_ID}-select-all-highlighted">全選全部標亮</button>
+            <button id="${PANEL_ID}-clear-selection">清除勾選</button>
+            <button id="${PANEL_ID}-reset-ai-suppressed">重設排除</button>
+            <button id="${PANEL_ID}-unsave-selected">取消儲存已選取</button>
+          </div>
+        </details>
+        <details>
+          <summary>診斷</summary>
+          <div class="actions">
+            <button id="${PANEL_ID}-diagnose-ai-keys">診斷指定貼文</button>
+            <button id="${PANEL_ID}-debug-log">設定 Debug Log</button>
+          </div>
+          <div id="${PANEL_ID}-debug-meta" class="meta"></div>
+        </details>
         <div class="hint">只會處理目前瀏覽器已登入且實際載入到頁面的收藏貼文。</div>
       `;
 
@@ -2825,6 +2843,7 @@
         unsaveSelected: panel.querySelector(`#${PANEL_ID}-unsave-selected`),
         debugLog: panel.querySelector(`#${PANEL_ID}-debug-log`),
         meta: panel.querySelector(`#${PANEL_ID}-meta`),
+        debugMeta: panel.querySelector(`#${PANEL_ID}-debug-meta`),
         error: panel.querySelector(`#${PANEL_ID}-error`)
       };
 
@@ -2892,7 +2911,7 @@
             multiple: false,
             types: [
               {
-                description: "UNSAVE result JSON",
+                description: "AI classification JSON",
                 accept: {
                   "application/json": [".json"]
                 }
@@ -2905,7 +2924,7 @@
           if (error?.name === "AbortError") {
             return;
           }
-          setError(`載入 UNSAVE 結果失敗: ${error instanceof Error ? error.message : String(error)}`);
+          setError(`載入 AI 分類失敗: ${error instanceof Error ? error.message : String(error)}`);
         }
       });
       this.elements.applyAi.addEventListener("click", () => AiReviewUtils.applyHighlights());
@@ -2950,19 +2969,22 @@
         `已解析含日期貼文: ${state.postsWithParsedDate}`,
         `最舊已見日期: ${state.oldestSeenPublished || "未知"}`,
         `自動存檔: ${getAutoSaveStatusText()}`,
-        `Debug Log: ${getDebugLogStatusText()}`,
-        `UNSAVE 結果: ${state.aiLoadStatus}`,
-        `UNSAVE 檔案: ${state.aiResultFileName || "未指定"}`,
-        `UNSAVE 產生時間/後端: ${state.aiResultGeneratedAt || "未知"} / ${state.aiResultBackend || "未知"}`,
-        `UNSAVE 來源/摘要: ${state.aiResultSourceFile || "未知"} / ${formatAiResultSummary(state.aiResultSummary)}`,
-        `UNSAVE 總候選/已選取: ${aiItemCounts.reviewable}/${state.aiReviewStats.selected}`,
-        `UNSAVE 目前 DOM 標亮: ${state.aiReviewStats.renderedMatched}`,
-        `UNSAVE 總高信心/低信心/unsure: ${aiItemCounts.highConfidence}/${aiItemCounts.lowConfidence}/${aiItemCounts.unsure}`,
-        `UNSAVE 目前畫面高信心/低信心/unsure: ${state.aiReviewStats.highConfidence}/${state.aiReviewStats.lowConfidence}/${state.aiReviewStats.unsure}`,
-        `UNSAVE 目前畫面本地候選: ${state.aiReviewStats.localCandidate}`,
-        `UNSAVE 已排除(已處理/頁面不存在): ${state.suppressedAiKeys.size}`,
+        `AI 分類: ${state.aiLoadStatus}`,
+        `分類檔案: ${state.aiResultFileName || "未指定"}`,
+        `分類產生時間/後端: ${state.aiResultGeneratedAt || "未知"} / ${state.aiResultBackend || "未知"}`,
+        `分類來源/摘要: ${state.aiResultSourceFile || "未知"} / ${formatAiResultSummary(state.aiResultSummary)}`,
+        `待取消候選/已選取: ${aiItemCounts.reviewable}/${state.aiReviewStats.selected}`,
+        `目前標亮: ${state.aiReviewStats.renderedMatched}`,
+        `候選分布(建議/其他/待確認): ${aiItemCounts.highConfidence}/${aiItemCounts.lowConfidence}/${aiItemCounts.unsure}`,
+        `目前畫面分布(建議/其他/待確認): ${state.aiReviewStats.highConfidence}/${state.aiReviewStats.lowConfidence}/${state.aiReviewStats.unsure}`,
+        `目前畫面本地候選: ${state.aiReviewStats.localCandidate}`,
+        `已排除(已處理/頁面不存在): ${state.suppressedAiKeys.size}`,
         `取消儲存 已驗證/待刷新/失敗: ${state.unsaveVerifiedKeys.size}/${state.unsaveAttemptedKeys.size}/${state.unsaveFailedKeys.size}`,
-        `來源頁面: ${location.pathname}`,
+        `來源頁面: ${location.pathname}`
+      ];
+
+      const debugLines = [
+        `Debug Log: ${getDebugLogStatusText()}`,
         `診斷 containers/link/time/datetime: ${state.debug.articleCount}/${state.debug.postLinkCount}/${state.debug.timeNodeCount}/${state.debug.datetimeCount}`,
         `診斷 parsed/null/errors: ${state.debug.parsedPostCount}/${state.debug.nullPostCount}/${state.debug.parseErrorCount}`,
         `診斷 emptyContent: ${state.debug.emptyContentCount}`,
@@ -2972,44 +2994,44 @@
       ];
 
       if (state.debug.containerSource) {
-        lines.push(`容器來源: ${state.debug.containerSource}`);
+        debugLines.push(`容器來源: ${state.debug.containerSource}`);
       }
 
       if (state.debug.samplePostHref) {
-        lines.push(`樣本貼文連結: ${state.debug.samplePostHref}`);
+        debugLines.push(`樣本貼文連結: ${state.debug.samplePostHref}`);
       }
       if (state.debug.sampleTimeText) {
-        lines.push(`樣本時間: ${state.debug.sampleTimeText}`);
+        debugLines.push(`樣本時間: ${state.debug.sampleTimeText}`);
       }
       if (state.debug.sampleArticleText) {
-        lines.push(`樣本文字: ${state.debug.sampleArticleText}`);
+        debugLines.push(`樣本文字: ${state.debug.sampleArticleText}`);
       }
       if (state.debug.visibleSignature) {
-        lines.push(`可見貼文簽名: ${state.debug.visibleSignature}`);
+        debugLines.push(`可見貼文簽名: ${state.debug.visibleSignature}`);
       }
       if (state.debug.lastNullReason) {
-        lines.push(`最後一筆 null 原因: ${state.debug.lastNullReason}`);
+        debugLines.push(`最後一筆 null 原因: ${state.debug.lastNullReason}`);
       }
       if (state.debug.oldestPostUrl) {
-        lines.push(`最舊命中貼文: ${state.debug.oldestPostUrl}`);
+        debugLines.push(`最舊命中貼文: ${state.debug.oldestPostUrl}`);
       }
       if (state.debug.oldestPostPreview) {
-        lines.push(`最舊命中文字: ${state.debug.oldestPostPreview}`);
+        debugLines.push(`最舊命中文字: ${state.debug.oldestPostPreview}`);
       }
       if (state.debug.matchedTargetPostUrl) {
-        lines.push(`觸發停止貼文: ${state.debug.matchedTargetPostUrl}`);
+        debugLines.push(`觸發停止貼文: ${state.debug.matchedTargetPostUrl}`);
       }
       if (state.debug.matchedTargetPostTime) {
-        lines.push(`觸發停止時間: ${state.debug.matchedTargetPostTime}`);
+        debugLines.push(`觸發停止時間: ${state.debug.matchedTargetPostTime}`);
       }
       if (state.debug.matchedTargetPostPreview) {
-        lines.push(`觸發停止文字: ${state.debug.matchedTargetPostPreview}`);
+        debugLines.push(`觸發停止文字: ${state.debug.matchedTargetPostPreview}`);
       }
       if (state.debug.emptyContentExamples?.length) {
         for (const example of state.debug.emptyContentExamples) {
-          lines.push(`空內容樣本: ${example.authorHandle} ${example.postUrl} ${example.publishedTime}`);
+          debugLines.push(`空內容樣本: ${example.authorHandle} ${example.postUrl} ${example.publishedTime}`);
           if (example.articlePreview) {
-            lines.push(`空內容預覽: ${example.articlePreview}`);
+            debugLines.push(`空內容預覽: ${example.articlePreview}`);
           }
         }
       }
@@ -3017,7 +3039,7 @@
         lines.push(`自動存檔結果: ${state.autoSaveLastResult}`);
       }
       if (state.debugLogLastResult) {
-        lines.push(`Debug Log 結果: ${state.debugLogLastResult}`);
+        debugLines.push(`Debug Log 結果: ${state.debugLogLastResult}`);
       }
 
       if (!isLikelySavedPage()) {
@@ -3025,6 +3047,9 @@
       }
 
       this.elements.meta.textContent = lines.join("\n");
+      if (this.elements.debugMeta) {
+        this.elements.debugMeta.textContent = debugLines.join("\n");
+      }
       this.elements.error.textContent = state.lastError || "";
       this.elements.start.disabled = state.isRunning;
       this.elements.stop.disabled = !state.isRunning;
@@ -3328,7 +3353,7 @@
       aiItems: [],
       aiMap: Object.create(null),
       aiIndexMap: new Map(),
-      aiLoadStatus: "未載入 UNSAVE 結果",
+      aiLoadStatus: "未載入 AI 分類",
       aiResultFileName: "",
       aiResultGeneratedAt: "",
       aiResultBackend: "",
@@ -3423,7 +3448,7 @@
     const notAi = summary.not_ai ?? "?";
     const unsure = summary.unsure ?? "?";
     const failed = summary.failed ?? "?";
-    return `total ${total}, ai ${ai}, not_ai ${notAi}, unsure ${unsure}, failed ${failed}`;
+    return `total ${total}, ai ${ai}, not_ai ${notAi}, 待判斷 ${unsure}, failed ${failed}`;
   }
 
   function getExportableItems() {
@@ -3536,7 +3561,7 @@
     state.aiItems = [];
     state.aiMap = Object.create(null);
     state.aiIndexMap = new Map();
-    state.aiLoadStatus = "未載入 UNSAVE 結果";
+    state.aiLoadStatus = "未載入 AI 分類";
     state.aiResultFileName = "";
     state.aiResultGeneratedAt = "";
     state.aiResultBackend = "";
@@ -3665,28 +3690,29 @@
       return status === "granted";
     },
 
-    async tick() {
-      if (this.inflight || !this.settings.autoLoad) {
-        return;
+    async tick(options = {}) {
+      const { forceLoad = false, ignoreAutoLoad = false } = options;
+      if (this.inflight || (!ignoreAutoLoad && !this.settings.autoLoad)) {
+        return false;
       }
       this.inflight = true;
       try {
         const handle = await this.ensureHandle();
         if (!handle) {
-          return;
+          return false;
         }
         const granted = await this.ensurePermission(handle);
         if (!granted) {
-          return;
+          return false;
         }
         const file = await handle.getFile();
-        if (file.lastModified === this.lastModified) {
-          return;
+        if (!forceLoad && file.lastModified === this.lastModified) {
+          return true;
         }
         const previous = this.lastModified;
         this.lastModified = file.lastModified;
-        if (previous === 0) {
-          return;
+        if (previous === 0 && !forceLoad) {
+          return true;
         }
         await AiReviewUtils.loadAiResultsFromHandle(handle);
         console.info("[crawl-the-threads] auto-loaded unsave.json", {
@@ -3696,10 +3722,13 @@
         if (this.settings.autoUnsave) {
           await this.runAutoUnsave();
         }
+        return true;
       } catch (error) {
         console.warn("[crawl-the-threads] AutoAiSync tick failed:", error);
+        return false;
       } finally {
         this.inflight = false;
+        this.refreshControls();
       }
     },
 
@@ -3713,7 +3742,7 @@
         await wait(this.UNSAVE_AFTER_LOAD_DELAY_MS);
         AiReviewUtils.selectHighConfidence();
         if (state.selectedAiKeys.size === 0) {
-          console.info("[crawl-the-threads] auto-unsave skipped: no high-confidence AI posts selected.");
+          console.info("[crawl-the-threads] auto-unsave skipped: no suggested AI posts selected.");
           return;
         }
         console.info("[crawl-the-threads] auto-unsave starting:", {
@@ -3748,6 +3777,9 @@
     },
 
     refreshControls() {
+      const statusText = this.getStatusText();
+      document.documentElement.dataset.crawlThreadsAutoAiSyncStatus = statusText;
+      document.documentElement.dataset.crawlThreadsAutoAiSyncBound = this.handle?.name ? "true" : "false";
       const panel = document.getElementById(this.PANEL_ID);
       if (!panel) {
         return;
@@ -3762,12 +3794,23 @@
         unsaveCheckbox.checked = this.settings.autoUnsave;
       }
       if (statusEl) {
-        const handleInfo = this.handle?.name ? `handle: ${this.handle.name}` : "handle: not bound";
-        const lastMod = this.lastModified
-          ? new Date(this.lastModified).toISOString()
-          : "never";
-        statusEl.textContent = `${handleInfo} · last seen: ${lastMod}`;
+        statusEl.textContent = statusText;
       }
+    },
+
+    getStatusText() {
+      const handleInfo = this.handle?.name ? `handle: ${this.handle.name}` : "handle: not bound";
+      const lastMod = this.lastModified ? new Date(this.lastModified).toISOString() : "never";
+      if (state.aiItems.length === 0) {
+        return `${handleInfo} · last seen: ${lastMod} · ${state.aiLoadStatus}`;
+      }
+      const counts = AiReviewUtils.countAiItemsByTier();
+      const generatedAt = state.aiResultGeneratedAt || "unknown generatedAt";
+      return `${handleInfo} · last seen: ${lastMod} · loaded: ${generatedAt} · 候選: ${counts.reviewable}/${state.aiItems.length}`;
+    },
+
+    closePanel() {
+      document.getElementById(this.PANEL_ID)?.remove();
     },
 
     async bindHandle() {
@@ -3779,7 +3822,7 @@
         const [picked] = await window.showOpenFilePicker({
           multiple: false,
           types: [
-            { description: "UNSAVE result JSON", accept: { "application/json": [".json"] } },
+            { description: "AI classification JSON", accept: { "application/json": [".json"] } },
           ],
         });
         await AutoSaveUtils.setNamedHandle(AI_FILE_HANDLE_KEY, picked);
@@ -3814,7 +3857,7 @@
       ].join(";");
 
       panel.innerHTML = `
-        <div style="font-weight:600;margin-bottom:6px;">crawl-the-threads · Auto UNSAVE Sync</div>
+        <div style="font-weight:600;margin-bottom:6px;">crawl-the-threads · Auto AI Sync</div>
         <label style="display:flex;gap:6px;align-items:center;margin:4px 0;">
           <input type="checkbox" data-key="autoLoad" /> 自動載入 unsave.json
         </label>
@@ -3845,8 +3888,11 @@
         if (target.dataset.action === "bind") {
           this.bindHandle();
         } else if (target.dataset.action === "tick") {
-          this.lastModified = 0;
-          this.tick().catch(() => {});
+          this.tick({ forceLoad: true, ignoreAutoLoad: true }).then((ok) => {
+            if (ok) {
+              this.closePanel();
+            }
+          }).catch(() => {});
         }
       });
     },
