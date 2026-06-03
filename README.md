@@ -18,7 +18,7 @@ Two coupled layers: `userscripts/threads-scriber-auto.user.js` (browser, Tamperm
                                               │
                           ┌───────────────────┴───────────────────┐
                           ▼                                       ▼
-   scripts/classify_to_scribe_ai.py            local app.py
+   scripts/classify_to_scribe_ai.py            scripts/import_bookmarks_to_markdown.py
    (Gemini classifier, AI+科技 filter)          (markdown note generator)
                           │                                       │
                           ▼                                       ▼
@@ -153,7 +153,7 @@ copy .env.example .env
 # edit config.json: verify paths, categories, unsaved-categories, and image-ocr
 ```
 
-ThreadSieve includes its own markdown note generator at `app.py`; it no longer calls a sibling `PROJECT_threads-to-note` repo. Markdown notes are written to `config.json` → `paths.markdown-output-root` (default: `output`).
+ThreadSieve includes its own markdown note generator at `scripts/import_bookmarks_to_markdown.py`; it no longer calls a sibling `PROJECT_threads-to-note` repo. Markdown notes are written to `config.json` → `paths.markdown-output-root` (default: `output`).
 
 ### 2. Browser side
 

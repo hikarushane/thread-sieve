@@ -175,7 +175,7 @@ def run_pipeline(
     note_env.setdefault("THREADS_MARKDOWN_OUTPUT", str(markdown_output_path))
     if config_path is not None:
         note_env["THREADSIEVE_CONFIG"] = str(config_path)
-    note_args = [sys.executable, str(project_root / "app.py")]
+    note_args = [sys.executable, str(project_root / "scripts" / "import_bookmarks_to_markdown.py")]
 
     jobs = [
         ("classify", launch_job("classify", classify_args, cwd=project_root, env=classify_env)),

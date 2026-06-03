@@ -1,6 +1,13 @@
 from __future__ import annotations
 
+import argparse
 import logging
+import sys
+from pathlib import Path
+
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
 
 from note_generator.config import load_config
 from note_generator.workflows.import_bookmarks_to_markdown import ImportBookmarksToMarkdownWorkflow
@@ -15,9 +22,16 @@ def configure_logging() -> None:
     logging.getLogger("httpx").setLevel(logging.WARNING)
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Import Threads bookmarks into local markdown notes.")
+    parser.add_argument("--env-file", default=".env")
+    return parser.parse_args()
+
+
 def main() -> None:
+    args = parse_args()
     configure_logging()
-    config = load_config()
+    config = load_config(PROJECT_ROOT / args.env_file)
     workflow = ImportBookmarksToMarkdownWorkflow.from_config(config)
     summary = workflow.run()
     logging.getLogger(__name__).info(

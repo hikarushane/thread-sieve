@@ -105,7 +105,10 @@ def test_run_pipeline_runs_ocr_after_classify_and_notes(monkeypatch, tmp_path):
     assert calls.index(("wait", "classify")) < launched_names.index("ocr") + 4
     notes_call = next(call for call in calls if call[0] == "launch" and call[1] == "notes")
     assert notes_call[2] == Path("project-root")
-    assert notes_call[4] == [sys.executable, str(Path("project-root") / "app.py")]
+    assert notes_call[4] == [
+        sys.executable,
+        str(Path("project-root") / "scripts" / "import_bookmarks_to_markdown.py"),
+    ]
     assert notes_call[3]["THREADS_BOOKMARK_INPUT"] == str(catch)
     assert notes_call[3]["THREADS_MARKDOWN_OUTPUT"] == str(markdown_root)
     ocr_call = next(call for call in calls if call[0] == "launch" and call[1] == "ocr")

@@ -1,6 +1,6 @@
 {
   "sourceFile": "catch.json",
-  "generatedAt": "2026-06-03T13:44:34.608789+00:00",
+  "generatedAt": "2026-06-03T16:22:50.180540+00:00",
   "backend": "threads-sieve/category_classifier (gemini-2.5-flash)",
   "unsavedCategories": [
     "AI",
@@ -26,7 +26,7 @@
       "reason": "科技",
       "postUrl": "https://www.threads.com/@govin999999/post/DZDAi-AmMoX",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:43:03.653940+00:00"
+      "classifiedAt": "2026-06-03T16:21:23.327597+00:00"
     },
     {
       "postId": "DU7cnPDEZKf",
@@ -35,7 +35,7 @@
       "reason": "科技",
       "postUrl": "https://www.threads.com/@darrell_tw_/post/DU7cnPDEZKf/media",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:43:10.297308+00:00"
+      "classifiedAt": "2026-06-03T16:21:30.297232+00:00"
     },
     {
       "postId": "DY663Dkkd5f",
@@ -44,7 +44,7 @@
       "reason": "AI",
       "postUrl": "https://www.threads.com/@matt_dancho/post/DY663Dkkd5f",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:43:18.511935+00:00"
+      "classifiedAt": "2026-06-03T16:21:38.740765+00:00"
     },
     {
       "postId": "DY2f5mbiEZ9",
@@ -53,7 +53,7 @@
       "reason": "科技",
       "postUrl": "https://www.threads.com/@hamzaashergill/post/DY2f5mbiEZ9",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:43:22.318974+00:00"
+      "classifiedAt": "2026-06-03T16:21:43.896440+00:00"
     },
     {
       "postId": "DY0tKj0gYx4",
@@ -62,7 +62,7 @@
       "reason": "Claude Code",
       "postUrl": "https://www.threads.com/@resen168/post/DY0tKj0gYx4",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:43:25.698209+00:00"
+      "classifiedAt": "2026-06-03T16:21:47.347068+00:00"
     },
     {
       "postId": "DY1uXH-kwe7",
@@ -71,7 +71,7 @@
       "reason": "Claude Code",
       "postUrl": "https://www.threads.com/@levelup.daily_lab/post/DY1uXH-kwe7",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:43:28.999408+00:00"
+      "classifiedAt": "2026-06-03T16:21:50.115567+00:00"
     },
     {
       "postId": "DY1lgkuiTJy",
@@ -80,7 +80,7 @@
       "reason": "AI",
       "postUrl": "https://www.threads.com/@kikitataysi/post/DY1lgkuiTJy",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:43:34.273354+00:00"
+      "classifiedAt": "2026-06-03T16:21:56.087462+00:00"
     },
     {
       "postId": "DYyy7MijjAQ",
@@ -89,7 +89,7 @@
       "reason": "科技",
       "postUrl": "https://www.threads.com/@s_h_u_ooo/post/DYyy7MijjAQ",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:43:39.010389+00:00"
+      "classifiedAt": "2026-06-03T16:22:00.851576+00:00"
     },
     {
       "postId": "DYzkER5j12z",
@@ -98,7 +98,7 @@
       "reason": "AI",
       "postUrl": "https://www.threads.com/@buildthink.ai/post/DYzkER5j12z",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:43:54.775458+00:00"
+      "classifiedAt": "2026-06-03T16:22:10.738948+00:00"
     },
     {
       "postId": "DYzYKMiFEPx",
@@ -107,7 +107,7 @@
       "reason": "AI",
       "postUrl": "https://www.threads.com/@krumjahn/post/DYzYKMiFEPx",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:43:58.609943+00:00"
+      "classifiedAt": "2026-06-03T16:22:14.525090+00:00"
     },
     {
       "postId": "DYzHwlKk1Lm",
@@ -116,7 +116,7 @@
       "reason": "AI",
       "postUrl": "https://www.threads.com/@yv.ictor/post/DYzHwlKk1Lm",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:43:59.384944+00:00"
+      "classifiedAt": "2026-06-03T16:22:15.536334+00:00"
     },
     {
       "postId": "DYwLmqQDtrc",
@@ -125,7 +125,7 @@
       "reason": "Claude Code",
       "postUrl": "https://www.threads.com/@cassie8flowceo/post/DYwLmqQDtrc",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:44:03.279356+00:00"
+      "classifiedAt": "2026-06-03T16:22:19.421553+00:00"
     },
     {
       "postId": "DYvxrv9klON",
@@ -134,7 +134,7 @@
       "reason": "Claude Code",
       "postUrl": "https://www.threads.com/@cai.chengkai/post/DYvxrv9klON",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:44:06.207200+00:00"
+      "classifiedAt": "2026-06-03T16:22:22.243942+00:00"
     },
     {
       "postId": "DYvcrTZmZNH",
@@ -143,7 +143,7 @@
       "reason": "AI",
       "postUrl": "https://www.threads.com/@cooljerrett/post/DYvcrTZmZNH",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:44:06.922048+00:00"
+      "classifiedAt": "2026-06-03T16:22:22.865815+00:00"
     },
     {
       "postId": "DYvnmxHEr0y",
@@ -152,7 +152,7 @@
       "reason": "AI",
       "postUrl": "https://www.threads.com/@kufutw/post/DYvnmxHEr0y",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:44:09.931879+00:00"
+      "classifiedAt": "2026-06-03T16:22:25.716761+00:00"
     },
     {
       "postId": "DYvhWhaEwWn",
@@ -161,7 +161,7 @@
       "reason": "AI",
       "postUrl": "https://www.threads.com/@0xspeter/post/DYvhWhaEwWn",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:44:15.073992+00:00"
+      "classifiedAt": "2026-06-03T16:22:30.353540+00:00"
     },
     {
       "postId": "DYv2vgxkofT",
@@ -170,7 +170,7 @@
       "reason": "AI",
       "postUrl": "https://www.threads.com/@crazyaitools_/post/DYv2vgxkofT",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:44:19.934574+00:00"
+      "classifiedAt": "2026-06-03T16:22:35.099985+00:00"
     },
     {
       "postId": "DYtM1_Dmcdq",
@@ -179,7 +179,7 @@
       "reason": "科技",
       "postUrl": "https://www.threads.com/@__yasac/post/DYtM1_Dmcdq",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:44:20.378481+00:00"
+      "classifiedAt": "2026-06-03T16:22:35.633793+00:00"
     },
     {
       "postId": "DYsruI9GoRX",
@@ -188,7 +188,7 @@
       "reason": "Claude Code",
       "postUrl": "https://www.threads.com/@sscottdev/post/DYsruI9GoRX",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:44:25.641406+00:00"
+      "classifiedAt": "2026-06-03T16:22:41.678567+00:00"
     },
     {
       "postId": "DYrnV4UGXYu",
@@ -197,7 +197,7 @@
       "reason": "Claude Code",
       "postUrl": "https://www.threads.com/@kai_ch_chen/post/DYrnV4UGXYu",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:44:31.427827+00:00"
+      "classifiedAt": "2026-06-03T16:22:46.396558+00:00"
     },
     {
       "postId": "DYrHZKWE9ss",
@@ -206,7 +206,7 @@
       "reason": "AI",
       "postUrl": "https://www.threads.com/@aiposthub/post/DYrHZKWE9ss",
       "model": "gemini-2.5-flash",
-      "classifiedAt": "2026-06-03T13:44:34.608789+00:00"
+      "classifiedAt": "2026-06-03T16:22:50.180540+00:00"
     }
   ]
 }
