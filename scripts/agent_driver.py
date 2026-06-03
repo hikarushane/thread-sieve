@@ -68,7 +68,7 @@ def resolve_chrome_ws_path() -> Path | None:
 
 
 CHROME_WS: Path | None = resolve_chrome_ws_path()
-EXPECTED_VERSION = "0.3.0"
+EXPECTED_VERSION = "0.3.1"
 PANEL_ID = "threads-saved-export-panel"
 SAVED_URL_SUBSTR = "/saved"
 
@@ -170,6 +170,48 @@ def ask_confirmation(input_fn=input) -> bool:
     except EOFError:
         return False
     return answer.strip().lower() == "y"
+
+
+def _coerce_chrome_json(result: object) -> dict:
+    if isinstance(result, str):
+        parsed = json.loads(result)
+    else:
+        parsed = result
+    if not isinstance(parsed, dict):
+        raise RuntimeError(f"expected object result from browser, got {type(parsed).__name__}")
+    return parsed
+
+
+def set_browser_auto_unsave(tab_index: int, enabled: bool) -> dict:
+    expr = (
+        "(()=>{"
+        "const api=window.ThreadSieveAutoAiSync;"
+        "if(!api?.setAutoUnsave) return JSON.stringify({ok:false,error:'ThreadSieveAutoAiSync API missing'});"
+        "const state=api.setAutoUnsave(" + json.dumps(enabled) + ");"
+        "return JSON.stringify({ok:true,state});"
+        "})()"
+    )
+    result = _coerce_chrome_json(chrome_eval(tab_index, expr))
+    if not result.get("ok"):
+        raise RuntimeError(str(result.get("error") or "failed to set autoUnsave"))
+    return result
+
+
+def run_confirmed_browser_unsave(tab_index: int) -> dict:
+    expr = (
+        "(async()=>{"
+        "const api=window.ThreadSieveAutoAiSync;"
+        "if(!api?.forceLoad||!api?.runConfirmedUnsave) return JSON.stringify({ok:false,error:'ThreadSieveAutoAiSync API missing'});"
+        "const loaded=await api.forceLoad();"
+        "if(!loaded?.ok) return JSON.stringify({ok:false,error:'forceLoad failed',loaded});"
+        "const unsave=await api.runConfirmedUnsave();"
+        "return JSON.stringify({ok:true,loaded,unsave});"
+        "})()"
+    )
+    result = _coerce_chrome_json(chrome_eval(tab_index, expr))
+    if not result.get("ok"):
+        raise RuntimeError(str(result.get("error") or "confirmed unsave failed"))
+    return result
 
 
 def cmd_probe() -> int:

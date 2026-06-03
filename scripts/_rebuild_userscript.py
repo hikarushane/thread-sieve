@@ -3,7 +3,7 @@
 
 Strategy: take base 0.1.3 (which already contains all DOM/AI bug fixes),
 splice in the AutoAiSync block extracted from the existing auto fork,
-update header + bump SCRIPT_VERSION to 0.3.0, centralize scriptVersion
+update header + bump SCRIPT_VERSION to 0.3.1, centralize scriptVersion
 injection into _appendEventNow.
 """
 from __future__ import annotations
@@ -34,7 +34,7 @@ AUTO_PATH = ROOT / "userscripts" / "threads-scriber-auto.user.js"
 BASE_PATH = Path(
     os.environ.get("THREADS_SCRIBER_PATH", str(ROOT.parent / "threads-scriber" / "threads-scriber.user.js"))
 )
-NEW_VERSION = "0.3.0"
+NEW_VERSION = "0.3.1"
 
 
 def main() -> int:

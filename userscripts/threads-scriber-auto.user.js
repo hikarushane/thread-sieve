@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ThreadSieve (Auto)
 // @namespace    https://local-only.example/threads-sieve/
-// @version      0.3.0
+// @version      0.3.1
 // @description  ThreadSieve auto-loads unsave.json on disk change and optionally auto-runs the AI-post cleanup flow.
 // @author       threads-sieve
 // @match        https://threads.com/*
@@ -16,7 +16,7 @@
   "use strict";
 
   const STORAGE_KEY = "threadsSavedExportState";
-  const SCRIPT_VERSION = "0.3.0";
+  const SCRIPT_VERSION = "0.3.1";
   const PANEL_ID = "threads-saved-export-panel";
   const FILE_HANDLE_DB = "threadsSavedExportFileDb";
   const FILE_HANDLE_STORE = "handles";
@@ -3670,6 +3670,37 @@
       }
     },
 
+    getAutomationState() {
+      return {
+        autoLoad: this.settings.autoLoad,
+        autoUnsave: this.settings.autoUnsave,
+        handleName: this.handle?.name || "",
+        lastModified: this.lastModified,
+        loadedCount: state.aiItems.length,
+        selectedCount: state.selectedAiKeys.size,
+        verified: state.unsaveVerifiedKeys.size,
+        attempted: state.unsaveAttemptedKeys.size,
+        failed: state.unsaveFailedKeys.size,
+      };
+    },
+
+    setAutoUnsave(enabled) {
+      this.settings.autoUnsave = Boolean(enabled);
+      this.saveSettings();
+      this.refreshControls();
+      return this.getAutomationState();
+    },
+
+    async forceLoad() {
+      const ok = await this.tick({ forceLoad: true, ignoreAutoLoad: true });
+      return { ok, ...this.getAutomationState() };
+    },
+
+    async runConfirmedUnsave() {
+      await this.runAutoUnsave();
+      return { ok: true, ...this.getAutomationState() };
+    },
+
     async ensureHandle() {
       if (this.handle) {
         return this.handle;
@@ -3910,6 +3941,13 @@
       // Keep the status fresh even when nothing changes.
       window.setInterval(() => this.refreshControls(), 5000);
     },
+  };
+
+  window.ThreadSieveAutoAiSync = {
+    getState: () => AutoAiSync.getAutomationState(),
+    setAutoUnsave: (enabled) => AutoAiSync.setAutoUnsave(Boolean(enabled)),
+    forceLoad: () => AutoAiSync.forceLoad(),
+    runConfirmedUnsave: () => AutoAiSync.runConfirmedUnsave(),
   };
 
   function bootAutoAiSync() {
