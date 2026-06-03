@@ -155,7 +155,7 @@ copy .env.example .env
 
 ThreadSieve includes its own markdown note generator at `scripts/import_bookmarks_to_markdown.py`; it no longer calls a sibling `PROJECT_threads-to-note` repo. Markdown notes are written to `config.json` → `paths.markdown-output-root` (default: `output`).
 
-### 2. Browser side
+### 2. Browser side (one-time setup)
 
 1. Launch Chrome with `--remote-debugging-port=9222` (see above).
 2. Navigate to `https://www.threads.com/saved` and keep this tab open.
@@ -185,7 +185,13 @@ Logs stream to console and `pipeline.log`. Stop with `Ctrl+C`.
 
 ### Terminal B — agent-driven scrape
 
-#### Step 1 · Verify panel readiness
+#### Step 1 · Prepare the browser session
+
+1. Launch Chrome with `--remote-debugging-port=9222` using the same debug profile from setup.
+2. Open `https://www.threads.com/saved` and keep this tab open.
+3. If needed, reload the `/saved` tab so the **ThreadSieve** panel and **Auto AI Sync** panel appear.
+
+#### Step 2 · Verify panel readiness
 
 ```powershell
 python scripts/agent_driver.py probe
@@ -203,7 +209,7 @@ Expected output ends with `OK: panel ready for agent-driven scrape`.
 | `unsave.json handle not bound in AutoAiSync panel` | Click **綁定 unsave.json** in the Auto AI Sync panel, pick `data/unsave.json`; re-run probe |
 | `AutoAiSync panel missing` | Reload `/saved` tab; this refers to the Auto AI Sync panel |
 
-#### Step 2 · Trigger scrape
+#### Step 3 · Trigger scrape
 
 ```powershell
 # Capture everything since 2010 (all saves):
@@ -217,7 +223,7 @@ python scripts/agent_driver.py scrape --cutoff 2025-01-01 --wait-seconds 120
 Each `scrape` run first clicks **清空結果** so `catch.json` contains only the current run, not stale panel/localStorage items from an earlier cutoff.
 `--wait-seconds` polls `狀態` until idle (`待機中` / `完成` / `已停止`) or timeout.
 
-#### Step 3 · Wait for pipeline
+#### Step 4 · Wait for pipeline
 
 Watch Terminal A. After `catch.json` stabilises, the watcher fires both jobs:
 
@@ -231,7 +237,7 @@ pipeline starting: items=N
 
 After `classify` and `notes` finish, `scripts/image_ocr_to_markdown.py` reads this run's `catch.json` and `unsave.json`. For posts whose classification reason matches `config.json` → `image-ocr.trigger-categories`, it renders the Threads post with Playwright, OCRs attached images, and appends a `## 圖片文字` section to the matching markdown note. Gemini OCR is the default backend; Chandra can be selected in `config.json`.
 
-#### Step 4 · Auto AI Sync auto-unsave
+#### Step 5 · Auto AI Sync auto-unsave
 
 The forked userscript polls `unsave.json` every 3 s. When `lastModified` changes it auto-loads the AI classification. If **載入後自動取消儲存** is ticked, the unsave flow starts immediately — no further action needed.
 

@@ -69,7 +69,7 @@ copy .env.example .env
 
 ThreadSieve 已內建 markdown note generator (`scripts/import_bookmarks_to_markdown.py`)，不再呼叫外部 `PROJECT_threads-to-note` repo。markdown 筆記會寫到 `config.json` 的 `paths.markdown-output-root`，預設是 `output`。
 
-### Browser 端
+### Browser 端（一次性設定）
 
 1. 用 `--remote-debugging-port=9222` 啟動 Chrome。
 2. 打開 `https://www.threads.com/saved`。
@@ -137,7 +137,13 @@ log 會輸出到 console 和 `pipeline.log`。停止時按 `Ctrl+C`。
 
 ### Terminal B：agent-driven scrape
 
-先確認 panel ready：
+先準備 browser 端：
+
+1. 用安裝階段設定好的同一個 debug profile 啟動 Chrome，並帶上 `--remote-debugging-port=9222`。
+2. 開啟 `https://www.threads.com/saved`，並保持這個 tab 開著。
+3. 如果 panel 還沒出現，先 reload `/saved`，讓 **ThreadSieve panel** 和 **Auto AI Sync panel** 載入。
+
+再確認 panel ready：
 
 ```powershell
 python scripts/agent_driver.py probe
