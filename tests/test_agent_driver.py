@@ -4,6 +4,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent / "scripts"
 sys.path.insert(0, str(SCRIPTS_DIR))
@@ -212,3 +214,102 @@ def test_confirm_unsave_gate_accept_runs_browser_unsave(tmp_path, monkeypatch):
 
     assert rc == 0
     assert calls == [7]
+
+
+def test_coerce_chrome_json_parses_string_into_dict():
+    result = mod._coerce_chrome_json('{"ok":true,"value":1}')
+    assert result == {"ok": True, "value": 1}
+
+
+def test_coerce_chrome_json_returns_dict_passthrough():
+    payload = {"ok": False, "error": "missing"}
+    assert mod._coerce_chrome_json(payload) is payload
+
+
+def test_coerce_chrome_json_raises_on_non_object_result():
+    with pytest.raises(RuntimeError, match="expected object result from browser"):
+        mod._coerce_chrome_json([1, 2, 3])
+    with pytest.raises(RuntimeError, match="expected object result from browser"):
+        mod._coerce_chrome_json(None)
+
+
+def test_set_browser_auto_unsave_raises_when_api_missing(monkeypatch):
+    monkeypatch.setattr(
+        mod,
+        "chrome_eval",
+        lambda _idx, _expr: '{"ok":false,"error":"ThreadSieveAutoAiSync API missing"}',
+    )
+    with pytest.raises(RuntimeError, match="ThreadSieveAutoAiSync API missing"):
+        mod.set_browser_auto_unsave(0, False)
+
+
+def test_set_browser_auto_unsave_returns_success_payload(monkeypatch):
+    monkeypatch.setattr(
+        mod,
+        "chrome_eval",
+        lambda _idx, _expr: '{"ok":true,"state":{"autoUnsave":false,"verified":0}}',
+    )
+    result = mod.set_browser_auto_unsave(0, False)
+    assert result == {"ok": True, "state": {"autoUnsave": False, "verified": 0}}
+
+
+def test_run_confirmed_browser_unsave_raises_when_force_load_fails(monkeypatch):
+    monkeypatch.setattr(
+        mod,
+        "chrome_eval",
+        lambda _idx, _expr: '{"ok":false,"error":"forceLoad failed","loaded":{"ok":false}}',
+    )
+    with pytest.raises(RuntimeError, match="forceLoad failed"):
+        mod.run_confirmed_browser_unsave(0)
+
+
+def test_wait_for_unsave_payload_retries_until_generated_at_changes(tmp_path, monkeypatch):
+    unsave = tmp_path / "unsave.json"
+    sleeps: list[float] = []
+
+    states = iter([
+        FileNotFoundError(),
+        '{"generatedAt":"old","items":[]}',
+        '{"generatedAt":"new","items":[{"postId":"p1"}]}',
+    ])
+
+    def fake_load_json_file(path):
+        nxt = next(states)
+        if isinstance(nxt, BaseException):
+            raise nxt
+        return mod.json.loads(nxt)
+
+    monkeypatch.setattr(mod, "load_json_file", fake_load_json_file)
+    times = iter([0.0, 0.1, 0.2, 0.3])
+    monkeypatch.setattr(mod.time, "time", lambda: next(times))
+    monkeypatch.setattr(mod.time, "sleep", lambda seconds: sleeps.append(seconds))
+
+    payload = mod.wait_for_unsave_payload(
+        unsave_path=unsave,
+        previous_generated_at="old",
+        timeout_seconds=5,
+        poll_seconds=0.1,
+    )
+
+    assert payload["generatedAt"] == "new"
+    assert sleeps == [0.1, 0.1]
+
+
+def test_wait_for_unsave_payload_raises_timeout_when_deadline_passes(tmp_path, monkeypatch):
+    unsave = tmp_path / "unsave.json"
+    monkeypatch.setattr(
+        mod,
+        "load_json_file",
+        lambda _path: {"generatedAt": "old", "items": []},
+    )
+    times = iter([0.0, 0.1, 0.2, 5.1])
+    monkeypatch.setattr(mod.time, "time", lambda: next(times))
+    monkeypatch.setattr(mod.time, "sleep", lambda _seconds: None)
+
+    with pytest.raises(TimeoutError, match="unsave.json did not update within 5s"):
+        mod.wait_for_unsave_payload(
+            unsave_path=unsave,
+            previous_generated_at="old",
+            timeout_seconds=5,
+            poll_seconds=0.1,
+        )
