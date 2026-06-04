@@ -313,3 +313,20 @@ def test_wait_for_unsave_payload_raises_timeout_when_deadline_passes(tmp_path, m
             timeout_seconds=5,
             poll_seconds=0.1,
         )
+
+
+def test_run_confirmed_browser_unsave_returns_unsave_state_on_success(monkeypatch):
+    monkeypatch.setattr(
+        mod,
+        "chrome_eval",
+        lambda _idx, _expr: (
+            '{"ok":true,"unsave":{"ok":true,'
+            '"autoUnsave":false,"verified":3,"attempted":3,"failed":0,'
+            '"loadedCount":3,"selectedCount":0}}'
+        ),
+    )
+    result = mod.run_confirmed_browser_unsave(0)
+    assert result["ok"] is True
+    assert result["unsave"]["verified"] == 3
+    assert result["unsave"]["attempted"] == 3
+    assert result["unsave"]["failed"] == 0
