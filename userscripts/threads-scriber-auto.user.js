@@ -3692,14 +3692,24 @@
     },
 
     async confirmedUnsave() {
-      const loaded = await this.tick({ forceLoad: true, ignoreAutoLoad: true });
-      if (!loaded) {
-        return { ok: false, error: "forceLoad failed", ...this.getAutomationState() };
+      // Pin autoUnsave to false for the duration of this call. tick() with forceLoad:true
+      // internally invokes runAutoUnsave() iff this.settings.autoUnsave === true, and we
+      // then call runAutoUnsave() again below — so without this guard a caller who forgot
+      // to disable autoUnsave would double-run the unsave loop.
+      const previousAutoUnsave = this.settings.autoUnsave;
+      this.settings.autoUnsave = false;
+      try {
+        const loaded = await this.tick({ forceLoad: true, ignoreAutoLoad: true });
+        if (!loaded) {
+          return { ok: false, error: "forceLoad failed", ...this.getAutomationState() };
+        }
+        await this.runAutoUnsave();
+        const automationState = this.getAutomationState();
+        const ok = automationState.verified > 0 || automationState.attempted > 0;
+        return { ok, ...automationState };
+      } finally {
+        this.settings.autoUnsave = previousAutoUnsave;
       }
-      await this.runAutoUnsave();
-      const state = this.getAutomationState();
-      const ok = state.verified > 0 || state.attempted > 0;
-      return { ok, ...state };
     },
 
     async ensureHandle() {
