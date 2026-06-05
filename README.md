@@ -1,6 +1,9 @@
-# ThreadSieve
+# ThreadSieve (full / power-user)
 
 [English](README.en.md)
+
+> **此分支為 power-user 版本**，包含 `watch_pipeline.py`、`agent_driver.py`、Chandra/vLLM OCR backend，需要 Node.js、Claude Code + `superpowers-chrome` plugin、Chrome `--remote-debugging-port=9222`。  
+> 只想 **雙擊跑、不裝 plugin、不開 terminal** 的一般使用者請改用 [`lite` 分支](https://github.com/hikaru-yeh/thread-sieve/tree/main)（即 repo 預設 branch）。
 
 Threads 收藏貼文的問題：
 

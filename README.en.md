@@ -1,6 +1,9 @@
-# ThreadSieve
+# ThreadSieve (full / power-user)
 
 [繁體中文](README.md)
+
+> **This branch is the power-user build** — includes `watch_pipeline.py`, `agent_driver.py`, and Chandra/vLLM OCR backend. Requires Node.js, Claude Code + `superpowers-chrome` plugin, and Chrome `--remote-debugging-port=9222`.  
+> If you just want to **double-click and go** (no plugin, no terminal), use the [`lite` branch](https://github.com/hikaru-yeh/thread-sieve) — it's the repo's default branch.
 
 The problem with Threads bookmarks:
 
