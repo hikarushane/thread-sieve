@@ -157,8 +157,14 @@ def build_unsave_preview_lines(catch_posts: object, unsave_payload: object) -> l
         post_id = str(item.get("postId") or "")
         post = posts_by_id.get(post_id)
         if not post:
-            lines.append("作者:(unknown)| 貼文:(post not found in catch.json)")
-            continue
+            has_preview_metadata = any(
+                str(item.get(key) or "").strip()
+                for key in ("authorName", "authorHandle", "contentText")
+            )
+            if not has_preview_metadata:
+                lines.append("作者:(unknown)| 貼文:(post not found in catch.json)")
+                continue
+            post = item
         author = (
             str(post.get("authorName") or "").strip()
             or str(post.get("authorHandle") or "").strip()

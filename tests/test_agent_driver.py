@@ -120,6 +120,30 @@ def test_build_unsave_preview_lines_joins_items_to_catch_posts():
     ]
 
 
+def test_build_unsave_preview_lines_falls_back_to_unsave_item_metadata():
+    catch_posts = [
+        {
+            "postId": "stale",
+            "authorName": "Stale",
+            "contentText": "not this run",
+        }
+    ]
+    unsave_payload = {
+        "items": [
+            {
+                "postId": "fresh",
+                "authorName": "Fresh Author",
+                "authorHandle": "@fresh",
+                "contentText": "新的一批 AI 貼文。第二句",
+            }
+        ]
+    }
+
+    assert mod.build_unsave_preview_lines(catch_posts, unsave_payload) == [
+        "作者:Fresh Author| 貼文:新的一批 AI 貼文。"
+    ]
+
+
 def test_ask_confirmation_accepts_only_lowercase_or_uppercase_y():
     assert mod.ask_confirmation(lambda _prompt: "y") is True
     assert mod.ask_confirmation(lambda _prompt: "Y") is True

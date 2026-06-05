@@ -53,6 +53,9 @@ class ClassifiedItem:
     confidence: float
     reason: str
     classified_at: str
+    author_handle: str = ""
+    author_name: str = ""
+    content_text: str = ""
 
 
 def parse_config(data: dict) -> ClassifyConfig:
@@ -147,6 +150,9 @@ def classify_post(
                 confidence=0.0,
                 reason=f"classifier error: {error}",
                 classified_at=timestamp(),
+                author_handle=author,
+                author_name=str(post.get("authorName", "") or ""),
+                content_text=content,
             ),
             "",
         )
@@ -161,6 +167,9 @@ def classify_post(
                 confidence=0.0,
                 reason=f"invalid category from Gemini: {raw[:200]!r}",
                 classified_at=timestamp(),
+                author_handle=author,
+                author_name=str(post.get("authorName", "") or ""),
+                content_text=content,
             ),
             "",
         )
@@ -174,6 +183,9 @@ def classify_post(
             confidence=1.0,
             reason=category,
             classified_at=timestamp(),
+            author_handle=author,
+            author_name=str(post.get("authorName", "") or ""),
+            content_text=content,
         ),
         category,
     )
@@ -187,6 +199,11 @@ def build_output_payload(
     classified: list[tuple[ClassifiedItem, str]],
     config: ClassifyConfig,
 ) -> dict:
+    posts_by_id = {
+        str(post.get("postId") or ""): post
+        for post in posts
+        if isinstance(post, dict) and post.get("postId")
+    }
     items_out = []
     ai_count = 0
     not_ai_count = 0
@@ -196,13 +213,17 @@ def build_output_payload(
     for item, category in classified:
         if item.decision == "ai":
             ai_count += 1
+            post = posts_by_id.get(item.post_id, {})
             items_out.append(
                 {
                     "postId": item.post_id,
+                    "postUrl": item.post_url,
+                    "authorHandle": item.author_handle or str(post.get("authorHandle", "") or ""),
+                    "authorName": item.author_name or str(post.get("authorName", "") or ""),
+                    "contentText": item.content_text or str(post.get("contentText", "") or ""),
                     "decision": item.decision,
                     "confidence": item.confidence,
                     "reason": item.reason,
-                    "postUrl": item.post_url,
                     "model": model,
                     "classifiedAt": item.classified_at,
                 }

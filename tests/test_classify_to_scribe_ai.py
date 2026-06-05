@@ -14,7 +14,13 @@ import classify_to_scribe_ai as mod  # noqa: E402
 
 
 SAMPLE_POSTS = [
-    {"postId": "p_ai", "postUrl": "https://t.example/p_ai", "authorHandle": "@a", "contentText": "AI agent stuff"},
+    {
+        "postId": "p_ai",
+        "postUrl": "https://t.example/p_ai",
+        "authorHandle": "@a",
+        "authorName": "Alice",
+        "contentText": "AI agent stuff",
+    },
     {"postId": "p_tech", "postUrl": "https://t.example/p_tech", "authorHandle": "@b", "contentText": "new GPU release"},
     {"postId": "p_food", "postUrl": "https://t.example/p_food", "authorHandle": "@c", "contentText": "delicious ramen"},
 ]
@@ -73,12 +79,40 @@ def test_output_item_schema_fields_present():
     payload = mod.build_output_payload(
         source_file="catch.json", model="gemini-test", posts=SAMPLE_POSTS, classified=classified, config=config,
     )
-    required_fields = {"postId", "postUrl", "decision", "confidence", "reason", "model", "classifiedAt"}
+    required_fields = {
+        "postId",
+        "postUrl",
+        "authorHandle",
+        "authorName",
+        "contentText",
+        "decision",
+        "confidence",
+        "reason",
+        "model",
+        "classifiedAt",
+    }
     for item in payload["items"]:
         assert required_fields <= set(item.keys())
         assert item["decision"] == "ai"
         assert item["confidence"] == 1.0
         assert item["reason"] in {"AI", "科技"}
+
+
+def test_output_items_include_preview_metadata_from_posts():
+    config = make_config({"AI"})
+    client = make_client({"p_ai": "AI", "p_tech": "科技", "p_food": "美食"})
+    classified = [
+        mod.classify_post(post=p, client=client, model="gemini-test", config=config)
+        for p in SAMPLE_POSTS
+    ]
+    payload = mod.build_output_payload(
+        source_file="catch.json", model="gemini-test", posts=SAMPLE_POSTS, classified=classified, config=config,
+    )
+
+    assert payload["items"][0]["postId"] == "p_ai"
+    assert payload["items"][0]["authorHandle"] == "@a"
+    assert payload["items"][0]["authorName"] == "Alice"
+    assert payload["items"][0]["contentText"] == "AI agent stuff"
 
 
 def test_invalid_category_falls_into_unsure_failed_buckets():
