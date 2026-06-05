@@ -38,7 +38,7 @@ Two coupled layers:
    ThreadSieve userscript: auto-load + confirmed auto-unsave
 ```
 
-Two usage paths after setup: **No Terminal** (scrape via browser panel + one classify command) or **With Terminal** (watcher auto-triggers on `catch.json` + agent-driven scrape with a confirmation gate).
+Two usage paths after setup: **No-typing (double-click)** (scrape via browser panel + double-click `run_classify.cmd`) or **With Terminal** (watcher auto-triggers on `catch.json` + agent-driven scrape with a confirmation gate).
 
 ---
 
@@ -208,18 +208,18 @@ The `catch.json` autosave grant, `unsave.json` binding, and `agent_driver.py pro
 
 Two usage paths. Choose based on your setup:
 
-| | Path 1 — No Terminal | Path 2 — Terminal watcher + agent scrape |
+| | Path 1 — No-typing (double-click) | Path 2 — Terminal watcher + agent scrape |
 | --- | --- | --- |
 | Requires `agent_driver.py` | No | Yes |
 | Requires Chrome debug port | No | Yes |
-| Classify trigger | Manual (one command) | Automatic (watcher detects `catch.json`) |
+| Classify trigger | Double-click `run_classify.cmd` | Automatic (watcher detects `catch.json`) |
 | Best for | Occasional use, quick runs | Daily automation |
 
 ---
 
-### Path 1 — No Terminal
+### Path 1 — No-typing (double-click)
 
-Scrape via the browser panel, then run classify once by hand.
+Scrape via the browser panel, then double-click `run_classify.cmd` to run classify once. No commands to type.
 
 #### Step 1 · Prepare the browser session
 
@@ -237,12 +237,18 @@ Scrape via the browser panel, then run classify once by hand.
 
 #### Step 3 · Run classify
 
+Double-click `run_classify.cmd` in the project root. A console window opens, activates `.venv`, runs `scripts/import_bookmarks_to_markdown.py`, then prints `[DONE]` or `[FAILED]` and waits for any key.
+
+Optional desktop shortcut: right-click `run_classify.cmd` → Send to → Desktop (create shortcut). Then double-click the shortcut from anywhere.
+
+This classifies every post once and writes both markdown notes and `unsave.json`. Image OCR runs automatically for posts whose category matches `config.json` → `image-ocr.trigger-categories`.
+
+Fallback for users who prefer a shell:
+
 ```powershell
 .\.venv\Scripts\Activate.ps1
 python scripts/import_bookmarks_to_markdown.py
 ```
-
-This classifies every post once and writes both markdown notes and `unsave.json`. Image OCR runs automatically for posts whose category matches `config.json` → `image-ocr.trigger-categories`.
 
 #### Step 4 · Confirm unsave in the browser
 
