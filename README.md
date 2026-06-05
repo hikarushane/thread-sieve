@@ -28,7 +28,7 @@ Two coupled layers: `userscripts/threads-scriber-auto.user.js` (browser, Tamperm
    ThreadSieve userscript: auto-load + confirmed auto-unsave
 ```
 
-After setup, each run re-grants the browser file handles, triggers a scrape, and then asks for one terminal confirmation before unsaving generated AI candidates.
+Two usage paths after setup: **No Terminal** (scrape via browser panel + one classify command) or **With Terminal** (watcher auto-triggers on `catch.json` + agent-driven scrape with a confirmation gate).
 
 ---
 
@@ -46,7 +46,14 @@ After setup, each run re-grants the browser file handles, triggers a scrape, and
 
 ## Install
 
-### 0. superpowers-chrome (CDP automation, required for `agent_driver.py`)
+### 0. Clone the repo
+
+```powershell
+git clone https://github.com/hikaru-yeh/thread-sieve.git
+cd thread-sieve
+```
+
+### 1. superpowers-chrome (CDP automation, required for `agent_driver.py`)
 
 `agent_driver.py` drives the browser through the [`superpowers-chrome`](https://github.com/obra/superpowers-chrome) plugin, which ships a `chrome-ws` Node.js CLI for Chrome DevTools Protocol commands.
 
@@ -144,7 +151,7 @@ Both hooks only target `agent_driver.py` and `push_userscript.py`. They block th
 
 ---
 
-### 1. Python side
+### 2. Python side
 
 ```powershell
 cd path\to\threads-sieve
@@ -153,13 +160,28 @@ python -m venv .venv
 pip install -r requirements.txt
 playwright install chromium
 copy .env.example .env
-# edit .env: fill GEMINI_API_KEY
-# edit config.json: verify paths, categories, unsaved-categories, and image-ocr
+copy config.json.example config.json
 ```
+
+Edit `.env`: fill in `GEMINI_API_KEY`.
+
+Edit `config.json`:
+
+| Key | What to set |
+| --- | --- |
+| `paths.catch-json` | Path to `data/catch.json` (relative or absolute) |
+| `paths.unsave-json` | Path to `data/unsave.json` (relative or absolute) |
+| `paths.markdown-output-root` | Where markdown notes are written (default: `output`) |
+| `paths.chrome-ws-cli` | Full path to the `chrome-ws` CLI from step 0 |
+| `categories` | Ordered list of categories the classifier can output |
+| `unsaved-categories` | Subset of `categories` whose posts get added to `unsave.json` |
+| `hints` | Free-text rules injected into the Gemini prompt to guide edge-case decisions |
+
+`category-overrides` is optional — keyword/regex rules that force a category before calling Gemini.
 
 ThreadSieve includes its own markdown note generator at `scripts/import_bookmarks_to_markdown.py`; it no longer calls a sibling `PROJECT_threads-to-note` repo. Markdown notes are written to `config.json` → `paths.markdown-output-root` (default: `output`).
 
-### 2. Browser side (one-time setup)
+### 3. Browser side (one-time setup)
 
 1. Launch Chrome with `--remote-debugging-port=9222` (see above).
 2. Navigate to `https://www.threads.com/saved` and keep this tab open.
@@ -174,7 +196,58 @@ The `catch.json` autosave grant, `unsave.json` binding, and `agent_driver.py pro
 
 ## Daily usage SOP
 
-### Terminal A — start the watcher (keep running)
+Two usage paths. Choose based on your setup:
+
+| | Path 1 — No Terminal | Path 2 — Terminal watcher + agent scrape |
+| --- | --- | --- |
+| Requires `agent_driver.py` | No | Yes |
+| Requires Chrome debug port | No | Yes |
+| Classify trigger | Manual (one command) | Automatic (watcher detects `catch.json`) |
+| Best for | Occasional use, quick runs | Daily automation |
+
+---
+
+### Path 1 — No Terminal
+
+Scrape via the browser panel, then run classify once by hand.
+
+#### Step 1 · Prepare the browser session
+
+1. Open Chrome and navigate to `https://www.threads.com/saved`.
+2. If needed, reload the `/saved` tab so the **ThreadSieve** panel and **Auto AI Sync** panel appear.
+3. In the **ThreadSieve panel**: click **設定自動存檔** → pick `data/catch.json`.
+4. In the **Auto AI Sync panel**: click **綁定 unsave.json** → pick `data/unsave.json`.
+5. Tick **自動載入 unsave.json**.
+
+#### Step 2 · Scrape via the panel
+
+1. Enter a cutoff date in the ThreadSieve panel date input.
+2. Click **清空結果** to clear any leftover results from a previous run.
+3. Click **開始抓取** and wait for `狀態` to show `完成` or `待機中`.
+
+#### Step 3 · Run classify
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+python scripts/import_bookmarks_to_markdown.py
+```
+
+This classifies every post once and writes both markdown notes and `unsave.json`. Image OCR runs automatically for posts whose category matches `config.json` → `image-ocr.trigger-categories`.
+
+#### Step 4 · Confirm unsave in the browser
+
+The Auto AI Sync panel polls `unsave.json` every 3 s. Once it loads the new file it shows the candidate count and `generatedAt` timestamp.
+
+- Click **立即檢查** to force an immediate poll.
+- Tick **載入後自動取消儲存** before the file updates, or click the unsave button manually, to unsave the AI candidates.
+
+---
+
+### Path 2 — Terminal watcher + agent scrape (automated)
+
+Runs the full pipeline automatically. Requires Chrome with `--remote-debugging-port=9222` and `config.json` → `paths.chrome-ws-cli` set.
+
+#### Terminal A — start the watcher (keep running)
 
 ```powershell
 cd path\to\threads-sieve
@@ -183,11 +256,9 @@ cd path\to\threads-sieve
 
 Logs stream to console and `pipeline.log`. Stop with `Ctrl+C`.
 
----
+#### Terminal B — agent-driven scrape
 
-### Terminal B — agent-driven scrape
-
-#### Step 1 · Prepare the browser session
+##### Step 1 · Prepare the browser session
 
 1. Launch Chrome with `--remote-debugging-port=9222` using the same debug profile from setup.
 2. Open `https://www.threads.com/saved` and keep this tab open.
@@ -198,7 +269,7 @@ Logs stream to console and `pipeline.log`. Stop with `Ctrl+C`.
 7. Leave **載入後自動取消儲存** off when using the Terminal B confirmation gate; `agent_driver.py scrape` will run the confirmed one-shot unsave after you type `y`.
 8. Optional: click **立即檢查** to force one AI classification load. If it succeeds, the small Auto AI Sync panel closes so it no longer covers the main panel.
 
-#### Step 2 · Verify panel readiness
+##### Step 2 · Verify panel readiness
 
 ```powershell
 python scripts/agent_driver.py probe
@@ -216,7 +287,7 @@ Expected output ends with `OK: panel ready for agent-driven scrape`.
 | `unsave.json handle not bound in AutoAiSync panel` | Click **綁定 unsave.json** in the Auto AI Sync panel, pick `data/unsave.json`; re-run probe |
 | `AutoAiSync panel missing` | Reload `/saved` tab; this refers to the Auto AI Sync panel |
 
-#### Step 3 · Trigger scrape
+##### Step 3 · Trigger scrape
 
 ```powershell
 # Capture everything since 2010 (all saves):
@@ -232,7 +303,7 @@ Each `scrape` run first clicks **清空結果** so `catch.json` contains only th
 
 `--no-unsave-confirm` skips the Terminal B confirmation gate and lets browser auto-unsave run as soon as `unsave.json` updates. `--unsave-timeout-seconds` (default `600`) bounds how long the gate waits for the watcher to write a fresh `unsave.json` after scrape completes.
 
-#### Step 4 · Wait for pipeline
+##### Step 4 · Wait for pipeline
 
 Watch Terminal A. After `catch.json` stabilises, the watcher runs the note workflow, which classifies each post once and writes both markdown notes and `unsave.json`:
 
@@ -245,7 +316,7 @@ pipeline starting: items=N
 
 After `notes` finishes, `scripts/image_ocr_to_markdown.py` reads this run's `catch.json` and `unsave.json`. For posts whose classification reason matches `config.json` → `image-ocr.trigger-categories`, it renders the Threads post with Playwright, OCRs attached images, and appends a `## 圖片文字` section to the matching markdown note. Gemini OCR is the default backend; Chandra can be selected in `config.json`.
 
-#### Step 5 · Terminal B confirmation gate
+##### Step 5 · Terminal B confirmation gate
 
 After a fresh `unsave.json` is generated, Terminal B prints each candidate as `作者:<author>| 貼文:<first sentence>` and asks `確認執行?(y/n)`.
 
