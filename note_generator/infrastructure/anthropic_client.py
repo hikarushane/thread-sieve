@@ -54,6 +54,7 @@ class AnthropicClient:
             },
             {"type": "text", "text": prompt},
         ]
+        # No retry wrapper — matches GeminiClient.generate_text_from_image parity (single-shot OCR).
         response = self._client.messages.create(
             model=model_name,
             max_tokens=self._max_tokens,
