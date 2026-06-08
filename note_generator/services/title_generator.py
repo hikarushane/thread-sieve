@@ -29,7 +29,7 @@ class TitleGenerator:
         title = self._clean_title(raw_title)
         title = title[: self._max_title_length].strip()
         if not title:
-            raise RuntimeError("Gemini returned an empty title")
+            raise RuntimeError("LLM returned an empty title")
         return TitledBookmark(
             classified=item,
             generated_title=title,

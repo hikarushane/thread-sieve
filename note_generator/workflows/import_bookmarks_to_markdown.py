@@ -150,6 +150,7 @@ class ImportBookmarksToMarkdownWorkflow:
                 categories=config.categories,
                 hints=config.hints,
                 category_overrides=config.category_overrides,
+                provider=config.llm_provider,
             ),
             ocr_enricher=ocr_enricher,
             title_generator=TitleGenerator(

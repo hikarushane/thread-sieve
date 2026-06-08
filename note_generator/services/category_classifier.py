@@ -20,6 +20,7 @@ class CategoryClassifier:
         categories: list[str],
         hints: list[str],
         category_overrides: list[CategoryOverride] | None = None,
+        provider: str = "gemini",
     ) -> None:
         if not categories:
             raise ValueError("config.json categories must not be empty")
@@ -28,6 +29,7 @@ class CategoryClassifier:
         self._categories = categories
         self._hints = hints
         self._category_overrides = category_overrides or []
+        self._provider = provider
         self._category_set = set(categories)
         self._canonical_by_casefold = {
             category.casefold(): category
@@ -51,11 +53,11 @@ class CategoryClassifier:
         raw_category = self._llm_client.generate_text(prompt, model_name=self._model_name)
         category = self._normalize_category(raw_category)
         if category not in self._category_set:
-            raise RuntimeError(f"Gemini returned invalid category: {category or raw_category!r}")
+            raise RuntimeError(f"LLM returned invalid category: {category or raw_category!r}")
         return ClassifiedBookmark(
             enriched=item,
             category=category,
-            category_reason="gemini",
+            category_reason=self._provider,
         )
 
     def _build_prompt(self, item: EnrichedBookmark) -> str:
