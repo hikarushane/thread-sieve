@@ -89,3 +89,43 @@ def test_model_overrides_via_config_json(monkeypatch, tmp_path):
     assert cfg.model_for_classification == "claude-opus-4-7"
     assert cfg.model_for_title == "claude-sonnet-4-6"
     assert cfg.model_for_ocr == "claude-sonnet-4-6"
+
+
+def test_legacy_classifier_model_env_var(monkeypatch, tmp_path):
+    path = _write_json(tmp_path, {"categories": ["AI"]})
+    monkeypatch.setenv("THREADSIEVE_CONFIG", str(path))
+    monkeypatch.setenv("CLASSIFIER_MODEL", "gemini-2.5-pro-legacy")
+
+    cfg = load_config(dotenv_path=None)
+
+    assert cfg.model_for_classification == "gemini-2.5-pro-legacy"
+
+
+def test_legacy_title_model_env_var(monkeypatch, tmp_path):
+    path = _write_json(tmp_path, {"categories": ["AI"]})
+    monkeypatch.setenv("THREADSIEVE_CONFIG", str(path))
+    monkeypatch.setenv("THREADS_GEMINI_TITLE_MODEL", "legacy-title-model")
+
+    cfg = load_config(dotenv_path=None)
+
+    assert cfg.model_for_title == "legacy-title-model"
+
+
+def test_legacy_ocr_model_env_var(monkeypatch, tmp_path):
+    path = _write_json(tmp_path, {"categories": ["AI"]})
+    monkeypatch.setenv("THREADSIEVE_CONFIG", str(path))
+    monkeypatch.setenv("IMAGE_OCR_MODEL", "legacy-ocr-model")
+
+    cfg = load_config(dotenv_path=None)
+
+    assert cfg.model_for_ocr == "legacy-ocr-model"
+
+
+def test_llm_block_null_in_json(monkeypatch, tmp_path):
+    path = _write_json(tmp_path, {"categories": ["AI"], "llm": None})
+    monkeypatch.setenv("THREADSIEVE_CONFIG", str(path))
+
+    cfg = load_config(dotenv_path=None)
+
+    assert cfg.llm_provider == "gemini"
+    assert cfg.model_for_classification == "gemini-2.5-flash"
