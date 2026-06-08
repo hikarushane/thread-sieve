@@ -403,6 +403,31 @@ frontmatter 有 `網址` 或 `url`、且沒有 `## 圖片文字` 的檔案。
 
 ---
 
+## LLM provider 選擇
+
+ThreadSieve 的分類、標題、圖片 OCR 三個階段都走 LLM。預設使用 Google Gemini SDK，但可以在 `config.json` 或 `.env` 中切換成 Anthropic Claude 或 OpenAI ChatGPT。
+
+| Provider  | `.env` API key 變數    | 預設 text model        | 預設 vision model      |
+|-----------|------------------------|------------------------|------------------------|
+| Gemini    | `GEMINI_API_KEY`       | `gemini-2.5-flash`     | `gemini-2.5-flash`     |
+| Anthropic | `ANTHROPIC_API_KEY`    | `claude-sonnet-4-6`    | `claude-sonnet-4-6`    |
+| OpenAI    | `OPENAI_API_KEY`       | `gpt-4o-mini`          | `gpt-4o`               |
+
+切換方式（擇一）：
+
+- `.env`: `LLM_PROVIDER=anthropic`
+- `config.json` 加入：
+
+  ```json
+  "llm": { "provider": "anthropic" }
+  ```
+
+只需要在 `.env` 中填入你選用的那一個 provider 的 API key，其餘空白即可。每個階段的 model 也可以單獨覆蓋（`THREADS_LLM_CLASSIFIER_MODEL` / `THREADS_LLM_TITLE_MODEL` / `THREADS_LLM_OCR_MODEL` 環境變數，或 `config.json` 的 `llm.text-model` / `title-model` / `vision-model`）。
+
+注意：目前 `scripts/image_ocr_to_markdown.py` 的 CLI 路徑只支援 `--ocr-backend gemini`；多 provider 走的是主要 pipeline（`scripts/import_bookmarks_to_markdown.py` + workflow）。
+
+---
+
 ## 設定
 
 `config.json` 放非 secret 的通用設定、分類表和 OCR 行為：
