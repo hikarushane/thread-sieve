@@ -12,11 +12,15 @@ class _FakeClient:
 
 
 def test_fake_client_satisfies_protocol():
-    client: LLMClient = _FakeClient()  # type: ignore[assignment]
-    assert client.generate_text("hello world", model_name="m") == "text:m:hello wo"
-    assert client.generate_text_from_image(b"xxx", "p", model_name="m") == "image:m:3"
+    fake = _FakeClient()
+    assert isinstance(fake, LLMClient)
+    assert fake.generate_text("hello world", model_name="m") == "text:m:hello wo"
+    assert fake.generate_text_from_image(b"xxx", "p", model_name="m") == "image:m:3"
 
 
-def test_protocol_methods_are_declared():
-    assert hasattr(LLMClient, "generate_text")
-    assert hasattr(LLMClient, "generate_text_from_image")
+def test_non_conforming_class_fails_isinstance_check():
+    class _MissingMethod:
+        def generate_text(self, prompt: str, *, model_name: str) -> str:
+            return "x"
+
+    assert not isinstance(_MissingMethod(), LLMClient)
