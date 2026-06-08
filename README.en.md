@@ -14,6 +14,8 @@ The problem with Threads bookmarks:
 
 ThreadSieve is a local automation pipeline that turns Threads saved posts into categorized markdown notes, and automatically unsave posts that have already been organized in specified categories.
 
+Post content passed into classification and note generation includes the main post text, comments from the post author in the same thread, and text extracted from post images with OCR.
+
 Two coupled layers:
 
 - `userscripts/threads-scriber-auto.user.js` — browser-side Tampermonkey userscript; scrapes the Threads saved page and writes `catch.json`.

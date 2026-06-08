@@ -14,6 +14,8 @@ Threads 收藏貼文的問題：
 
 ThreadSieve 是一套本機端自動化流程，用來把 Threads 收藏貼文篩選、分類，轉成 markdown 筆記，並可自動取消儲存已整理過的指定分類貼文。
 
+抓取後進入分類與筆記產生的貼文內容包含：主文內容、作者在同串貼文中的留言，以及貼文圖片經 OCR 轉出的文字。
+
 這個 repo 包含兩層：
 
 - `userscripts/threads-scriber-auto.user.js`：瀏覽器端 Tampermonkey userscript，負責抓 Threads saved 頁面並寫出 `catch.json`。
