@@ -3,7 +3,7 @@
 [繁體中文](README.md)
 
 > End-user branch: no `superpowers-chrome`, no watcher, no Chrome debug port.  
-> For the full automation build (terminal watcher + agent-driven scrape + Chandra OCR), switch to the `main` branch.
+> For the full automation build (terminal watcher + agent-driven scrape + Chandra OCR), switch to the `full` branch.
 
 The problem with Threads bookmarks:
 
@@ -54,8 +54,6 @@ Two layers:
 | Tampermonkey extension | userscript injection |
 | Gemini API key | classification + image OCR |
 
-No Node.js. No `--remote-debugging-port`. No Claude Code plugin required.
-
 ---
 
 ## Install
@@ -102,7 +100,7 @@ Edit `config.json`:
 
 ---
 
-## Daily SOP (no typing)
+## Daily SOP
 
 #### Step 1 · Prepare the browser
 
@@ -241,7 +239,7 @@ Path values may be relative or absolute. For Windows paths in JSON, forward slas
 
 ## Want more automation?
 
-Switch to the `main` branch for:
+Switch to the `full` branch for:
 
 - `watch_pipeline.py` — auto-trigger classify on `catch.json` change.
 - `agent_driver.py` — drive the panel from terminal via `superpowers-chrome` + Chrome `--remote-debugging-port=9222`.
