@@ -29,6 +29,11 @@
     "backend": "gemini",
     "trigger-categories": ["AI"]
   },
+  "thread-context": {
+    "enabled": true,
+    "min-reply-chars": 12,
+    "max-replies": 30
+  },
   "hints": [
     "If content discusses AI agents, prompts, LLMs, or automation workflows, prefer AI over Tech.",
     "If content is clearly about a specific public figure or fandom topic, prefer the most specific matching category."

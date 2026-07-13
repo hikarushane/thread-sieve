@@ -93,3 +93,56 @@ def test_threads_reply_enricher_accepts_configured_label_lines() -> None:
     )
 
     assert enriched.primary_content == "Useful reply"
+
+
+def test_thread_context_defaults(tmp_path, monkeypatch):
+    monkeypatch.delenv("THREADS_CONTEXT_ENABLED", raising=False)
+    monkeypatch.delenv("THREADS_CONTEXT_MIN_REPLY_CHARS", raising=False)
+    monkeypatch.delenv("THREADS_CONTEXT_MAX_REPLIES", raising=False)
+    config_path = tmp_path / "config.json"
+    config_path.write_text('{"categories": ["Tech"]}', encoding="utf-8")
+    monkeypatch.setenv("THREADSIEVE_CONFIG", str(config_path))
+
+    from note_generator.config import load_config
+
+    config = load_config(dotenv_path=None)
+    assert config.thread_context_enabled is True
+    assert config.thread_context_min_reply_chars == 12
+    assert config.thread_context_max_replies == 30
+
+
+def test_thread_context_json_block(tmp_path, monkeypatch):
+    monkeypatch.delenv("THREADS_CONTEXT_ENABLED", raising=False)
+    monkeypatch.delenv("THREADS_CONTEXT_MIN_REPLY_CHARS", raising=False)
+    monkeypatch.delenv("THREADS_CONTEXT_MAX_REPLIES", raising=False)
+    config_path = tmp_path / "config.json"
+    config_path.write_text(
+        '{"categories": ["Tech"], "thread-context": '
+        '{"enabled": false, "min-reply-chars": 20, "max-replies": 5}}',
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("THREADSIEVE_CONFIG", str(config_path))
+
+    from note_generator.config import load_config
+
+    config = load_config(dotenv_path=None)
+    assert config.thread_context_enabled is False
+    assert config.thread_context_min_reply_chars == 20
+    assert config.thread_context_max_replies == 5
+
+
+def test_thread_context_env_overrides_json(tmp_path, monkeypatch):
+    config_path = tmp_path / "config.json"
+    config_path.write_text(
+        '{"categories": ["Tech"], "thread-context": {"enabled": false, "min-reply-chars": 20}}',
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("THREADSIEVE_CONFIG", str(config_path))
+    monkeypatch.setenv("THREADS_CONTEXT_ENABLED", "true")
+    monkeypatch.setenv("THREADS_CONTEXT_MIN_REPLY_CHARS", "8")
+
+    from note_generator.config import load_config
+
+    config = load_config(dotenv_path=None)
+    assert config.thread_context_enabled is True
+    assert config.thread_context_min_reply_chars == 8
