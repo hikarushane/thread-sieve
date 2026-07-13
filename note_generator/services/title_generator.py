@@ -23,7 +23,7 @@ class TitleGenerator:
             "只輸出一個標題，不要解釋，不要引號，不要第二行。\n\n"
             "如果內容包含英文人名、品牌、專案名稱、產品名稱或社群名稱，"
             "請保留原本的英文拼寫，不要自行翻譯。\n\n"
-            f"{item.enriched.combined_content[:4000]}"
+            f"{item.enriched.llm_content[:4000]}"
         )
         raw_title = self._llm_client.generate_text(prompt, model_name=self._model_name)
         title = self._clean_title(raw_title)
