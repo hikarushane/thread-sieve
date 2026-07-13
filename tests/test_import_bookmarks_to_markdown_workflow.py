@@ -224,3 +224,72 @@ def test_from_config_passes_thread_context_settings(tmp_path, monkeypatch) -> No
     assert enricher._thread_context_enabled is False
     assert enricher._min_reply_chars == 20
     assert enricher._max_replies == 5
+
+
+def test_workflow_end_to_end_with_reply_context(tmp_path) -> None:
+    import json as _json
+
+    from note_generator.services.threads_reply_enricher import PageSnapshot, ThreadsReplyEnricher
+
+    blob = _json.dumps({
+        "data": {
+            "edges": [
+                {"node": {"thread_items": [
+                    {"post": {"code": "ROOT01", "user": {"username": "original_poster"},
+                              "caption": {"text": "母帖脈絡文字"}, "text_post_app_info": {}}},
+                    {"post": {"code": "FOCAL01", "user": {"username": "replier_b"},
+                              "caption": {"text": "收藏的回應完整全文"},
+                              "text_post_app_info": {"reply_to_author": {"username": "original_poster"}}}},
+                ]}},
+                {"node": {"thread_items": [
+                    {"post": {"code": "C1", "user": {"username": "commenter_c"},
+                              "caption": {"text": "路人問題"},
+                              "text_post_app_info": {"reply_to_author": {"username": "original_poster"}}}},
+                    {"post": {"code": "OPR1", "user": {"username": "original_poster"},
+                              "caption": {"text": "原作者的回答"},
+                              "text_post_app_info": {"reply_to_author": {"username": "commenter_c"}}}},
+                ]}},
+            ]
+        }
+    })
+
+    class SnapshotClient:
+        def fetch_page_snapshot(self, url: str) -> PageSnapshot:
+            return PageSnapshot(body_text="", embedded_json_blobs=[blob])
+
+        def fetch_body_text(self, url: str) -> str:
+            return ""
+
+        def fetch_image_urls(self, url: str) -> list[str]:
+            return []
+
+    output_dir = tmp_path / "notes"
+    items = [
+        SourceBookmark(
+            post_url="https://www.threads.com/@replier_b/post/FOCAL01",
+            author_handle="@replier_b",
+            content_text="收藏的回應（DOM 截斷版）",
+            metadata={"postId": "p_reply"},
+        ),
+    ]
+    workflow = ImportBookmarksToMarkdownWorkflow(
+        reader=FakeReader(items),
+        enricher=ThreadsReplyEnricher(page_client=SnapshotClient()),
+        classifier=FakeClassifier({"p_reply": "AI"}),
+        ocr_enricher=FakeOcrEnricher(),
+        title_generator=FakeTitleGenerator(),
+        filename_builder=FakeFilenameBuilder(),
+        content_builder=MarkdownContentBuilder(),
+        writer=FakeWriter(),
+        output_dir=output_dir,
+        event_logger=FakeEventLogger(),
+    )
+    summary = workflow.run()
+
+    assert summary.written_count == 1
+    body = (output_dir / "title-p_reply.md").read_text(encoding="utf-8")
+    assert 'saved_kind: "reply"' in body
+    assert "收藏的回應完整全文" in body
+    assert "## 上文脈絡" in body
+    assert "> **@original_poster**（原帖）：" in body
+    assert "> [!quote]- 回覆（2 則，含原作者 1 則）" in body
