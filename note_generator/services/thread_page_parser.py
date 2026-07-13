@@ -38,14 +38,20 @@ def parse_thread_page(json_blobs: list[str], focal_code: str) -> ThreadPageData:
             (index for index, post in enumerate(chain) if post.code == focal_code),
             -1,
         )
-        if focal is None and focal_index >= 0:
-            focal = chain[focal_index]
-            ancestor_chain = chain[:focal_index]
-            trailing = chain[focal_index + 1:]
-            if trailing:
-                reply_threads.append(trailing)
-        else:
+        if focal_index < 0:
             reply_threads.append(chain)
+            continue
+        if focal is not None:
+            # Same thread edge duplicated in another JSON blob with a
+            # different item count; code-sequence dedupe above only
+            # catches exact matches, so skip this longer/shorter copy
+            # instead of reprinting the root and focal post as a reply.
+            continue
+        focal = chain[focal_index]
+        ancestor_chain = chain[:focal_index]
+        trailing = chain[focal_index + 1:]
+        if trailing:
+            reply_threads.append(trailing)
 
     if focal is None:
         return ThreadPageData(focal=None)

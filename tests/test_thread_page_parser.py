@@ -98,6 +98,22 @@ def test_broken_json_and_missing_keys_are_skipped() -> None:
     assert data.focal is not None
 
 
+def test_longer_duplicate_focal_chain_across_blobs_is_not_a_reply_thread() -> None:
+    short = [
+        _item("ROOT01", "original_poster", "母帖全文"),
+        _item("FOCAL01", "replier_b", "收藏的回應", reply_to="original_poster"),
+    ]
+    longer = [
+        _item("ROOT01", "original_poster", "母帖全文"),
+        _item("FOCAL01", "replier_b", "收藏的回應", reply_to="original_poster"),
+        _item("CHILD1", "commenter_c", "對收藏回應的回覆", reply_to="replier_b"),
+    ]
+    data = parse_thread_page([_blob(short), _blob(longer)], "FOCAL01")
+    assert data.focal is not None
+    assert [p.code for p in data.ancestor_chain] == ["ROOT01"]
+    assert data.reply_threads == []
+
+
 def test_items_without_code_or_user_are_dropped() -> None:
     blob = _blob([
         {"post": {"code": "", "user": {"username": "x"}, "caption": {"text": "no code"}}},
