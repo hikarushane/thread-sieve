@@ -68,7 +68,7 @@ class CategoryClassifier:
             f"可選分類：{'、'.join(self._categories)}\n\n"
             + (f"分類判別補充：\n{hints_block}\n\n" if hints_block else "")
             + f"作者：{item.source.author_handle}\n"
-            + f"內容：{item.combined_content[:5000]}"
+            + f"內容：{item.llm_content[:5000]}"
         )
 
     def _normalize_category(self, raw_category: str) -> str:
