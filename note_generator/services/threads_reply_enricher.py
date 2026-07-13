@@ -4,7 +4,14 @@ from dataclasses import dataclass
 from typing import Protocol
 import re
 
-from note_generator.models import EnrichedBookmark, SourceBookmark
+from note_generator.models import EnrichedBookmark, SourceBookmark, ThreadPost
+from note_generator.services.thread_page_parser import parse_thread_page
+
+
+@dataclass(frozen=True)
+class PageSnapshot:
+    body_text: str
+    embedded_json_blobs: list[str]
 
 
 class ThreadPageClient(Protocol):
@@ -13,6 +20,9 @@ class ThreadPageClient(Protocol):
 
     def fetch_image_urls(self, url: str) -> list[str]:
         """Fetch visible post image URLs for a thread URL."""
+
+    def fetch_page_snapshot(self, url: str) -> PageSnapshot:
+        """Fetch body text and embedded thread JSON blobs in one visit."""
 
 
 COOKIE_SELECTORS = [
@@ -49,6 +59,13 @@ AUTHOR_BLOCK_METADATA_LINES = {
 DEFAULT_PRE_CONTENT_LABEL_LINES = {
     "Verified",
 }
+
+_POST_CODE_RE = re.compile(r"/(?:post|t)/([^/?#]+)")
+
+
+def _extract_post_code(url: str) -> str:
+    match = _POST_CODE_RE.search(url or "")
+    return match.group(1) if match else ""
 
 
 @dataclass
@@ -105,19 +122,60 @@ class PlaywrightThreadPageClient:
             finally:
                 browser.close()
 
+    def fetch_page_snapshot(self, url: str) -> PageSnapshot:
+        from playwright.sync_api import sync_playwright
+
+        with sync_playwright() as playwright:
+            browser = playwright.chromium.launch(headless=self.headless)
+            try:
+                page = browser.new_page(
+                    user_agent=(
+                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) "
+                        "Chrome/124.0.0.0 Safari/537.36"
+                    )
+                )
+                page.goto(url, wait_until="domcontentloaded", timeout=30000)
+                page.wait_for_timeout(5000)
+                dismiss_overlays(page)
+                page.wait_for_timeout(1000)
+                body_text = page.inner_text("body")
+                blobs = page.evaluate(
+                    """() => Array.from(
+                        document.querySelectorAll('script[type="application/json"]')
+                    ).map((node) => node.textContent || "")
+                     .filter((text) => text.includes("thread_items"))"""
+                )
+                return PageSnapshot(
+                    body_text=body_text,
+                    embedded_json_blobs=[str(blob) for blob in blobs],
+                )
+            finally:
+                browser.close()
+
 
 class ThreadsReplyEnricher:
-    def __init__(self, page_client: ThreadPageClient, pre_content_label_lines: set[str] | None = None) -> None:
+    def __init__(
+        self,
+        page_client: ThreadPageClient,
+        pre_content_label_lines: set[str] | None = None,
+        thread_context_enabled: bool = True,
+        min_reply_chars: int = 12,
+        max_replies: int = 30,
+    ) -> None:
         self._page_client = page_client
         self._pre_content_label_lines = set(DEFAULT_PRE_CONTENT_LABEL_LINES)
         if pre_content_label_lines is not None:
             self._pre_content_label_lines.update(pre_content_label_lines)
+        self._thread_context_enabled = thread_context_enabled
+        self._min_reply_chars = min_reply_chars
+        self._max_replies = max_replies
 
     def enrich(self, source: SourceBookmark) -> EnrichedBookmark:
         primary_content = source.content_text.strip()
 
         try:
-            body_text = self._page_client.fetch_body_text(source.post_url)
+            snapshot = self._page_client.fetch_page_snapshot(source.post_url)
         except Exception:
             return EnrichedBookmark(
                 source=source,
@@ -126,9 +184,29 @@ class ThreadsReplyEnricher:
                 reply_fetch_status="fallback_to_primary",
             )
 
+        if self._thread_context_enabled and snapshot.embedded_json_blobs:
+            structured = self._enrich_structured(source, snapshot, primary_content)
+            if structured is not None:
+                return structured
+
+        return self._enrich_from_body_text(
+            source=source,
+            body_text=snapshot.body_text,
+            seed_content=primary_content,
+            fetched_status="fetched_fallback" if self._thread_context_enabled else "fetched",
+        )
+
+    def _enrich_from_body_text(
+        self,
+        *,
+        source: SourceBookmark,
+        body_text: str,
+        seed_content: str,
+        fetched_status: str,
+    ) -> EnrichedBookmark:
         primary_content = self._extract_primary_content(
             body_text=body_text,
-            seed_content=primary_content,
+            seed_content=seed_content,
             author_handle=source.author_handle,
         )
         author_replies = self._extract_author_replies(
@@ -148,8 +226,77 @@ class ThreadsReplyEnricher:
             source=source,
             primary_content=primary_content,
             author_replies=author_replies,
-            reply_fetch_status="fetched",
+            reply_fetch_status=fetched_status,
         )
+
+    def _enrich_structured(
+        self,
+        source: SourceBookmark,
+        snapshot: PageSnapshot,
+        seed_content: str,
+    ) -> EnrichedBookmark | None:
+        focal_code = _extract_post_code(source.post_url)
+        if not focal_code:
+            return None
+
+        page_data = parse_thread_page(snapshot.embedded_json_blobs, focal_code)
+        if page_data.focal is None:
+            return None
+
+        primary_content = page_data.focal.text.strip() or seed_content
+        ancestor_chain = page_data.ancestor_chain
+        saved_kind = "reply" if ancestor_chain else "root"
+        focal_author = page_data.focal.author_handle
+        root_author = (
+            ancestor_chain[0].author_handle if ancestor_chain else focal_author
+        )
+
+        author_replies: list[str] = []
+        reply_threads: list[list[ThreadPost]] = []
+        for chain in page_data.reply_threads:
+            if all(post.author_handle == focal_author for post in chain):
+                author_replies.extend(
+                    post.text for post in chain if post.text.strip()
+                )
+                continue
+            filtered = self._filter_reply_chain(chain, root_author)
+            if filtered:
+                reply_threads.append(filtered)
+
+        truncated = len(reply_threads) > self._max_replies
+        reply_threads = reply_threads[: self._max_replies]
+
+        return EnrichedBookmark(
+            source=source,
+            primary_content=primary_content,
+            author_replies=author_replies,
+            reply_fetch_status="fetched_structured",
+            ancestor_chain=ancestor_chain,
+            reply_threads=reply_threads,
+            saved_kind=saved_kind,
+            reply_threads_truncated=truncated,
+        )
+
+    def _filter_reply_chain(
+        self,
+        chain: list[ThreadPost],
+        root_author: str,
+    ) -> list[ThreadPost]:
+        keep = [False] * len(chain)
+        for index, post in enumerate(chain):
+            if post.author_handle == root_author:
+                keep[index] = True
+                if index > 0:
+                    keep[index - 1] = True
+            elif self._is_informative(post.text):
+                keep[index] = True
+        return [post for index, post in enumerate(chain) if keep[index]]
+
+    def _is_informative(self, text: str) -> bool:
+        stripped = text.strip()
+        if len(stripped) < self._min_reply_chars:
+            return False
+        return bool(re.search(r"\w", stripped))
 
     def _extract_author_replies(
         self,
