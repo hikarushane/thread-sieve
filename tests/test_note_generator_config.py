@@ -140,6 +140,7 @@ def test_thread_context_env_overrides_json(tmp_path, monkeypatch):
     monkeypatch.setenv("THREADSIEVE_CONFIG", str(config_path))
     monkeypatch.setenv("THREADS_CONTEXT_ENABLED", "true")
     monkeypatch.setenv("THREADS_CONTEXT_MIN_REPLY_CHARS", "8")
+    monkeypatch.delenv("THREADS_CONTEXT_MAX_REPLIES", raising=False)
 
     from note_generator.config import load_config
 

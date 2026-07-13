@@ -14,7 +14,7 @@ class PromptCapturingLLM:
         self.prompts.append(prompt)
         return self.response
 
-    def generate_text_with_image(self, prompt: str, image_bytes: bytes, model_name: str) -> str:
+    def generate_text_from_image(self, image_bytes: bytes, prompt: str, *, model_name: str) -> str:
         raise NotImplementedError
 
 

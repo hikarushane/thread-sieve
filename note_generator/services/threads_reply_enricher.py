@@ -239,43 +239,46 @@ class ThreadsReplyEnricher:
         if not focal_code:
             return None
 
-        page_data = parse_thread_page(snapshot.embedded_json_blobs, focal_code)
-        if page_data.focal is None:
+        try:
+            page_data = parse_thread_page(snapshot.embedded_json_blobs, focal_code)
+            if page_data.focal is None:
+                return None
+
+            primary_content = page_data.focal.text.strip() or seed_content
+            ancestor_chain = page_data.ancestor_chain
+            saved_kind = "reply" if ancestor_chain else "root"
+            focal_author = page_data.focal.author_handle
+            root_author = (
+                ancestor_chain[0].author_handle if ancestor_chain else focal_author
+            )
+
+            author_replies: list[str] = []
+            reply_threads: list[list[ThreadPost]] = []
+            for chain in page_data.reply_threads:
+                if all(post.author_handle == focal_author for post in chain):
+                    author_replies.extend(
+                        post.text for post in chain if post.text.strip()
+                    )
+                    continue
+                filtered = self._filter_reply_chain(chain, root_author)
+                if filtered:
+                    reply_threads.append(filtered)
+
+            truncated = len(reply_threads) > self._max_replies
+            reply_threads = reply_threads[: self._max_replies]
+
+            return EnrichedBookmark(
+                source=source,
+                primary_content=primary_content,
+                author_replies=author_replies,
+                reply_fetch_status="fetched_structured",
+                ancestor_chain=ancestor_chain,
+                reply_threads=reply_threads,
+                saved_kind=saved_kind,
+                reply_threads_truncated=truncated,
+            )
+        except Exception:
             return None
-
-        primary_content = page_data.focal.text.strip() or seed_content
-        ancestor_chain = page_data.ancestor_chain
-        saved_kind = "reply" if ancestor_chain else "root"
-        focal_author = page_data.focal.author_handle
-        root_author = (
-            ancestor_chain[0].author_handle if ancestor_chain else focal_author
-        )
-
-        author_replies: list[str] = []
-        reply_threads: list[list[ThreadPost]] = []
-        for chain in page_data.reply_threads:
-            if all(post.author_handle == focal_author for post in chain):
-                author_replies.extend(
-                    post.text for post in chain if post.text.strip()
-                )
-                continue
-            filtered = self._filter_reply_chain(chain, root_author)
-            if filtered:
-                reply_threads.append(filtered)
-
-        truncated = len(reply_threads) > self._max_replies
-        reply_threads = reply_threads[: self._max_replies]
-
-        return EnrichedBookmark(
-            source=source,
-            primary_content=primary_content,
-            author_replies=author_replies,
-            reply_fetch_status="fetched_structured",
-            ancestor_chain=ancestor_chain,
-            reply_threads=reply_threads,
-            saved_kind=saved_kind,
-            reply_threads_truncated=truncated,
-        )
 
     def _filter_reply_chain(
         self,
