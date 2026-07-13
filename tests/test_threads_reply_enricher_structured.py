@@ -171,3 +171,19 @@ def test_focal_not_in_json_falls_back_to_heuristic() -> None:
     blob = _blob([_item("OTHER1", "someone", "無關內容")])
     enriched = _enricher(PageSnapshot(body_text="", embedded_json_blobs=[blob])).enrich(_source())
     assert enriched.reply_fetch_status in {"fetched_fallback", "no_author_replies"}
+
+
+def test_saved_reply_self_thread_goes_to_author_replies() -> None:
+    blob = _blob(
+        [
+            _item("ROOT01", "original_poster", "母帖全文"),
+            _item("FOCAL01", "replier_b", "收藏的回應", reply_to="original_poster"),
+            _item("SELF1", "replier_b", "收藏回應的自串第二段", reply_to="replier_b"),
+        ],
+    )
+    enriched = _enricher(PageSnapshot(body_text="", embedded_json_blobs=[blob])).enrich(_source())
+
+    assert enriched.saved_kind == "reply"
+    assert enriched.author_replies == ["收藏回應的自串第二段"]
+    assert enriched.reply_threads == []
+    assert "收藏回應的自串第二段" in enriched.combined_content

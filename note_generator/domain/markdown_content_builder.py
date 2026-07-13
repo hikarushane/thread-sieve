@@ -33,7 +33,7 @@ def _build_replies_callout(enriched: EnrichedBookmark) -> str:
     root_author = (
         enriched.ancestor_chain[0].author_handle
         if enriched.ancestor_chain
-        else enriched.source.author_handle.lstrip("@")
+        else enriched.source.author_handle.removeprefix("@")
     )
     total = sum(len(chain) for chain in chains)
     op_count = sum(
