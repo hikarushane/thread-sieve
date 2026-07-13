@@ -80,6 +80,9 @@ class _DisabledThreadPageClient:
     def fetch_image_urls(self, url: str) -> list[str]:
         raise RuntimeError("Playwright image fetch disabled by configuration")
 
+    def fetch_page_snapshot(self, url: str) -> object:
+        raise RuntimeError("Playwright enrichment disabled by configuration")
+
 
 class _DisabledImageOCREnricher:
     def enrich(self, item: object) -> object:
@@ -143,6 +146,9 @@ class ImportBookmarksToMarkdownWorkflow:
             enricher=ThreadsReplyEnricher(
                 page_client=page_client,
                 pre_content_label_lines=set(config.categories),
+                thread_context_enabled=config.thread_context_enabled,
+                min_reply_chars=config.thread_context_min_reply_chars,
+                max_replies=config.thread_context_max_replies,
             ),
             classifier=CategoryClassifier(
                 llm_client=llm_client,

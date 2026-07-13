@@ -187,3 +187,40 @@ def test_from_config_builds_workflow_for_each_provider(monkeypatch, tmp_path):
         assert workflow._classification_model == "m-classify"
 
     assert captured_providers == ["gemini", "anthropic", "openai"]
+
+
+def test_disabled_thread_page_client_raises_on_snapshot() -> None:
+    from note_generator.workflows.import_bookmarks_to_markdown import _DisabledThreadPageClient
+    import pytest
+
+    client = _DisabledThreadPageClient()
+    with pytest.raises(RuntimeError):
+        client.fetch_page_snapshot("https://www.threads.com/@x/post/Y")
+
+
+def test_from_config_passes_thread_context_settings(tmp_path, monkeypatch) -> None:
+    config_path = tmp_path / "config.json"
+    config_path.write_text(
+        '{"categories": ["Tech"], "thread-context": '
+        '{"enabled": false, "min-reply-chars": 20, "max-replies": 5}}',
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("THREADSIEVE_CONFIG", str(config_path))
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    for name in (
+        "THREADS_CONTEXT_ENABLED",
+        "THREADS_CONTEXT_MIN_REPLY_CHARS",
+        "THREADS_CONTEXT_MAX_REPLIES",
+    ):
+        monkeypatch.delenv(name, raising=False)
+
+    from note_generator.config import load_config
+    from note_generator.workflows.import_bookmarks_to_markdown import (
+        ImportBookmarksToMarkdownWorkflow,
+    )
+
+    workflow = ImportBookmarksToMarkdownWorkflow.from_config(load_config(dotenv_path=None))
+    enricher = workflow._enricher
+    assert enricher._thread_context_enabled is False
+    assert enricher._min_reply_chars == 20
+    assert enricher._max_replies == 5
