@@ -54,6 +54,9 @@ class AppConfig:
     playwright_headless: bool
     event_log_filename: str
     max_title_length: int = 80
+    thread_context_enabled: bool = True
+    thread_context_min_reply_chars: int = 12
+    thread_context_max_replies: int = 30
 
 
 def _load_dotenv_if_present(dotenv_path: Path | None) -> None:
@@ -174,6 +177,23 @@ def _read_csv_set(name: str, default: set[str]) -> set[str]:
     return {part.strip() for part in raw_value.split(",") if part.strip()}
 
 
+def _read_thread_context_block(config_data: dict) -> dict:
+    block = config_data.get("thread-context")
+    return block if isinstance(block, dict) else {}
+
+
+def _coerce_bool(value: object, default: bool) -> bool:
+    if isinstance(value, bool):
+        return value
+    return default
+
+
+def _coerce_positive_int(value: object, default: int) -> int:
+    if isinstance(value, bool) or not isinstance(value, int):
+        return default
+    return value if value > 0 else default
+
+
 def _read_llm_block(config_data: dict) -> dict:
     block = config_data.get("llm")
     return block if isinstance(block, dict) else {}
@@ -277,4 +297,20 @@ def load_config(dotenv_path: Path | None = Path(".env")) -> AppConfig:
         event_log_filename=os.getenv("THREADS_EVENT_LOG_FILENAME", "threads_events.jsonl").strip()
         or "threads_events.jsonl",
         max_title_length=_read_positive_int("THREADS_MAX_TITLE_LENGTH", 80),
+        thread_context_enabled=_read_bool(
+            "THREADS_CONTEXT_ENABLED",
+            _coerce_bool(_read_thread_context_block(config_data).get("enabled"), True),
+        ),
+        thread_context_min_reply_chars=_read_positive_int(
+            "THREADS_CONTEXT_MIN_REPLY_CHARS",
+            _coerce_positive_int(
+                _read_thread_context_block(config_data).get("min-reply-chars"), 12
+            ),
+        ),
+        thread_context_max_replies=_read_positive_int(
+            "THREADS_CONTEXT_MAX_REPLIES",
+            _coerce_positive_int(
+                _read_thread_context_block(config_data).get("max-replies"), 30
+            ),
+        ),
     )
