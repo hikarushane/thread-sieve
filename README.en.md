@@ -14,7 +14,7 @@ The problem with Threads bookmarks:
 
 ThreadSieve is a local automation pipeline that turns Threads saved posts into categorized markdown notes, and auto-unsaves posts in specified categories.
 
-Post content passed into classification and note generation includes the main post text, comments from the post author in the same thread, and text extracted from post images with OCR.
+Post content passed into classification and note generation includes the main post text, comments from the post author in the same thread, and text extracted from post images with OCR. When the saved item is a reply, the note also carries the reply's single-line ancestor context (the full chain from the root post down to the reply) and a reply section (the original poster's replies plus substantive comments, rendered collapsed).
 
 Two layers:
 
@@ -187,6 +187,18 @@ Note: the standalone `scripts/image_ocr_to_markdown.py` CLI currently supports o
 
 ---
 
+## Ancestor context and replies for saved replies
+
+When the saved bookmark is a reply (not a root post), the classify stage opens the post permalink anonymously and extracts from the page's embedded data:
+
+- **Ancestor context**: the full single line from the root post down to the saved reply, written into the note's `## 上文脈絡` section (nested blockquotes, each post labeled with `@author`).
+- **Reply section**: the original poster's replies (paired with the comment they answer) plus comments above a length threshold, written into a collapsible Obsidian callout (`> [!quote]- 回覆（N 則…）`), collapsed by default.
+- Frontmatter gains `saved_kind: root|reply`, marking whether the saved item is a root post or a reply.
+
+The ancestor context (but never the reply section) is also fed to classification and title generation, improving accuracy for saved replies — with no extra network requests or LLM quota.
+
+---
+
 ## Configuration
 
 `config.json`:
@@ -202,6 +214,9 @@ Note: the standalone `scripts/image_ocr_to_markdown.py` CLI currently supports o
 | `hints` | example rules | Gemini prompt nudges |
 | `image-ocr.backend` | `gemini` | lite build only supports Gemini |
 | `image-ocr.trigger-categories` | `["AI"]` | categories that trigger image OCR |
+| `thread-context.enabled` | `true` | ancestor/replies capture toggle; `false` restores the previous behavior |
+| `thread-context.min-reply-chars` | `12` | minimum comment length for the reply section (the original poster's replies are exempt) |
+| `thread-context.max-replies` | `30` | maximum reply threads kept (extra ones are truncated, noted in the callout header) |
 
 Path values may be relative or absolute. For Windows absolute paths in JSON you MUST use forward slashes (`C:/Users/<you>/...`) or escape every backslash as `\\` (`C:\\Users\\<you>\\...`). A single `\` is the JSON escape character, so `"D:\shane\..."` raises `json.decoder.JSONDecodeError: Invalid \escape`.
 
@@ -213,6 +228,11 @@ Path values may be relative or absolute. For Windows absolute paths in JSON you 
 | `CLASSIFIER_MODEL` | `gemini-2.5-flash` | classifier |
 | `IMAGE_OCR_ENABLED` | `true` | OCR step toggle |
 | `IMAGE_OCR_MODEL` | `gemini-2.5-flash` | Gemini image OCR model |
+| `THREADS_CONTEXT_ENABLED` | `true` | overrides `thread-context.enabled` |
+| `THREADS_CONTEXT_MIN_REPLY_CHARS` | `12` | overrides `thread-context.min-reply-chars` |
+| `THREADS_CONTEXT_MAX_REPLIES` | `30` | overrides `thread-context.max-replies` |
+
+The pipeline writes a `threads_events.jsonl` event log into the output directory; ancestor/replies capture outcomes are logged as `reply_fetch_fetched_structured` (structured parse succeeded) and `reply_fetch_fetched_fallback` (fell back to plain-text parsing) events.
 
 ---
 
@@ -222,6 +242,8 @@ Path values may be relative or absolute. For Windows absolute paths in JSON you 
 - **File System Access grants are per-run setup**. Re-bind `catch.json` / `unsave.json` if the panel shows "handle: not bound".
 - **Gemini quota**: each scrape classifies every post once, then uses Gemini again for title generation and (when triggered) image OCR — all from the same key.
 - **Playwright is required for image OCR**: if browser binaries are missing, run `playwright install chromium`.
+- **The reply section only captures anonymously visible replies**: deeply nested replies and content behind the login wall are not collected.
+- **Threads redesigns may break the embedded-data parse**: the pipeline then falls back to the previous plain-text parsing (that note temporarily has no ancestor/reply sections; the main content is unaffected), and `saved_kind` is a best-effort `root`.
 
 ---
 
