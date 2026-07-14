@@ -18,7 +18,7 @@ If a code change modifies user-visible behavior, setup, or the single SOP in a w
 pytest tests/
 ```
 
-Run from project root with venv active (`.\.venv\Scripts\Activate.ps1`). `tests/` is gitignored on this branch.
+Run from project root with venv active (`.\.venv\Scripts\Activate.ps1`). Note: `.gitignore` lists `tests/`, but the test files are tracked (added before the ignore rule) and SHOULD be committed — new test files need `git add -f tests/...`; verify with `git show --stat HEAD` that they made it into the commit.
 
 ## Scope guardrail (lite branch)
 
