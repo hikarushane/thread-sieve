@@ -2,6 +2,8 @@
 
 [繁體中文](README.md)
 
+> **Latest update (2026-07-18)**: browser panel redesign — the manual-tools section and the Auto AI Sync panel are gone, replaced by a single big **取消儲存** (unsave) button that re-picks `unsave.json` on every run, eliminating accidental runs against stale classification results; install is now a one-line command; new macOS double-click launcher. Full history in [RELEASE_NOTES.md](RELEASE_NOTES.md).
+
 > End-user branch: no `superpowers-chrome`, no watcher, no Chrome debug port.  
 > For the full automation build (terminal watcher + agent-driven scrape + Chandra OCR), switch to the `full` branch.
 
@@ -12,14 +14,14 @@ The problem with Threads bookmarks:
   ❌ can't find anything
   ❌ they just sit there rotting
 
-ThreadSieve is a local automation pipeline that turns Threads saved posts into categorized markdown notes, and auto-unsaves posts in specified categories.
+ThreadSieve is a local automation pipeline that turns Threads saved posts into categorized markdown notes, and unsaves posts in specified categories with a one-button flow.
 
 Post content passed into classification and note generation includes the main post text, comments from the post author in the same thread, and text extracted from post images with OCR. When the saved item is a reply, the note also carries the reply's single-line ancestor context (the full chain from the root post down to the reply) and a reply section (the original poster's replies plus substantive comments, rendered collapsed).
 
 Two layers:
 
 - `userscripts/threads-scriber-auto.user.js` — Tampermonkey userscript; scrapes the Threads saved page and writes `catch.json`.
-- `scripts/*.py` — Python pipeline; classification, markdown notes, Gemini image OCR.
+- `scripts/*.py` — Python pipeline; LLM classification, markdown notes, image OCR.
 
 ---
 
@@ -37,10 +39,10 @@ Two layers:
                                             |
                                             v
                     scripts/image_ocr_to_markdown.py
-                    (Gemini OCR -> ## 圖片文字)
+                    (image OCR -> ## 圖片文字)
                                             |
                                             v
-                  userscript: auto-load unsave.json + confirmed unsave
+                  userscript "取消儲存" button: pick unsave.json → confirm → unsave
 ```
 
 ---
@@ -49,10 +51,10 @@ Two layers:
 
 | Requirement | Why |
 | --- | --- |
-| Python 3.11+ | classifier, markdown generator, image OCR |
+| Python 3.10+ (not needed for the one-line install — uv downloads 3.12 automatically) | classifier, markdown generator, image OCR |
 | Google Chrome / Edge | browser |
 | Tampermonkey extension | userscript injection |
-| Gemini API key | classification + image OCR |
+| LLM API key (one of Gemini / Anthropic / OpenAI; Gemini by default) | classification + titles + image OCR |
 
 ---
 
@@ -105,7 +107,7 @@ cp config.json.example config.json
 
 ### 1. Fill in the config
 
-Edit `.env`: fill in `GEMINI_API_KEY`.
+Edit `.env`: fill in the API key for your chosen provider (default Gemini → `GEMINI_API_KEY`; see "LLM provider" below to switch).
 
 Edit `config.json`:
 
@@ -116,16 +118,17 @@ Edit `config.json`:
 | `paths.markdown-output-root` | Where markdown notes are written (default: `output`) |
 | `categories` | Ordered list of categories the classifier can output |
 | `unsaved-categories` | Subset of `categories` whose posts get added to `unsave.json` |
-| `hints` | Free-text rules injected into the Gemini prompt for edge cases |
+| `hints` | Free-text rules injected into the classifier prompt for edge cases |
+| `llm.provider` (optional) | `gemini` (default) / `anthropic` / `openai` |
 
-`category-overrides` is optional — keyword/regex rules that force a category before calling Gemini.
+`category-overrides` is optional — keyword/regex rules that force a category before calling the LLM.
 
 ### 2. Browser side (one-time setup)
 
 1. Open Chrome / Edge and navigate to `https://www.threads.com/saved`.
 2. Install [Tampermonkey](https://www.tampermonkey.net/).
 3. Install `userscripts/threads-scriber-auto.user.js`.
-4. Reload the `/saved` tab. A floating panel "ThreadSieve · Auto AI Sync" appears bottom-right.
+4. Reload the `/saved` tab. The **ThreadSieve** panel appears.
 
 ---
 
@@ -136,8 +139,6 @@ Edit `config.json`:
 1. Open Chrome and navigate to `https://www.threads.com/saved`.
 2. If needed, reload `/saved`.
 3. In the **ThreadSieve panel**: click **設定自動存檔** → pick `data/catch.json`.
-4. In the **Auto AI Sync panel**: click **綁定 unsave.json** → pick `data/unsave.json`.
-5. Tick **自動載入 unsave.json**.
 
 > File System Access grants may need to be re-done each browser session.
 
@@ -179,10 +180,9 @@ python scripts/import_bookmarks_to_markdown.py
 
 #### Step 4 · Confirm unsave in the browser
 
-The Auto AI Sync panel polls `unsave.json` every 3 s. Once it loads the new file it shows the candidate count and `generatedAt` timestamp.
+In the ThreadSieve panel, click the big **取消儲存** button → pick `data/unsave.json` in the file picker → the panel shows the candidate count and highlights the posts → a confirm dialog runs the unsave pass after you accept.
 
-- Click **立即檢查** to force an immediate poll.
-- Tick **載入後自動取消儲存** before the file updates, or click the unsave button manually, to unsave the AI candidates.
+Re-picking the file on every run is deliberate: the file pick itself is your confirmation that the latest classification result is being used, preventing accidental runs against a stale file.
 
 ---
 
@@ -255,9 +255,11 @@ The ancestor context (but never the reply section) is also fed to classification
 | `paths.unsave-json` | `data/unsave.json` | classify writes, userscript reads |
 | `paths.markdown-output-root` | `output` | markdown note root |
 | `categories` | example list | classifier output categories |
-| `unsaved-categories` | example subset | maps to `decision="ai"` → auto-unsave |
+| `unsaved-categories` | example subset | posts in these categories are written to `unsave.json` |
 | `category-overrides` | `[]` | optional keyword/regex forced categories |
-| `hints` | example rules | Gemini prompt nudges |
+| `hints` | example rules | classifier prompt nudges |
+| `llm.provider` | `gemini` | LLM provider: `gemini` / `anthropic` / `openai` |
+| `llm.text-model` / `title-model` / `vision-model` | provider default | per-stage model overrides (leave unset for provider defaults) |
 | `image-ocr.backend` | `gemini` | lite build only supports Gemini |
 | `image-ocr.trigger-categories` | `["AI"]` | categories that trigger image OCR |
 | `thread-context.enabled` | `true` | ancestor/replies capture toggle; `false` restores the previous behavior |
@@ -270,10 +272,11 @@ Path values may be relative or absolute. For Windows absolute paths in JSON you 
 
 | Key | Default | Used by |
 | --- | --- | --- |
-| `GEMINI_API_KEY` | required | classifier + image OCR |
-| `CLASSIFIER_MODEL` | `gemini-2.5-flash` | classifier |
+| `LLM_PROVIDER` | `gemini` | `gemini` / `anthropic` / `openai` (also settable via `llm.provider` in `config.json`) |
+| `GEMINI_API_KEY` / `ANTHROPIC_API_KEY` / `OPENAI_API_KEY` | — | fill in only the one for the selected provider |
+| `THREADS_LLM_CLASSIFIER_MODEL` / `THREADS_LLM_TITLE_MODEL` / `THREADS_LLM_OCR_MODEL` | provider default | per-stage model overrides |
+| `CLASSIFIER_MODEL` / `IMAGE_OCR_MODEL` | — | legacy Gemini overrides, still honored; prefer `THREADS_LLM_*` |
 | `IMAGE_OCR_ENABLED` | `true` | OCR step toggle |
-| `IMAGE_OCR_MODEL` | `gemini-2.5-flash` | Gemini image OCR model |
 | `THREADS_CONTEXT_ENABLED` | `true` | overrides `thread-context.enabled` |
 | `THREADS_CONTEXT_MIN_REPLY_CHARS` | `12` | overrides `thread-context.min-reply-chars` |
 | `THREADS_CONTEXT_MAX_REPLIES` | `30` | overrides `thread-context.max-replies` |
@@ -284,9 +287,9 @@ The pipeline writes a `threads_events.jsonl` event log into the output directory
 
 ## Known limitations
 
-- **Browser must be on `/saved`** for auto-unsave to fire. The classify step still writes `unsave.json` and markdown regardless.
-- **File System Access grants are per-run setup**. Re-bind `catch.json` / `unsave.json` if the panel shows "handle: not bound".
-- **Gemini quota**: each scrape classifies every post once, then uses Gemini again for title generation and (when triggered) image OCR — all from the same key.
+- **Browser must be on `/saved`** to run the unsave pass (the button reports an error otherwise). The classify step still writes `unsave.json` and markdown regardless.
+- **File System Access grants are per-run setup**. Re-pick `catch.json` for autosave if the panel loses the grant; `unsave.json` is re-picked on every unsave run by design.
+- **LLM quota**: each classify run classifies every post once, then calls the LLM again for title generation and (when triggered) image OCR — all from the same API key.
 - **Playwright is required for image OCR**: if browser binaries are missing, run `playwright install chromium`.
 - **The reply section only captures anonymously visible replies**: deeply nested replies and content behind the login wall are not collected.
 - **Threads redesigns may break the embedded-data parse**: the pipeline then falls back to the previous plain-text parsing (that note temporarily has no ancestor/reply sections; the main content is unaffected), and `saved_kind` is a best-effort `root`.
@@ -299,10 +302,8 @@ The pipeline writes a `threads_events.jsonl` event log into the output directory
 | --- | --- | --- |
 | Double-clicking `run_classify.cmd`/`run_classify.command` shows `.venv not found` | venv never created | Run the one-line install once (pick the command for your OS) |
 | classify exits with `json.decoder.JSONDecodeError: Invalid \escape` | Windows path in `config.json` uses single `\` | Use `/` (`D:/foo/bar`) or `\\` (`D:\\foo\\bar`) |
-| classify exits with `GEMINI_API_KEY missing` | key not in `.env` or venv didn't pick it up | Confirm `GEMINI_API_KEY=...` in `.env`, double-click again |
-| Panel never loads AI classification | handle not bound / autoLoad off | Re-bind `unsave.json`, tick **自動載入 unsave.json** |
-| `unsave.json` updated but browser idle | Auto AI Sync poll not yet cycled | Click **立即檢查** to force a poll |
-| Unsave button does nothing | not on `/saved` | Switch the tab back to `https://www.threads.com/saved` |
+| classify exits with `<PROVIDER>_API_KEY missing` | the selected provider's key not in `.env`, or venv didn't pick it up | Confirm the matching `..._API_KEY=...` in `.env`, double-click again |
+| Unsave button does nothing | not on `/saved`, or the file picker was cancelled | Switch the tab back to `https://www.threads.com/saved`, click the button and pick the file again |
 
 ---
 
