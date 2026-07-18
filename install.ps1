@@ -1,8 +1,8 @@
 # ThreadSieve 一行安裝 bootstrap（Windows）
-# 用法：irm https://raw.githubusercontent.com/hikaru-yeh/thread-sieve/main/install.ps1 | iex
+# 用法：irm https://raw.githubusercontent.com/hikarushane/thread-sieve/main/install.ps1 | iex
 $ErrorActionPreference = "Stop"
 
-$RepoUrl = "https://github.com/hikaru-yeh/thread-sieve.git"
+$RepoUrl = "https://github.com/hikarushane/thread-sieve.git"
 $TargetDir = if ($env:THREADSIEVE_DIR) { $env:THREADSIEVE_DIR } else { "thread-sieve" }
 $PythonVersion = "3.12"
 
