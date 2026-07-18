@@ -14,6 +14,7 @@ PROJECT_ROOT = SCRIPT_DIR.parent
 sys.path.insert(0, str(SCRIPT_DIR))
 sys.path.insert(0, str(PROJECT_ROOT))
 
+from note_generator.infrastructure.chandra_ocr import ChandraOcrEngine
 from note_generator.infrastructure.llm_factory import build_llm_client
 from note_generator.config import (
     DEFAULT_CONFIG_PATH,
@@ -27,7 +28,10 @@ from note_generator.config import (
 
 
 DEFAULT_OCR_BACKEND = "gemini"
+DEFAULT_OCR_METHOD = "vllm"
+DEFAULT_MAX_OUTPUT_TOKENS = 12384
 DEFAULT_TRIGGER_CATEGORIES = {"AI", "Claude Code"}
+DEFAULT_PROMPT_TYPE = "ocr_layout"
 DEFAULT_MODEL = "gemini-2.5-flash"
 OCR_PROMPT = (
     "分析這張圖片的內容，以結構化 Markdown 格式輸出。規則：\n"
@@ -227,16 +231,47 @@ def build_gemini_ocr_image(*, api_key: str, model: str = DEFAULT_MODEL) -> Calla
     return ocr_image
 
 
+def build_chandra_ocr_image(
+    *,
+    method: str = DEFAULT_OCR_METHOD,
+    prompt_type: str = DEFAULT_PROMPT_TYPE,
+    max_output_tokens: int = DEFAULT_MAX_OUTPUT_TOKENS,
+    include_headers_footers: bool = False,
+) -> Callable[[str], str]:
+    engine = ChandraOcrEngine(
+        method=method,
+        prompt_type=prompt_type,
+        max_output_tokens=max_output_tokens,
+        include_headers_footers=include_headers_footers,
+    )
+
+    def ocr_image(image_url: str) -> str:
+        return engine.generate_markdown(download_image(image_url))
+
+    return ocr_image
+
+
 def build_ocr_image(
     *,
     backend: str = DEFAULT_OCR_BACKEND,
     api_key: str = "",
     model: str = DEFAULT_MODEL,
+    ocr_method: str = DEFAULT_OCR_METHOD,
+    prompt_type: str = DEFAULT_PROMPT_TYPE,
+    max_output_tokens: int = DEFAULT_MAX_OUTPUT_TOKENS,
+    include_headers_footers: bool = False,
 ) -> Callable[[str], str]:
     normalized_backend = backend.strip().lower() or DEFAULT_OCR_BACKEND
     if normalized_backend == "gemini":
         return build_gemini_ocr_image(api_key=api_key, model=model)
-    raise RuntimeError(f"Unsupported IMAGE_OCR_BACKEND: {backend!r}. Lite build only supports 'gemini'.")
+    if normalized_backend == "chandra":
+        return build_chandra_ocr_image(
+            method=ocr_method,
+            prompt_type=prompt_type,
+            max_output_tokens=max_output_tokens,
+            include_headers_footers=include_headers_footers,
+        )
+    raise RuntimeError(f"Unsupported IMAGE_OCR_BACKEND: {backend!r}. Use 'gemini' or 'chandra'.")
 
 
 def ocr_post_images(*, post_url: str, ocr_image: Callable[[str], str], headless: bool = True) -> list[str]:
@@ -261,6 +296,10 @@ def run(
     api_key: str = "",
     model: str = DEFAULT_MODEL,
     ocr_backend: str = DEFAULT_OCR_BACKEND,
+    ocr_method: str = DEFAULT_OCR_METHOD,
+    prompt_type: str = DEFAULT_PROMPT_TYPE,
+    max_output_tokens: int = DEFAULT_MAX_OUTPUT_TOKENS,
+    include_headers_footers: bool = False,
 ) -> dict:
     posts = read_json(input_path)
     if not isinstance(posts, list):
@@ -273,6 +312,10 @@ def run(
         backend=ocr_backend,
         api_key=api_key,
         model=model,
+        ocr_method=ocr_method,
+        prompt_type=prompt_type,
+        max_output_tokens=max_output_tokens,
+        include_headers_footers=include_headers_footers,
     )
     selected = select_trigger_posts(posts, classifications, trigger_categories)
     updated = 0
@@ -305,6 +348,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--model", default="")
     parser.add_argument("--config", default="")
     parser.add_argument("--ocr-backend", default="")
+    parser.add_argument("--ocr-method", default="")
+    parser.add_argument("--prompt-type", default="")
+    parser.add_argument("--max-output-tokens", type=int, default=None)
+    parser.add_argument("--include-headers-footers", action="store_true")
     parser.add_argument("--trigger-categories", default="")
     parser.add_argument("--env-file", default=".env")
     parser.add_argument("--headed", action="store_true")
@@ -317,6 +364,13 @@ def main() -> int:
     config_path = resolve_json_config_path(args.config)
     config_data = load_json_config(config_path)
     ocr_config = read_ocr_config(config_path)
+    max_output_tokens = args.max_output_tokens
+    if max_output_tokens is None:
+        max_output_tokens = read_int_env(
+            "IMAGE_OCR_MAX_OUTPUT_TOKENS",
+            "MAX_OUTPUT_TOKENS",
+            default=read_config_int(ocr_config, "max-output-tokens", DEFAULT_MAX_OUTPUT_TOKENS),
+        )
     api_key = args.api_key or os.environ.get("GEMINI_API_KEY", "")
     model = args.model or os.environ.get("IMAGE_OCR_MODEL", DEFAULT_MODEL)
     configured_categories = read_configured_set(ocr_config.get("trigger-categories"), DEFAULT_TRIGGER_CATEGORIES)
@@ -347,6 +401,16 @@ def main() -> int:
             ocr_backend=args.ocr_backend
             or os.environ.get("IMAGE_OCR_BACKEND", "")
             or read_config_str(ocr_config, "backend", DEFAULT_OCR_BACKEND),
+            ocr_method=args.ocr_method
+            or os.environ.get("IMAGE_OCR_METHOD", "")
+            or read_config_str(ocr_config, "method", DEFAULT_OCR_METHOD),
+            prompt_type=args.prompt_type
+            or os.environ.get("IMAGE_OCR_PROMPT_TYPE", "")
+            or read_config_str(ocr_config, "prompt-type", DEFAULT_PROMPT_TYPE),
+            max_output_tokens=max_output_tokens,
+            include_headers_footers=args.include_headers_footers
+            or os.environ.get("IMAGE_OCR_INCLUDE_HEADERS_FOOTERS", "").strip().lower() in {"true", "1", "yes", "on"}
+            or read_config_bool(ocr_config, "include-headers-footers"),
             trigger_categories=trigger_categories,
             headless=not args.headed,
         )

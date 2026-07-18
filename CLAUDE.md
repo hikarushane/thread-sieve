@@ -1,6 +1,6 @@
-# ThreadSieve (lite) — Claude Code instructions
+# ThreadSieve (full / power-user) — Claude Code instructions
 
-End-user GUI-only branch. Two layers: `userscripts/threads-scriber-auto.user.js` (browser, Tampermonkey) and `scripts/*.py` (Python: classify + markdown + Gemini image OCR). Run via `run_classify.cmd` double-click — no terminal automation, no Chrome debug port, no watcher.
+Power-user branch. Two layers: `userscripts/threads-scriber-auto.user.js` (browser, Tampermonkey) and `scripts/*.py` (Python: classify + markdown + image OCR, plus the automation layer — `watch_pipeline.py` watcher, `agent_driver.py` / `push_userscript.py` via `superpowers-chrome` + Chrome `--remote-debugging-port=9222`, and the Chandra/vLLM OCR backend). Path 1 (double-click `run_classify.cmd` / `.command`) works without any of that.
 
 ## README consistency gate
 
@@ -20,13 +20,10 @@ pytest tests/
 
 Run from project root with venv active (`.\.venv\Scripts\Activate.ps1`). Note: `.gitignore` lists `tests/`, but the test files are tracked (added before the ignore rule) and SHOULD be committed — new test files need `git add -f tests/...`; verify with `git show --stat HEAD` that they made it into the commit.
 
-## Scope guardrail (lite branch)
+## Branch scope (full)
 
-This branch must NOT add back:
-- `agent_driver.py`, `push_userscript.py`, `watch_pipeline.py`, `classify_to_scribe_ai.py`
-- `superpowers-chrome` / `chrome-ws` dependency
-- Chrome `--remote-debugging-port` requirement
-- Chandra / vLLM OCR backend
-- `.claude/` or `.codex/` hooks
+This IS the branch for the automation layer: `agent_driver.py`, `push_userscript.py`, `watch_pipeline.py`, `classify_to_scribe_ai.py`, `superpowers-chrome` / `chrome-ws`, Chrome `--remote-debugging-port`, Chandra/vLLM OCR, and the `.claude` / `.codex` / `.antigravity` hooks all live here.
 
-If a feature needs any of those, it belongs on `main`, not `lite`.
+The lite guardrail applies to `main` (the default, end-user branch): never sync any of the above back to `main`. Code changes that belong on both branches land on `main` first, then get cherry-picked here (the two branches share file content but not commit SHAs — sync with cherry-pick, never merge).
+
+Known gap: `agent_driver.py` expects userscript 0.3.2 (Auto AI Sync panel); the 0.4.1 panel removed that surface, so probe's version check and the unsave gate need updating before Path 2 unsave automation works again.

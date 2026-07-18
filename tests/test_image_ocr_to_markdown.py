@@ -92,8 +92,8 @@ def test_build_ocr_image_defaults_to_gemini(monkeypatch) -> None:
 def test_build_ocr_image_rejects_unsupported_backend() -> None:
     import pytest
 
-    with pytest.raises(RuntimeError, match="Lite build only supports 'gemini'"):
-        mod.build_ocr_image(backend="chandra", api_key="key")
+    with pytest.raises(RuntimeError, match="Use 'gemini' or 'chandra'"):
+        mod.build_ocr_image(backend="tesseract", api_key="key")
 
 
 def test_ocr_post_images_uses_injected_ocr_callable_and_skips_failures(monkeypatch) -> None:

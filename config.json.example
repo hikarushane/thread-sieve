@@ -2,7 +2,8 @@
   "paths": {
     "catch-json": "data/catch.json",
     "unsave-json": "data/unsave.json",
-    "markdown-output-root": "D:/<output folder for the markdown files>"
+    "markdown-output-root": "D:/<output folder for the markdown files>",
+    "chrome-ws-cli": "C:/Users/<you>/.claude/plugins/cache/superpowers-marketplace/superpowers-chrome/2.1.0/skills/browsing/chrome-ws"
   },
   "llm": {
     "provider": "gemini",
@@ -27,6 +28,10 @@
   "category-overrides": [],
   "image-ocr": {
     "backend": "gemini",
+    "method": "vllm",
+    "prompt-type": "ocr_layout",
+    "max-output-tokens": 12384,
+    "include-headers-footers": false,
     "trigger-categories": ["AI"]
   },
   "thread-context": {

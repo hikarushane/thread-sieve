@@ -18,11 +18,17 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from note_generator.config import resolve_json_config_path
 from image_ocr_to_markdown import (
     DEFAULT_MODEL,
+    DEFAULT_MAX_OUTPUT_TOKENS,
     DEFAULT_OCR_BACKEND,
+    DEFAULT_OCR_METHOD,
+    DEFAULT_PROMPT_TYPE,
     build_ocr_image,
     fetch_image_urls_with_playwright,
     load_dotenv,
+    read_config_bool,
+    read_config_int,
     read_config_str,
+    read_int_env,
     read_ocr_config,
 )
 
@@ -185,6 +191,10 @@ def run_batch(
     api_key: str = "",
     model: str = DEFAULT_MODEL,
     ocr_backend: str = DEFAULT_OCR_BACKEND,
+    ocr_method: str = DEFAULT_OCR_METHOD,
+    prompt_type: str = DEFAULT_PROMPT_TYPE,
+    max_output_tokens: int = DEFAULT_MAX_OUTPUT_TOKENS,
+    include_headers_footers: bool = False,
 ) -> dict[str, int | str]:
     if not path.exists():
         raise FileNotFoundError(path)
@@ -255,6 +265,10 @@ def run_batch(
                     api_key=api_key,
                     model=model,
                     ocr_backend=ocr_backend,
+                    ocr_method=ocr_method,
+                    prompt_type=prompt_type,
+                    max_output_tokens=max_output_tokens,
+                    include_headers_footers=include_headers_footers,
                 )
             failure_reason = "ocr_failed"
             ocr_texts = [image_ocr(image_url).strip() for image_url in image_urls]
@@ -315,11 +329,19 @@ def _build_default_ocr_image(
     api_key: str = "",
     model: str = DEFAULT_MODEL,
     ocr_backend: str = DEFAULT_OCR_BACKEND,
+    ocr_method: str = DEFAULT_OCR_METHOD,
+    prompt_type: str = DEFAULT_PROMPT_TYPE,
+    max_output_tokens: int = DEFAULT_MAX_OUTPUT_TOKENS,
+    include_headers_footers: bool = False,
 ) -> Callable[[str], str]:
     return build_ocr_image(
         backend=ocr_backend,
         api_key=api_key,
         model=model,
+        ocr_method=ocr_method,
+        prompt_type=prompt_type,
+        max_output_tokens=max_output_tokens,
+        include_headers_footers=include_headers_footers,
     )
 
 
@@ -345,6 +367,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--model", default="")
     parser.add_argument("--config", default="")
     parser.add_argument("--ocr-backend", default="")
+    parser.add_argument("--ocr-method", default="")
+    parser.add_argument("--prompt-type", default="")
+    parser.add_argument("--max-output-tokens", type=int, default=None)
+    parser.add_argument("--include-headers-footers", action="store_true")
     parser.add_argument("--env-file", default=".env")
     parser.add_argument("--headed", action="store_true")
     return parser.parse_args()
@@ -354,6 +380,13 @@ def main() -> int:
     args = parse_args()
     load_dotenv(Path(args.env_file))
     ocr_config = read_ocr_config(resolve_json_config_path(args.config))
+    max_output_tokens = args.max_output_tokens
+    if max_output_tokens is None:
+        max_output_tokens = read_int_env(
+            "IMAGE_OCR_MAX_OUTPUT_TOKENS",
+            "MAX_OUTPUT_TOKENS",
+            default=read_config_int(ocr_config, "max-output-tokens", DEFAULT_MAX_OUTPUT_TOKENS),
+        )
     api_key = args.api_key or os.environ.get("GEMINI_API_KEY", "")
     model = args.model or os.environ.get("IMAGE_OCR_MODEL", DEFAULT_MODEL)
     try:
@@ -370,6 +403,16 @@ def main() -> int:
             ocr_backend=args.ocr_backend
             or os.environ.get("IMAGE_OCR_BACKEND", "")
             or read_config_str(ocr_config, "backend", DEFAULT_OCR_BACKEND),
+            ocr_method=args.ocr_method
+            or os.environ.get("IMAGE_OCR_METHOD", "")
+            or read_config_str(ocr_config, "method", DEFAULT_OCR_METHOD),
+            prompt_type=args.prompt_type
+            or os.environ.get("IMAGE_OCR_PROMPT_TYPE", "")
+            or read_config_str(ocr_config, "prompt-type", DEFAULT_PROMPT_TYPE),
+            max_output_tokens=max_output_tokens,
+            include_headers_footers=args.include_headers_footers
+            or os.environ.get("IMAGE_OCR_INCLUDE_HEADERS_FOOTERS", "").strip().lower() in {"true", "1", "yes", "on"}
+            or read_config_bool(ocr_config, "include-headers-footers"),
         )
     except (FileNotFoundError, RuntimeError) as error:
         print(f"ERROR: {error}", file=sys.stderr)
