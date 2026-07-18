@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         ThreadSieve (Auto)
 // @namespace    https://local-only.example/threads-sieve/
-// @version      0.3.2
-// @description  ThreadSieve auto-loads unsave.json on disk change and optionally auto-runs the AI-post cleanup flow.
+// @version      0.4.1
+// @description  ThreadSieve captures Threads saved posts and runs the AI-post unsave flow from a single pick-and-run button.
 // @author       threads-sieve
 // @match        https://threads.com/*
 // @match        https://www.threads.com/*
@@ -16,14 +16,14 @@
   "use strict";
 
   const STORAGE_KEY = "threadsSavedExportState";
-  const SCRIPT_VERSION = "0.3.2";
+  const SCRIPT_VERSION = "0.4.1";
   const PANEL_ID = "threads-saved-export-panel";
   const FILE_HANDLE_DB = "threadsSavedExportFileDb";
   const FILE_HANDLE_STORE = "handles";
   const FILE_HANDLE_KEY = "catch-json";
-  const AI_FILE_HANDLE_KEY = "unsave-json";
   const DEBUG_LOG_FILE_HANDLE_KEY = "threads-debug-log";
   const DEFAULT_SCROLL_DELAY = 1400;
+  const UNSAVE_AFTER_LOAD_DELAY_MS = 600;
   const DEFAULT_MAX_PENDING_LOAD_ROUNDS = 8;
   const DEFAULT_MAX_OLD_ONLY_ROUNDS = 1;
   const DEFAULT_MAX_ITEMS = 0;
@@ -121,53 +121,6 @@
         pad(date.getMinutes()),
         pad(date.getSeconds())
       ].join("");
-    }
-  };
-
-  const ExportUtils = {
-    downloadJson(items) {
-      const filename = `threads-saved-${DateUtils.formatTimestamp()}.json`;
-      const blob = new Blob([JSON.stringify(items, null, 2)], { type: "application/json;charset=utf-8" });
-      this.downloadBlob(blob, filename);
-    },
-
-    downloadCsv(items) {
-      const filename = `threads-saved-${DateUtils.formatTimestamp()}.csv`;
-      const headers = [
-        "postId",
-        "postUrl",
-        "authorHandle",
-        "authorName",
-        "contentText",
-        "publishedTime",
-        "collectedAt",
-        "sourcePage"
-      ];
-      const lines = [
-        headers.join(","),
-        ...items.map((item) => headers.map((key) => this.escapeCsv(item[key] || "")).join(","))
-      ];
-      const blob = new Blob(["\uFEFF" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
-      this.downloadBlob(blob, filename);
-    },
-
-    escapeCsv(value) {
-      const text = String(value ?? "");
-      if (/[",\n]/.test(text)) {
-        return `"${text.replace(/"/g, '""')}"`;
-      }
-      return text;
-    },
-
-    downloadBlob(blob, filename) {
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
   };
 
@@ -840,24 +793,6 @@
       return changed;
     },
 
-    clearSuppressedKeys() {
-      if (state.suppressedAiKeys.size === 0) {
-        setError("目前沒有排除項目需要重設。");
-        return;
-      }
-      const count = state.suppressedAiKeys.size;
-      state.suppressedAiKeys = new Set();
-      saveState();
-      if (state.aiItems.length > 0) {
-        this.selectHighConfidence();
-      }
-      setError(`已重設 ${count} 筆排除項目。`);
-      DebugLogUtils.appendEvent("ai_suppressed_keys_cleared", {
-        count
-      }).catch(() => {});
-      UI.update();
-    },
-
     getLoadedArticleEntries() {
       return Parser.getArticleNodes()
         .map((article) => {
@@ -1305,40 +1240,6 @@
       UI.update();
     },
 
-    selectAllHighlighted() {
-      if (!state.aiHighlightsActive) {
-        this.applyHighlights();
-      }
-
-      const processedKeys = this.getSuppressedKeySet();
-      state.selectedAiKeys = new Set([
-        ...this.getSelectedReviewableItemKeys(),
-        ...this.getHighlightedEntryKeys()
-      ]);
-      this.syncHighlights();
-      state.aiReviewStats.selected = state.selectedAiKeys.size;
-      if (state.selectedAiKeys.size === 0) {
-        setError("目前沒有可選取的標亮貼文。");
-      } else {
-        setError(`已選取 ${state.selectedAiKeys.size} 筆標亮貼文。`);
-      }
-      DebugLogUtils.appendEvent("ai_all_highlighted_selected", {
-        selectedCount: state.selectedAiKeys.size,
-        processedCount: processedKeys.size
-      }).catch(() => {});
-      UI.update();
-    },
-
-    clearSelection() {
-      state.selectedAiKeys = new Set();
-      for (const article of Parser.getArticleNodes()) {
-        this.updateArticleSelectionState(article, "");
-      }
-      state.aiReviewStats.selected = 0;
-      setError("");
-      UI.update();
-    },
-
     findMoreButton(article) {
       const scopes = [article, article.parentElement].filter(Boolean);
       for (const scope of scopes) {
@@ -1724,6 +1625,59 @@
             failureCount: nextFailureCount
           }).catch(() => {});
         }
+      }
+    },
+
+    async runUnsaveFromPickedFile() {
+      if (typeof window.showOpenFilePicker !== "function") {
+        setError("目前瀏覽器不支援載入本機 JSON 檔案。");
+        return;
+      }
+      if (!isLikelySavedPage()) {
+        setError("請先切到 Threads 收藏頁（/saved）再執行取消儲存。");
+        return;
+      }
+      let fileHandle;
+      try {
+        [fileHandle] = await window.showOpenFilePicker({
+          multiple: false,
+          types: [
+            {
+              description: "AI classification JSON",
+              accept: {
+                "application/json": [".json"]
+              }
+            }
+          ]
+        });
+      } catch (error) {
+        if (error?.name !== "AbortError") {
+          setError(`選擇 unsave.json 失敗: ${error instanceof Error ? error.message : String(error)}`);
+        }
+        return;
+      }
+      await this.loadAiResultsFromHandle(fileHandle);
+      // 選檔即宣告「此檔為當前真相」：清掉歷次累積的排除鍵，避免舊的
+      // 誤判 verified（Threads 虛擬捲動造成的 article detach）永久吃掉候選。
+      // 已真正取消的貼文不會出現在頁面上，巡覽迴圈會自行略過。
+      if (state.suppressedAiKeys.size > 0) {
+        state.suppressedAiKeys = new Set();
+        saveState();
+      }
+      try {
+        this.applyHighlights();
+        await wait(UNSAVE_AFTER_LOAD_DELAY_MS);
+        this.selectHighConfidence();
+        if (state.selectedAiKeys.size === 0) {
+          setError("沒有建議取消的貼文，未執行取消儲存。");
+          return;
+        }
+        await this.unsaveSelected();
+      } finally {
+        // 一鍵流程結束即停用標亮同步；否則 MutationObserver 與
+        // syncHighlights/UI.update 的 DOM 寫入互相觸發，形成無限重繪迴圈。
+        this.clearHighlights();
+        UI.update();
       }
     },
 
@@ -2633,6 +2587,17 @@
           gap: 8px;
           margin-top: 10px;
         }
+        #${PANEL_ID} .unsave-run {
+          margin-top: 10px;
+          padding: 14px 12px;
+          font-size: 15px;
+          font-weight: 700;
+          border: 1px solid rgba(255, 107, 107, 0.55);
+          background: rgba(214, 48, 49, 0.82);
+        }
+        #${PANEL_ID} .unsave-run:hover {
+          background: rgba(231, 76, 60, 0.95);
+        }
         #${PANEL_ID} details {
           margin-top: 10px;
           border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -2792,21 +2757,7 @@
         </div>
         <div id="${PANEL_ID}-meta" class="meta"></div>
         <div id="${PANEL_ID}-error" class="error"></div>
-        <details>
-          <summary>手動工具</summary>
-          <div class="actions">
-            <button id="${PANEL_ID}-csv">下載 CSV</button>
-            <button id="${PANEL_ID}-json">下載 JSON</button>
-            <button id="${PANEL_ID}-copy">複製 JSON</button>
-            <button id="${PANEL_ID}-load-ai">載入 unsave 分類</button>
-            <button id="${PANEL_ID}-apply-ai">套用標亮</button>
-            <button id="${PANEL_ID}-select-high">全選建議取消</button>
-            <button id="${PANEL_ID}-select-all-highlighted">全選全部標亮</button>
-            <button id="${PANEL_ID}-clear-selection">清除勾選</button>
-            <button id="${PANEL_ID}-reset-ai-suppressed">重設排除</button>
-            <button id="${PANEL_ID}-unsave-selected">取消儲存已選取</button>
-          </div>
-        </details>
+        <button id="${PANEL_ID}-unsave-run" class="unsave-run">取消儲存</button>
         <details>
           <summary>診斷</summary>
           <div class="actions">
@@ -2828,19 +2779,10 @@
         newOnly: panel.querySelector(`#${PANEL_ID}-new-only`),
         start: panel.querySelector(`#${PANEL_ID}-start`),
         stop: panel.querySelector(`#${PANEL_ID}-stop`),
-        csv: panel.querySelector(`#${PANEL_ID}-csv`),
-        json: panel.querySelector(`#${PANEL_ID}-json`),
         autosave: panel.querySelector(`#${PANEL_ID}-autosave`),
         clear: panel.querySelector(`#${PANEL_ID}-clear`),
-        copy: panel.querySelector(`#${PANEL_ID}-copy`),
-        loadAi: panel.querySelector(`#${PANEL_ID}-load-ai`),
-        applyAi: panel.querySelector(`#${PANEL_ID}-apply-ai`),
-        selectHigh: panel.querySelector(`#${PANEL_ID}-select-high`),
-        selectAllHighlighted: panel.querySelector(`#${PANEL_ID}-select-all-highlighted`),
-        clearSelection: panel.querySelector(`#${PANEL_ID}-clear-selection`),
-        resetAiSuppressed: panel.querySelector(`#${PANEL_ID}-reset-ai-suppressed`),
+        unsaveRun: panel.querySelector(`#${PANEL_ID}-unsave-run`),
         diagnoseAiKeys: panel.querySelector(`#${PANEL_ID}-diagnose-ai-keys`),
-        unsaveSelected: panel.querySelector(`#${PANEL_ID}-unsave-selected`),
         debugLog: panel.querySelector(`#${PANEL_ID}-debug-log`),
         meta: panel.querySelector(`#${PANEL_ID}-meta`),
         debugMeta: panel.querySelector(`#${PANEL_ID}-debug-meta`),
@@ -2882,8 +2824,6 @@
 
       this.elements.start.addEventListener("click", () => Scroller.start());
       this.elements.stop.addEventListener("click", () => Scroller.stop("已停止"));
-      this.elements.csv.addEventListener("click", () => ExportUtils.downloadCsv(getExportableItems()));
-      this.elements.json.addEventListener("click", () => ExportUtils.downloadJson(getExportableItems()));
       this.elements.autosave.addEventListener("click", async () => {
         try {
           await AutoSaveUtils.chooseFileHandle();
@@ -2894,44 +2834,20 @@
         }
       });
       this.elements.clear.addEventListener("click", () => clearResults());
-      this.elements.copy.addEventListener("click", async () => {
-        try {
-          await navigator.clipboard.writeText(JSON.stringify(getExportableItems(), null, 2));
-        } catch (error) {
-          setError(`無法複製到剪貼簿: ${error instanceof Error ? error.message : String(error)}`);
-        }
-      });
-      this.elements.loadAi.addEventListener("click", async () => {
-        if (typeof window.showOpenFilePicker !== "function") {
-          setError("目前瀏覽器不支援載入本機 JSON 檔案。");
+      this.elements.unsaveRun.addEventListener("click", async () => {
+        const button = this.elements.unsaveRun;
+        if (button.disabled) {
           return;
         }
+        button.disabled = true;
         try {
-          const [fileHandle] = await window.showOpenFilePicker({
-            multiple: false,
-            types: [
-              {
-                description: "AI classification JSON",
-                accept: {
-                  "application/json": [".json"]
-                }
-              }
-            ]
-          });
-          await AutoSaveUtils.setNamedHandle(AI_FILE_HANDLE_KEY, fileHandle);
-          await AiReviewUtils.loadAiResultsFromHandle(fileHandle);
+          await AiReviewUtils.runUnsaveFromPickedFile();
         } catch (error) {
-          if (error?.name === "AbortError") {
-            return;
-          }
-          setError(`載入 unsave 分類失敗: ${error instanceof Error ? error.message : String(error)}`);
+          setError(`取消儲存失敗: ${error instanceof Error ? error.message : String(error)}`);
+        } finally {
+          button.disabled = false;
         }
       });
-      this.elements.applyAi.addEventListener("click", () => AiReviewUtils.applyHighlights());
-      this.elements.selectHigh.addEventListener("click", () => AiReviewUtils.selectHighConfidence());
-      this.elements.selectAllHighlighted.addEventListener("click", () => AiReviewUtils.selectAllHighlighted());
-      this.elements.clearSelection.addEventListener("click", () => AiReviewUtils.clearSelection());
-      this.elements.resetAiSuppressed.addEventListener("click", () => AiReviewUtils.clearSuppressedKeys());
       this.elements.diagnoseAiKeys.addEventListener("click", () => AiReviewUtils.diagnoseAiKeys());
       this.elements.debugLog.addEventListener("click", async () => {
         try {
@@ -2945,11 +2861,6 @@
           }
           setError(`設定 debug log 失敗: ${error instanceof Error ? error.message : String(error)}`);
         }
-      });
-      this.elements.unsaveSelected.addEventListener("click", () => {
-        AiReviewUtils.unsaveSelected().catch((error) => {
-          setError(`取消儲存失敗: ${error instanceof Error ? error.message : String(error)}`);
-        });
       });
     },
 
@@ -3053,16 +2964,7 @@
       this.elements.error.textContent = state.lastError || "";
       this.elements.start.disabled = state.isRunning;
       this.elements.stop.disabled = !state.isRunning;
-      this.elements.csv.disabled = state.items.length === 0;
-      this.elements.json.disabled = state.items.length === 0;
-      this.elements.copy.disabled = state.items.length === 0;
-      this.elements.applyAi.disabled = state.aiItems.length === 0;
-      this.elements.selectHigh.disabled = state.aiItems.length === 0;
-      this.elements.selectAllHighlighted.disabled = state.aiItems.length === 0;
-      this.elements.clearSelection.disabled = state.selectedAiKeys.size === 0;
-      this.elements.resetAiSuppressed.disabled = state.suppressedAiKeys.size === 0;
       this.elements.diagnoseAiKeys.disabled = state.aiItems.length === 0;
-      this.elements.unsaveSelected.disabled = state.selectedAiKeys.size === 0;
     }
   };
 
@@ -3626,353 +3528,9 @@
     window.setInterval(() => AiReviewUtils.scheduleSync(), 1000);
   }
 
-  // ───────────────────────────────────────────────────────────────────────
-  // AutoAiSync — ThreadSieve addition
-  //
-  // Polls the persisted unsave.json file handle for lastModified changes,
-  // auto-reloads it via AiReviewUtils, and optionally triggers the existing
-  // unsave flow (selectHighConfidence → unsaveSelected).
-  //
-  // All toggles are stored in localStorage so they survive reloads. The
-  // module is fully contained — it does not modify state owned by the
-  // existing modules other than calling their public methods.
-  // ───────────────────────────────────────────────────────────────────────
-  const AutoAiSync = {
-    POLL_INTERVAL_MS: 3000,
-    TOGGLE_STORAGE_KEY: "threads-sieve:auto-ai-sync",
-    PANEL_ID: "threads-sieve-auto-panel",
-    UNSAVE_AFTER_LOAD_DELAY_MS: 600,
-    timerId: 0,
-    lastModified: 0,
-    handle: null,
-    inflight: false,
-    settings: { autoLoad: false, autoUnsave: false },
-
-    loadSettings() {
-      try {
-        const raw = localStorage.getItem(this.TOGGLE_STORAGE_KEY);
-        if (!raw) {
-          return;
-        }
-        const parsed = JSON.parse(raw);
-        this.settings.autoLoad = Boolean(parsed?.autoLoad);
-        this.settings.autoUnsave = Boolean(parsed?.autoUnsave);
-      } catch (_error) {
-        // ignore malformed storage; defaults already applied
-      }
-    },
-
-    saveSettings() {
-      try {
-        localStorage.setItem(this.TOGGLE_STORAGE_KEY, JSON.stringify(this.settings));
-      } catch (_error) {
-        // localStorage may fail in private mode; settings just won't persist
-      }
-    },
-
-    getAutomationState() {
-      return {
-        autoLoad: this.settings.autoLoad,
-        autoUnsave: this.settings.autoUnsave,
-        handleName: this.handle?.name || "",
-        lastModified: this.lastModified,
-        loadedCount: state.aiItems.length,
-        selectedCount: state.selectedAiKeys.size,
-        verified: state.unsaveVerifiedKeys.size,
-        attempted: state.unsaveAttemptedKeys.size,
-        failed: state.unsaveFailedKeys.size,
-      };
-    },
-
-    setAutoUnsave(enabled) {
-      this.settings.autoUnsave = Boolean(enabled);
-      this.saveSettings();
-      this.refreshControls();
-      return this.getAutomationState();
-    },
-
-    async confirmedUnsave() {
-      // Pin autoUnsave to false for the duration of this call. tick() with forceLoad:true
-      // internally invokes runAutoUnsave() iff this.settings.autoUnsave === true, and we
-      // then call runAutoUnsave() again below — so without this guard a caller who forgot
-      // to disable autoUnsave would double-run the unsave loop.
-      const previousAutoUnsave = this.settings.autoUnsave;
-      this.settings.autoUnsave = false;
-      try {
-        const loaded = await this.tick({ forceLoad: true, ignoreAutoLoad: true });
-        if (!loaded) {
-          return { ok: false, error: "forceLoad failed", ...this.getAutomationState() };
-        }
-        await this.runAutoUnsave();
-        const automationState = this.getAutomationState();
-        const ok = automationState.verified > 0 || automationState.attempted > 0;
-        return { ok, ...automationState };
-      } finally {
-        this.settings.autoUnsave = previousAutoUnsave;
-      }
-    },
-
-    async ensureHandle() {
-      if (this.handle) {
-        return this.handle;
-      }
-      const handle = await AutoSaveUtils.getNamedHandle(AI_FILE_HANDLE_KEY);
-      if (!handle) {
-        return null;
-      }
-      this.handle = handle;
-      return handle;
-    },
-
-    async ensurePermission(handle) {
-      if (!handle?.queryPermission) {
-        return true;
-      }
-      const status = await handle.queryPermission({ mode: "read" });
-      return status === "granted";
-    },
-
-    async tick(options = {}) {
-      const { forceLoad = false, ignoreAutoLoad = false } = options;
-      if (this.inflight || (!ignoreAutoLoad && !this.settings.autoLoad)) {
-        return false;
-      }
-      this.inflight = true;
-      try {
-        const handle = await this.ensureHandle();
-        if (!handle) {
-          return false;
-        }
-        const granted = await this.ensurePermission(handle);
-        if (!granted) {
-          return false;
-        }
-        const file = await handle.getFile();
-        if (!forceLoad && file.lastModified === this.lastModified) {
-          return true;
-        }
-        const previous = this.lastModified;
-        this.lastModified = file.lastModified;
-        if (previous === 0 && !forceLoad) {
-          return true;
-        }
-        await AiReviewUtils.loadAiResultsFromHandle(handle);
-        console.info("[threads-sieve] auto-loaded unsave.json", {
-          fileName: handle.name,
-          lastModified: this.lastModified,
-        });
-        if (this.settings.autoUnsave) {
-          await this.runAutoUnsave();
-        }
-        return true;
-      } catch (error) {
-        console.warn("[threads-sieve] AutoAiSync tick failed:", error);
-        return false;
-      } finally {
-        this.inflight = false;
-        this.refreshControls();
-      }
-    },
-
-    async runAutoUnsave() {
-      if (!isLikelySavedPage()) {
-        console.info("[threads-sieve] auto-unsave skipped: not on saved page.");
-        return;
-      }
-      try {
-        AiReviewUtils.applyHighlights();
-        await wait(this.UNSAVE_AFTER_LOAD_DELAY_MS);
-        AiReviewUtils.selectHighConfidence();
-        if (state.selectedAiKeys.size === 0) {
-          console.info("[threads-sieve] auto-unsave skipped: no suggested AI posts selected.");
-          return;
-        }
-        console.info("[threads-sieve] auto-unsave starting:", {
-          selectedCount: state.selectedAiKeys.size,
-        });
-        await AiReviewUtils.unsaveSelected({ skipConfirm: true });
-        console.info("[threads-sieve] auto-unsave finished:", {
-          verified: state.unsaveVerifiedKeys.size,
-          attempted: state.unsaveAttemptedKeys.size,
-          failed: state.unsaveFailedKeys.size,
-        });
-      } catch (error) {
-        console.warn("[threads-sieve] auto-unsave failed:", error);
-      }
-    },
-
-    start() {
-      if (this.timerId) {
-        return;
-      }
-      this.timerId = window.setInterval(() => {
-        this.tick().catch(() => {});
-      }, this.POLL_INTERVAL_MS);
-    },
-
-    stop() {
-      if (!this.timerId) {
-        return;
-      }
-      window.clearInterval(this.timerId);
-      this.timerId = 0;
-    },
-
-    refreshControls() {
-      const statusText = this.getStatusText();
-      document.documentElement.dataset.threadsSieveAutoAiSyncStatus = statusText;
-      document.documentElement.dataset.threadsSieveAutoAiSyncBound = this.handle?.name ? "true" : "false";
-      const panel = document.getElementById(this.PANEL_ID);
-      if (!panel) {
-        return;
-      }
-      const loadCheckbox = panel.querySelector('input[data-key="autoLoad"]');
-      const unsaveCheckbox = panel.querySelector('input[data-key="autoUnsave"]');
-      const statusEl = panel.querySelector('[data-role="status"]');
-      if (loadCheckbox) {
-        loadCheckbox.checked = this.settings.autoLoad;
-      }
-      if (unsaveCheckbox) {
-        unsaveCheckbox.checked = this.settings.autoUnsave;
-      }
-      if (statusEl) {
-        statusEl.textContent = statusText;
-      }
-    },
-
-    getStatusText() {
-      const handleInfo = this.handle?.name ? `handle: ${this.handle.name}` : "handle: not bound";
-      const lastMod = this.lastModified ? new Date(this.lastModified).toISOString() : "never";
-      if (state.aiItems.length === 0) {
-        return `${handleInfo} · last seen: ${lastMod} · ${state.aiLoadStatus}`;
-      }
-      const counts = AiReviewUtils.countAiItemsByTier();
-      const generatedAt = state.aiResultGeneratedAt || "unknown generatedAt";
-      return `${handleInfo} · last seen: ${lastMod} · loaded: ${generatedAt} · 候選: ${counts.reviewable}/${state.aiItems.length}`;
-    },
-
-    closePanel() {
-      document.getElementById(this.PANEL_ID)?.remove();
-    },
-
-    async bindHandle() {
-      if (typeof window.showOpenFilePicker !== "function") {
-        alert("此瀏覽器不支援 File System Access API。");
-        return;
-      }
-      try {
-        const [picked] = await window.showOpenFilePicker({
-          multiple: false,
-          types: [
-            { description: "AI classification JSON", accept: { "application/json": [".json"] } },
-          ],
-        });
-        await AutoSaveUtils.setNamedHandle(AI_FILE_HANDLE_KEY, picked);
-        this.handle = picked;
-        this.lastModified = 0;
-        this.refreshControls();
-      } catch (error) {
-        if (error?.name !== "AbortError") {
-          alert(`綁定 unsave.json 失敗: ${error?.message || error}`);
-        }
-      }
-    },
-
-    buildPanel() {
-      if (document.getElementById(this.PANEL_ID)) {
-        return;
-      }
-      const panel = document.createElement("div");
-      panel.id = this.PANEL_ID;
-      panel.style.cssText = [
-        "position:fixed",
-        "right:12px",
-        "bottom:12px",
-        "z-index:2147483647",
-        "background:rgba(20,20,20,0.92)",
-        "color:#fff",
-        "font:12px/1.4 -apple-system,Segoe UI,sans-serif",
-        "padding:8px 10px",
-        "border-radius:8px",
-        "box-shadow:0 4px 16px rgba(0,0,0,0.35)",
-        "max-width:280px",
-      ].join(";");
-
-      panel.innerHTML = `
-        <div style="font-weight:600;margin-bottom:6px;">ThreadSieve · Auto AI Sync</div>
-        <label style="display:flex;gap:6px;align-items:center;margin:4px 0;">
-          <input type="checkbox" data-key="autoLoad" /> 自動載入 unsave.json
-        </label>
-        <label style="display:flex;gap:6px;align-items:center;margin:4px 0;">
-          <input type="checkbox" data-key="autoUnsave" /> 載入後自動取消儲存
-        </label>
-        <button type="button" data-action="bind" style="margin:6px 4px 4px 0;padding:4px 8px;cursor:pointer;">綁定 unsave.json</button>
-        <button type="button" data-action="tick" style="margin:6px 0 4px 0;padding:4px 8px;cursor:pointer;">立即檢查</button>
-        <div data-role="status" style="margin-top:6px;opacity:0.8;font-size:11px;"></div>
-      `;
-      document.body.appendChild(panel);
-
-      panel.addEventListener("change", (event) => {
-        const target = event.target;
-        if (target instanceof HTMLInputElement && target.dataset.key) {
-          this.settings[target.dataset.key] = target.checked;
-          this.saveSettings();
-          if (target.dataset.key === "autoLoad" && target.checked) {
-            this.tick().catch(() => {});
-          }
-        }
-      });
-      panel.addEventListener("click", (event) => {
-        const target = event.target;
-        if (!(target instanceof HTMLElement)) {
-          return;
-        }
-        if (target.dataset.action === "bind") {
-          this.bindHandle();
-        } else if (target.dataset.action === "tick") {
-          this.tick({ forceLoad: true, ignoreAutoLoad: true }).then((ok) => {
-            if (ok) {
-              this.closePanel();
-            }
-          }).catch(() => {});
-        }
-      });
-    },
-
-    async init() {
-      this.loadSettings();
-      try {
-        await this.ensureHandle();
-      } catch (_error) {
-        // ignore — handle just not bound yet
-      }
-      this.buildPanel();
-      this.refreshControls();
-      this.start();
-      // Keep the status fresh even when nothing changes.
-      window.setInterval(() => this.refreshControls(), 5000);
-    },
-  };
-
-  window.ThreadSieveAutoAiSync = {
-    getState: () => AutoAiSync.getAutomationState(),
-    setAutoUnsave: (enabled) => AutoAiSync.setAutoUnsave(Boolean(enabled)),
-    confirmedUnsave: () => AutoAiSync.confirmedUnsave(),
-  };
-
-  function bootAutoAiSync() {
-    AutoAiSync.init().catch((error) => {
-      console.warn("[threads-sieve] AutoAiSync init failed:", error);
-    });
-  }
-
-
-
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot, { once: true });
-    document.addEventListener("DOMContentLoaded", bootAutoAiSync, { once: true });
   } else {
     boot();
-    bootAutoAiSync();
   }
 })();
