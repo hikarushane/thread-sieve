@@ -3444,11 +3444,11 @@
       return "未知";
     }
     const total = summary.total ?? "?";
-    const ai = summary.ai ?? "?";
-    const notAi = summary.not_ai ?? "?";
+    const unsave = summary.unsave ?? summary.ai ?? "?";
+    const keep = summary.keep ?? summary.not_ai ?? "?";
     const unsure = summary.unsure ?? "?";
     const failed = summary.failed ?? "?";
-    return `total ${total}, 取消 ${ai}, 保留 ${notAi}, 待判斷 ${unsure}, failed ${failed}`;
+    return `total ${total}, 取消 ${unsave}, 保留 ${keep}, 待判斷 ${unsure}, failed ${failed}`;
   }
 
   function getExportableItems() {

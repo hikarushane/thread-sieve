@@ -117,8 +117,8 @@ def test_workflow_writes_markdown_and_unsave_from_one_classification_pass(tmp_pa
     assert payload["unsavedCategories"] == ["AI"]
     assert payload["summary"] == {
         "total": 2,
-        "ai": 1,
-        "not_ai": 1,
+        "unsave": 1,
+        "keep": 1,
         "unsure": 0,
         "failed": 0,
     }
