@@ -58,18 +58,29 @@ Two layers:
 
 ## Install
 
-### 0. Clone the repo
-
-```powershell
-git clone -b lite https://github.com/hikaru-yeh/thread-sieve.git
-cd thread-sieve
-```
-
-### 1. Python side
+### 0. One-line install (clone + Python environment)
 
 **Windows (PowerShell):**
 
 ```powershell
+irm https://raw.githubusercontent.com/hikaru-yeh/thread-sieve/main/install.ps1 | iex
+```
+
+**macOS (Terminal):**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/hikaru-yeh/thread-sieve/main/install.sh | bash
+```
+
+One line does it all: clone the repo → install [uv](https://docs.astral.sh/uv/) if missing → create a Python 3.12 virtual environment → install dependencies and Chromium → generate `.env` / `config.json`. **It doesn't matter which Python version your system has**: uv downloads the right one automatically and uses it only inside this project's `.venv`, leaving your existing setup untouched.
+
+<details>
+<summary>Prefer not to <code>curl | bash</code>? Manual steps here</summary>
+
+```powershell
+# Windows (PowerShell); requires Python 3.10+
+git clone https://github.com/hikaru-yeh/thread-sieve.git
+cd thread-sieve
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
@@ -78,9 +89,10 @@ copy .env.example .env
 copy config.json.example config.json
 ```
 
-**macOS (Terminal):**
-
 ```bash
+# macOS (Terminal); requires Python 3.10+
+git clone https://github.com/hikaru-yeh/thread-sieve.git
+cd thread-sieve
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -88,6 +100,10 @@ playwright install chromium
 cp .env.example .env
 cp config.json.example config.json
 ```
+
+</details>
+
+### 1. Fill in the config
 
 Edit `.env`: fill in `GEMINI_API_KEY`.
 
@@ -281,7 +297,7 @@ The pipeline writes a `threads_events.jsonl` event log into the output directory
 
 | Symptom | Likely cause | Fix |
 | --- | --- | --- |
-| Double-clicking `run_classify.cmd`/`run_classify.command` shows `.venv not found` | venv never created | Run the install → Python side block once (pick Windows/macOS) |
+| Double-clicking `run_classify.cmd`/`run_classify.command` shows `.venv not found` | venv never created | Run the one-line install once (pick the command for your OS) |
 | classify exits with `json.decoder.JSONDecodeError: Invalid \escape` | Windows path in `config.json` uses single `\` | Use `/` (`D:/foo/bar`) or `\\` (`D:\\foo\\bar`) |
 | classify exits with `GEMINI_API_KEY missing` | key not in `.env` or venv didn't pick it up | Confirm `GEMINI_API_KEY=...` in `.env`, double-click again |
 | Panel never loads AI classification | handle not bound / autoLoad off | Re-bind `unsave.json`, tick **自動載入 unsave.json** |
