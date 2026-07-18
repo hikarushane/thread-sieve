@@ -329,7 +329,7 @@ log 會輸出到 console 和 `pipeline.log`。停止時按 `Ctrl+C`。
 3. 如果 panel 還沒出現，先 reload `/saved`，讓 **ThreadSieve panel** 載入。
 4. 在 ThreadSieve panel 點 **設定自動存檔**，選 `data/catch.json`。
 
-> **userscript 0.4.1 起的行為變更**：Auto AI Sync 面板、`unsave.json` 持久綁定與「載入後自動取消儲存」已移除。classify 寫出新 `unsave.json` 後，最後的取消儲存一律在瀏覽器 panel 點單一「取消儲存」按鈕、重新選檔執行；`agent_driver.py` 舊的 unsave 確認 gate（`--no-unsave-confirm`、`--unsave-timeout-seconds`）對 0.4.1 面板已不再適用。
+> **userscript 0.4.2（full 分支版）**：0.4.1 移除了 Auto AI Sync 面板與自動 unsave；full 分支的 userscript 在其上加回 agent bridge（`window.ThreadSieveAgent`），讓 Terminal B 確認 gate 把 `unsave.json` 內容直接注入頁面執行一鍵流程。terminal 的 `y/n` 取代選檔確認——執行當下才從磁碟重新讀檔，防舊檔誤執行的保證不變。路徑二請安裝 **full 分支**的 `userscripts/threads-scriber-auto.user.js`（0.4.2）。
 
 再確認 panel ready：
 
@@ -344,7 +344,7 @@ Expected output 最後一行：`OK: panel ready for agent-driven scrape`
 | 問題 | 處理方式 |
 | --- | --- |
 | `panel missing` | reload `/saved`；等 Tampermonkey inject |
-| `scriptVersion=X expected 0.3.2` | userscript 已是 0.4.1，`agent_driver.py` 的預期版本尚未跟上面板改版；scrape 部分仍可用，unsave gate 見上方行為變更說明 |
+| `scriptVersion=X expected 0.4.2` | 裝的不是 full 分支版 userscript（例如還是 lite 的 0.4.1，沒有 agent bridge） | 重新安裝 full 分支的 `userscripts/threads-scriber-auto.user.js` |
 | `autosave (catch.json) not bound` | 點 **設定自動存檔**，選 `data/catch.json`；re-run probe |
 
 觸發 scrape：
@@ -368,7 +368,12 @@ pipeline starting: items=N
 
 `notes` 完成後，`image_ocr_to_markdown.py` 會對 `config.json` → `image-ocr.trigger-categories` 指定分類的貼文執行圖片 OCR，並把結果寫入 markdown 的 `## 圖片文字` 區塊。預設 OCR backend 是 Gemini；要切到 Chandra，改 `config.json` 的 `image-ocr.backend`。
 
-最後的取消儲存：watcher 寫出新 `unsave.json` 後，回到瀏覽器在 ThreadSieve panel 點 **取消儲存** → 選 `data/unsave.json` → confirm 對話框確認後執行（userscript 0.4.1 起 Terminal B 的 y/n gate 與 auto-unsave 已不再驅動瀏覽器端，見上方行為變更說明）。
+Terminal B confirmation gate：watcher 寫出新 `unsave.json` 後，Terminal B 印出每個候選（`作者:<author>| 貼文:<first sentence>`）並問 `確認執行?(y/n)`：
+
+- 輸入 `y`：從磁碟重新讀取 `unsave.json`、經 agent bridge 注入頁面執行一鍵取消儲存，回報 `verified/attempted/failed/remaining`。
+- 輸入 `n`：`unsave.json` 保留不動，瀏覽器端不動。
+
+加 `--no-unsave-confirm` 可跳過 gate（只觸發 scrape），之後改在瀏覽器 panel 手動點「取消儲存」。`--unsave-timeout-seconds`（預設 `600`）控制 gate 等待新 `unsave.json` 的最長秒數。
 
 ThreadSieve panel 0.4.1 起僅保留 scrape 相關控制與單一「取消儲存」按鈕；舊版的手動工具、手動載入 AI classification、診斷面板已移除。
 

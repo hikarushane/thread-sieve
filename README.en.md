@@ -331,7 +331,7 @@ Logs stream to console and `pipeline.log`. Stop with `Ctrl+C`.
 3. If needed, reload the `/saved` tab so the **ThreadSieve** panel appears.
 4. In the **ThreadSieve panel**: click **設定自動存檔** → pick `data/catch.json`.
 
-> **Behavior change as of userscript 0.4.1**: the Auto AI Sync panel, persistent `unsave.json` binding, and auto-unsave-on-load are gone. After classify writes a fresh `unsave.json`, the final unsave always happens in the browser panel via the single **取消儲存** button with a fresh file pick; `agent_driver.py`'s old unsave confirmation gate (`--no-unsave-confirm`, `--unsave-timeout-seconds`) no longer applies to the 0.4.1 panel.
+> **Userscript 0.4.2 (full-branch build)**: 0.4.1 removed the Auto AI Sync panel and auto-unsave; the full-branch userscript adds an agent bridge (`window.ThreadSieveAgent`) on top, so the Terminal B gate injects the `unsave.json` content straight into the page and runs the one-shot flow. The terminal `y/n` replaces the file-pick confirmation — the file is re-read from disk at execution time, so the anti-stale-file guarantee still holds. For Path 2, install the **full-branch** `userscripts/threads-scriber-auto.user.js` (0.4.2).
 
 ##### Step 2 · Verify panel readiness
 
@@ -346,7 +346,7 @@ Expected output ends with `OK: panel ready for agent-driven scrape`.
 | Problem | Fix |
 | --- | --- |
 | `panel missing` | Reload the `/saved` tab; wait for Tampermonkey to inject |
-| `scriptVersion=X expected 0.3.2` | The userscript is now 0.4.1 and `agent_driver.py`'s expected version has not caught up with the panel redesign; scrape still works — for unsave see the behavior-change note above |
+| `scriptVersion=X expected 0.4.2` | Installed userscript is not the full-branch build (e.g. still lite 0.4.1, which has no agent bridge) | Re-install the full-branch `userscripts/threads-scriber-auto.user.js` |
 | `autosave (catch.json) not bound` | Click **設定自動存檔** in the panel, pick `data/catch.json`; re-run probe |
 
 ##### Step 3 · Trigger scrape
@@ -376,9 +376,14 @@ pipeline starting: items=N
 
 After `notes` finishes, `scripts/image_ocr_to_markdown.py` reads this run's `catch.json` and `unsave.json`. For posts whose classification reason matches `config.json` → `image-ocr.trigger-categories`, it renders the Threads post with Playwright, OCRs attached images, and appends a `## 圖片文字` section to the matching markdown note. Gemini OCR is the default backend; Chandra can be selected in `config.json`.
 
-##### Step 5 · Run the unsave in the browser
+##### Step 5 · Terminal B confirmation gate
 
-After the watcher writes a fresh `unsave.json`, go back to the browser and click **取消儲存** in the ThreadSieve panel → pick `data/unsave.json` → accept the confirm dialog to run the unsave pass (as of userscript 0.4.1, Terminal B's y/n gate and auto-unsave no longer drive the browser side — see the behavior-change note above).
+After the watcher writes a fresh `unsave.json`, Terminal B prints each candidate as `作者:<author>| 貼文:<first sentence>` and asks `確認執行?(y/n)`:
+
+- Type `y`: the gate re-reads `unsave.json` from disk, injects it through the agent bridge, runs the one-shot unsave, and reports `verified/attempted/failed/remaining`.
+- Type `n`: `unsave.json` stays on disk and the browser is left untouched.
+
+Pass `--no-unsave-confirm` to skip the gate (scrape only) and run the unsave manually from the browser panel instead. `--unsave-timeout-seconds` (default `600`) bounds how long the gate waits for a fresh `unsave.json`.
 
 As of 0.4.1 the ThreadSieve panel keeps only the scrape controls and the single **取消儲存** button; the old manual tools, manual AI classification loading, and debug panels have been removed.
 

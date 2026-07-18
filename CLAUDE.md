@@ -26,4 +26,4 @@ This IS the branch for the automation layer: `agent_driver.py`, `push_userscript
 
 The lite guardrail applies to `main` (the default, end-user branch): never sync any of the above back to `main`. Code changes that belong on both branches land on `main` first, then get cherry-picked here (the two branches share file content but not commit SHAs — sync with cherry-pick, never merge).
 
-Known gap: `agent_driver.py` expects userscript 0.3.2 (Auto AI Sync panel); the 0.4.1 panel removed that surface, so probe's version check and the unsave gate need updating before Path 2 unsave automation works again.
+Known divergence: the userscript here is the full-branch build (0.4.2) — lite's 0.4.1 plus the `window.ThreadSieveAgent` bridge block near the end of the file, which lets `agent_driver.py` inject unsave.json content over CDP for the Terminal B gate. When syncing the userscript from `main`, re-apply the bridge block (and its `runUnsaveFromPayloadText` / `loadAiResultsFromPayloadText` helpers in `AiReviewUtils`) and keep the full-branch version number ahead of lite's.

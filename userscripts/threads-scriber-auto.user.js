@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ThreadSieve (Auto)
 // @namespace    https://local-only.example/threads-sieve/
-// @version      0.4.1
+// @version      0.4.2
 // @description  ThreadSieve captures Threads saved posts and runs the AI-post unsave flow from a single pick-and-run button.
 // @author       threads-sieve
 // @match        https://threads.com/*
@@ -16,7 +16,7 @@
   "use strict";
 
   const STORAGE_KEY = "threadsSavedExportState";
-  const SCRIPT_VERSION = "0.4.1";
+  const SCRIPT_VERSION = "0.4.2";
   const PANEL_ID = "threads-saved-export-panel";
   const FILE_HANDLE_DB = "threadsSavedExportFileDb";
   const FILE_HANDLE_STORE = "handles";
@@ -529,7 +529,11 @@
 
     async loadAiResultsFromHandle(fileHandle) {
       const file = await fileHandle.getFile();
-      const payload = JSON.parse(await file.text());
+      await this.loadAiResultsFromPayloadText(await file.text(), fileHandle.name || "unsave.json");
+    },
+
+    async loadAiResultsFromPayloadText(payloadText, fileName = "unsave.json") {
+      const payload = JSON.parse(payloadText);
       const sourceItems = Array.isArray(payload) ? payload : Array.isArray(payload?.items) ? payload.items : null;
       if (!sourceItems) {
         throw new Error("unsave 分類格式不正確，找不到 items 陣列。");
@@ -541,7 +545,7 @@
       state.aiIndexMap = this.buildAiIndexMap(items);
       const payloadSummary = payload?.summary && typeof payload.summary === "object" ? payload.summary : null;
       state.aiLoadStatus = `已載入 ${items.length} 筆 unsave 分類`;
-      state.aiResultFileName = fileHandle.name || "unsave.json";
+      state.aiResultFileName = fileName;
       state.aiResultGeneratedAt = typeof payload?.generatedAt === "string" ? payload.generatedAt : "";
       state.aiResultBackend = typeof payload?.backend === "string" ? payload.backend : "";
       state.aiResultSourceFile = typeof payload?.sourceFile === "string" ? payload.sourceFile : "";
@@ -1679,6 +1683,45 @@
         this.clearHighlights();
         UI.update();
       }
+    },
+
+    // Agent 路徑（full 分支）：直接吃 unsave.json 內容、跳過檔案選擇器。
+    // Terminal 端的 y/n 確認取代選檔確認——呼叫方在執行當下才從磁碟讀檔，
+    // 防舊檔誤執行的保證不變。
+    async runUnsaveFromPayloadText(payloadText, { skipConfirm = true, fileName = "unsave.json (agent)" } = {}) {
+      if (!isLikelySavedPage()) {
+        return { ok: false, error: "not on /saved — open https://www.threads.com/saved first" };
+      }
+      try {
+        await this.loadAiResultsFromPayloadText(payloadText, fileName);
+      } catch (error) {
+        return { ok: false, error: error instanceof Error ? error.message : String(error) };
+      }
+      if (state.suppressedAiKeys.size > 0) {
+        state.suppressedAiKeys = new Set();
+        saveState();
+      }
+      try {
+        this.applyHighlights();
+        await wait(UNSAVE_AFTER_LOAD_DELAY_MS);
+        this.selectHighConfidence();
+        if (state.selectedAiKeys.size === 0) {
+          return { ok: true, verified: 0, attempted: 0, failed: 0, remainingSelected: 0, note: "no candidates selected" };
+        }
+        await this.unsaveSelected({ skipConfirm });
+      } catch (error) {
+        return { ok: false, error: error instanceof Error ? error.message : String(error) };
+      } finally {
+        this.clearHighlights();
+        UI.update();
+      }
+      return {
+        ok: true,
+        verified: state.unsaveVerifiedKeys.size,
+        attempted: state.unsaveAttemptedKeys.size,
+        failed: state.unsaveFailedKeys.size,
+        remainingSelected: state.selectedAiKeys.size
+      };
     },
 
     async unsaveSelected({ skipConfirm = false } = {}) {
@@ -3527,6 +3570,13 @@
     document.addEventListener("scroll", () => AiReviewUtils.scheduleSync(), true);
     window.setInterval(() => AiReviewUtils.scheduleSync(), 1000);
   }
+
+  // Agent bridge（full 分支限定）：scripts/agent_driver.py 經 CDP 呼叫。
+  // 從 lite（main）同步 userscript 時要保留這個區塊與 0.4.x 的 full 版號。
+  window.ThreadSieveAgent = {
+    scriptVersion: SCRIPT_VERSION,
+    runUnsave: (payloadText, options) => AiReviewUtils.runUnsaveFromPayloadText(payloadText, options)
+  };
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot, { once: true });

@@ -2,13 +2,14 @@
 
 Wraps the bundled superpowers-chrome `chrome-ws` CLI so an agent (or this
 script invoked directly) can trigger the scrape from outside the browser.
-The rest of the pipeline (classify -> notes -> unsave.json -> AutoAiSync
-auto-load -> auto-unsave) happens automatically once the Tampermonkey panel
-finishes the scrape.
+After the scrape, the watcher/classify step writes unsave.json; the scrape
+command's confirmation gate reads that file from disk at confirm time and
+injects it into the page through the window.ThreadSieveAgent bridge
+(full-branch userscript >= 0.4.2) to run the one-shot unsave pass.
 
 Commands:
   python scripts/agent_driver.py probe
-      Verify panel exists, SCRIPT_VERSION matches, autosave + AutoAiSync handle bound.
+      Verify panel exists, SCRIPT_VERSION matches, autosave bound, agent bridge present.
 
   python scripts/agent_driver.py status
       Dump the current panel meta block.
@@ -18,7 +19,7 @@ Commands:
       reports an idle state or timeout.
 
   python scripts/agent_driver.py click <button-id>
-      Click an arbitrary panel button id (e.g. unsave-selected, load-ai).
+      Click an arbitrary panel button id (e.g. start, stop, clear, unsave-run).
 """
 from __future__ import annotations
 
@@ -73,7 +74,7 @@ def resolve_chrome_ws_path() -> Path | None:
 
 
 CHROME_WS: Path | None = resolve_chrome_ws_path()
-EXPECTED_VERSION = "0.3.2"
+EXPECTED_VERSION = "0.4.2"
 PANEL_ID = "threads-saved-export-panel"
 SAVED_URL_SUBSTR = "/saved"
 
@@ -104,8 +105,8 @@ def find_saved_tab_index() -> int:
     raise RuntimeError(f"no tab found containing '{SAVED_URL_SUBSTR}'. Open https://www.threads.com/saved.")
 
 
-def chrome_eval(tab_index: int, expression: str) -> object:
-    raw = _run_chrome_ws("eval", str(tab_index), expression)
+def chrome_eval(tab_index: int, expression: str, *, timeout: float = 30.0) -> object:
+    raw = _run_chrome_ws("eval", str(tab_index), expression, timeout=timeout)
     # chrome-ws prints the JSON-stringified result on stdout
     try:
         return json.loads(raw)
@@ -193,35 +194,42 @@ def _coerce_chrome_json(result: object) -> dict:
     return parsed
 
 
-def set_browser_auto_unsave(tab_index: int, enabled: bool) -> dict:
-    expr = (
-        "(()=>{"
-        "const api=window.ThreadSieveAutoAiSync;"
-        "if(!api?.setAutoUnsave) return JSON.stringify({ok:false,error:'ThreadSieveAutoAiSync API missing'});"
-        "const state=api.setAutoUnsave(" + json.dumps(enabled) + ");"
-        "return JSON.stringify({ok:true,state});"
-        "})()"
-    )
-    result = _coerce_chrome_json(chrome_eval(tab_index, expr))
-    if not result.get("ok"):
-        raise RuntimeError(str(result.get("error") or "failed to set autoUnsave"))
-    return result
+AGENT_BRIDGE_MISSING_HINT = (
+    "ThreadSieveAgent bridge missing — install the full-branch userscript "
+    "(userscripts/threads-scriber-auto.user.js >= 0.4.2)"
+)
+BRIDGE_PROBE_EXPR = "(()=>JSON.stringify({present:!!window.ThreadSieveAgent?.runUnsave}))()"
+MAX_UNSAVE_PAYLOAD_CHARS = 200_000
+UNSAVE_EVAL_TIMEOUT_SECONDS = 900.0
 
 
-def run_confirmed_browser_unsave(tab_index: int) -> dict:
-    expr = (
+def agent_bridge_present(tab_index: int) -> bool:
+    result = _coerce_chrome_json(chrome_eval(tab_index, BRIDGE_PROBE_EXPR))
+    return bool(result.get("present"))
+
+
+def build_agent_unsave_expr(payload_text: str) -> str:
+    return (
         "(async()=>{"
-        "const api=window.ThreadSieveAutoAiSync;"
-        "if(!api?.confirmedUnsave) return JSON.stringify({ok:false,error:'ThreadSieveAutoAiSync API missing'});"
-        "const unsave=await api.confirmedUnsave();"
-        "return JSON.stringify({ok:!!unsave?.ok,unsave});"
+        "const api=window.ThreadSieveAgent;"
+        "if(!api?.runUnsave) return JSON.stringify({ok:false,error:" + json.dumps(AGENT_BRIDGE_MISSING_HINT) + "});"
+        "const result=await api.runUnsave(" + json.dumps(payload_text) + ");"
+        "return JSON.stringify(result);"
         "})()"
     )
-    result = _coerce_chrome_json(chrome_eval(tab_index, expr))
+
+
+def run_agent_bridge_unsave(tab_index: int, payload_text: str) -> dict:
+    if len(payload_text) > MAX_UNSAVE_PAYLOAD_CHARS:
+        raise RuntimeError(
+            f"unsave.json too large to inject over CDP ({len(payload_text)} chars > "
+            f"{MAX_UNSAVE_PAYLOAD_CHARS}); run the unsave from the browser panel instead"
+        )
+    result = _coerce_chrome_json(
+        chrome_eval(tab_index, build_agent_unsave_expr(payload_text), timeout=UNSAVE_EVAL_TIMEOUT_SECONDS)
+    )
     if not result.get("ok"):
-        unsave_state = result.get("unsave") if isinstance(result.get("unsave"), dict) else {}
-        message = str(unsave_state.get("error") or result.get("error") or "confirmed unsave failed")
-        raise RuntimeError(message)
+        raise RuntimeError(str(result.get("error") or "agent bridge unsave failed"))
     return result
 
 
@@ -301,22 +309,45 @@ def run_unsave_confirmation_gate(
         print(line)
 
     if not ask_confirmation(input_fn):
-        print("已取消執行；unsave.json 已保留，browser auto-unsave 維持關閉。")
+        print("已取消執行；unsave.json 已保留，瀏覽器端不動。")
         return 0
 
-    result = run_confirmed_browser_unsave(tab_index)
-    unsave_state = result.get("unsave", {}) if isinstance(result, dict) else {}
+    payload_text = unsave_path.read_text(encoding="utf-8")
+    result = run_agent_bridge_unsave(tab_index, payload_text)
     print(
         "已執行取消儲存；"
-        f"verified={unsave_state.get('verified', '?')} "
-        f"attempted={unsave_state.get('attempted', '?')} "
-        f"failed={unsave_state.get('failed', '?')}"
+        f"verified={result.get('verified', '?')} "
+        f"attempted={result.get('attempted', '?')} "
+        f"failed={result.get('failed', '?')} "
+        f"remaining={result.get('remainingSelected', '?')}"
     )
     return 0
 
 
+PROBE_BUTTON_KEYS = ("start", "stop", "autosave", "clear", "unsave-run")
+
+
+def evaluate_probe_result(result: dict) -> list[str]:
+    problems: list[str] = []
+    if result.get("error"):
+        problems.append(str(result["error"]))
+        return problems
+    if result.get("scriptVersion") != EXPECTED_VERSION:
+        problems.append(f"scriptVersion={result.get('scriptVersion')} expected {EXPECTED_VERSION}")
+    if not result.get("autoSaveBound"):
+        problems.append("autosave (catch.json) not bound")
+    if not result.get("agentBridge"):
+        problems.append(AGENT_BRIDGE_MISSING_HINT)
+    buttons = result.get("buttons", {})
+    missing_buttons = [k for k, v in buttons.items() if not v]
+    if missing_buttons:
+        problems.append(f"missing buttons: {missing_buttons}")
+    return problems
+
+
 def cmd_probe() -> int:
     idx = find_saved_tab_index()
+    button_keys_js = json.dumps(list(PROBE_BUTTON_KEYS))
     expr = (
         "(()=>{"
         "const panel=document.getElementById('" + PANEL_ID + "');"
@@ -324,12 +355,10 @@ def cmd_probe() -> int:
         "const meta=document.getElementById('" + PANEL_ID + "-meta')?.textContent||'';"
         "const versionMatch=meta.match(/腳本版本:\\s*([0-9.]+)/);"
         "const autoSave=/自動存檔:\\s*已設定/.test(meta);"
-        "const autoPanel=!!document.getElementById('threads-sieve-auto-panel');"
-        "const autoStatus=document.querySelector('#threads-sieve-auto-panel [data-role=\"status\"]')?.textContent||document.documentElement.dataset.threadsSieveAutoAiSyncStatus||'';"
-        "const autoSyncBound=document.documentElement.dataset.threadsSieveAutoAiSyncBound==='true'||(!autoPanel&&/handle:\\s*(?!not bound)/.test(autoStatus));"
-        "const buttons={};['start','load-ai','apply-ai','select-high','unsave-selected','autosave']"
-        ".forEach(k=>{buttons[k]=!!document.getElementById('" + PANEL_ID + "-'+k);});"
-        "return JSON.stringify({url:location.href,scriptVersion:versionMatch?versionMatch[1]:null,autoSaveBound:autoSave,autoPanelPresent:autoPanel,autoSyncBound:autoSyncBound,autoStatus:autoStatus.trim(),buttons});"
+        "const bridge=!!window.ThreadSieveAgent?.runUnsave;"
+        "const buttons={};" + button_keys_js
+        + ".forEach(k=>{buttons[k]=!!document.getElementById('" + PANEL_ID + "-'+k);});"
+        "return JSON.stringify({url:location.href,scriptVersion:versionMatch?versionMatch[1]:null,autoSaveBound:autoSave,agentBridge:bridge,buttons});"
         "})()"
     )
     result = chrome_eval(idx, expr)
@@ -337,22 +366,7 @@ def cmd_probe() -> int:
         result = json.loads(result)
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
-    problems: list[str] = []
-    if result.get("error"):
-        problems.append(result["error"])
-    if result.get("scriptVersion") != EXPECTED_VERSION:
-        problems.append(f"scriptVersion={result.get('scriptVersion')} expected {EXPECTED_VERSION}")
-    if not result.get("autoSaveBound"):
-        problems.append("autosave (catch.json) not bound")
-    if not result.get("autoPanelPresent") and not result.get("autoSyncBound"):
-        problems.append("AutoAiSync panel missing")
-    autostatus = result.get("autoStatus", "")
-    if not result.get("autoSyncBound") and ("handle: not bound" in autostatus or autostatus.startswith("handle: not bound")):
-        problems.append("unsave.json handle not bound in AutoAiSync panel")
-    buttons = result.get("buttons", {})
-    missing_buttons = [k for k, v in buttons.items() if not v]
-    if missing_buttons:
-        problems.append(f"missing buttons: {missing_buttons}")
+    problems = evaluate_probe_result(result)
     if problems:
         print("\nPROBLEMS:", file=sys.stderr)
         for p in problems:
@@ -394,12 +408,15 @@ def cmd_scrape(
         catch_path, unsave_path = resolve_pipeline_paths()
         previous_generated_at = read_generated_at(unsave_path)
         try:
-            set_browser_auto_unsave(idx, False)
+            bridge_ready = agent_bridge_present(idx)
         except RuntimeError as error:
-            print(f"ERROR: cannot enable Terminal B gate: {error}", file=sys.stderr)
+            print(f"ERROR: cannot check agent bridge: {error}", file=sys.stderr)
+            return 2
+        if not bridge_ready:
+            print(f"ERROR: cannot enable Terminal B gate: {AGENT_BRIDGE_MISSING_HINT}", file=sys.stderr)
             print("Deploy the latest userscript with: python scripts/push_userscript.py --probe", file=sys.stderr)
             return 2
-        print("browser auto-unsave disabled; Terminal B confirmation gate is active")
+        print("agent bridge ready; Terminal B confirmation gate is active")
     chrome_click(idx, "#" + PANEL_ID + "-clear")
     print(f"clicked #{PANEL_ID}-clear on tab {idx}")
     fill_expr = (
@@ -492,7 +509,7 @@ def main() -> int:
         help="seconds to wait for watch_pipeline/classify to write a fresh unsave.json before prompting",
     )
     sp_click = sub.add_parser("click", help="click an arbitrary panel button by short key")
-    sp_click.add_argument("button_key", help="e.g. start, load-ai, apply-ai, select-high, unsave-selected")
+    sp_click.add_argument("button_key", help="e.g. start, stop, autosave, clear, unsave-run")
     args = parser.parse_args()
 
     if not CHROME_WS or not CHROME_WS.exists():
