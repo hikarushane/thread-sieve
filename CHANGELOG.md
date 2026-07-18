@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-18 — 移除 claude-code 與 codex CLI backend（改回純 API）
+
+### 移除
+
+- **`llm.provider` 的 `claude-code` 與 `codex` 選項全數移除**（同日稍早加入，實測後決定不留）：批量分類情境下，CLI 每次呼叫要付整個 app 啟動＋agent session 開銷（實測單次 trivial call：Gemini API 1.5s vs Claude CLI 5.6s），且消耗與 coding 共用的訂閱 quota、無法設 `temperature=0`。
+- 支援的 provider 回到 `gemini`｜`anthropic`｜`openai`；範例設定檔與 README 同步還原。
+- 完整決策脈絡與替代方案比較見 `docs/decisions/ADR-001-use-llm-provider-apis-not-agent-clis.md`。
+
 ## 2026-07-18 — 新增 claude-code 與 codex CLI 分類 backend
 
 ### 新功能

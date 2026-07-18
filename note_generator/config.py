@@ -18,23 +18,18 @@ DEFAULT_IMAGE_OCR_CATEGORIES = {"AI", "Claude Code"}
 TRUE_VALUES = {"true", "1", "yes", "on"}
 FALSE_VALUES = {"false", "0", "no", "off"}
 
-SUPPORTED_PROVIDERS = ("gemini", "anthropic", "openai", "claude-code", "codex")
+SUPPORTED_PROVIDERS = ("gemini", "anthropic", "openai")
 DEFAULT_PROVIDER = "gemini"
 
-# For CLI providers an empty model string means "use the CLI's configured default model".
 _DEFAULT_TEXT_MODELS = {
     "gemini": "gemini-2.5-flash",
     "anthropic": "claude-sonnet-4-6",
     "openai": "gpt-4o-mini",
-    "claude-code": "",
-    "codex": "",
 }
 _DEFAULT_VISION_MODELS = {
     "gemini": "gemini-2.5-flash",
     "anthropic": "claude-sonnet-4-6",
     "openai": "gpt-4o",
-    "claude-code": "",
-    "codex": "",
 }
 DEFAULT_GEMINI_MODEL = _DEFAULT_TEXT_MODELS["gemini"]  # back-compat re-export
 

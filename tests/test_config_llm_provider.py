@@ -68,32 +68,6 @@ def test_openai_defaults(monkeypatch, tmp_path):
     assert cfg.model_for_ocr == "gpt-4o"
 
 
-@pytest.mark.parametrize("provider", ["claude-code", "codex"])
-def test_cli_provider_defaults_to_cli_default_model(monkeypatch, tmp_path, provider):
-    path = _write_json(tmp_path, {"categories": ["AI"], "llm": {"provider": provider}})
-    monkeypatch.setenv("THREADSIEVE_CONFIG", str(path))
-
-    cfg = load_config(dotenv_path=None)
-
-    assert cfg.llm_provider == provider
-    assert cfg.model_for_classification == ""
-    assert cfg.model_for_title == ""
-    assert cfg.model_for_ocr == ""
-
-
-@pytest.mark.parametrize("provider", ["claude-code", "codex"])
-def test_cli_provider_model_overridable_via_config_json(monkeypatch, tmp_path, provider):
-    path = _write_json(
-        tmp_path,
-        {"categories": ["AI"], "llm": {"provider": provider, "text-model": "some-model"}},
-    )
-    monkeypatch.setenv("THREADSIEVE_CONFIG", str(path))
-
-    cfg = load_config(dotenv_path=None)
-
-    assert cfg.model_for_classification == "some-model"
-
-
 def test_model_overrides_via_config_json(monkeypatch, tmp_path):
     path = _write_json(
         tmp_path,

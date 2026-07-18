@@ -3,8 +3,6 @@ from __future__ import annotations
 import pytest
 
 from note_generator.infrastructure.anthropic_client import AnthropicClient
-from note_generator.infrastructure.claude_code_cli_client import ClaudeCodeCLIClient
-from note_generator.infrastructure.codex_cli_client import CodexCLIClient
 from note_generator.infrastructure.gemini_client import GeminiClient
 from note_generator.infrastructure.llm_factory import build_llm_client
 from note_generator.infrastructure.openai_client import OpenAIClient
@@ -39,42 +37,6 @@ def test_factory_returns_openai_and_forwards_key(monkeypatch):
     client = build_llm_client("openai", {"openai": "o-key"})
     assert isinstance(client, OpenAIClient)
     assert captured == [{"api_key": "o-key"}]
-
-
-def test_factory_returns_claude_code_cli_without_api_key(monkeypatch):
-    monkeypatch.setattr(
-        "note_generator.infrastructure.claude_code_cli_client.shutil.which",
-        lambda _: "/usr/local/bin/claude",
-    )
-    client = build_llm_client("claude-code", {})
-    assert isinstance(client, ClaudeCodeCLIClient)
-
-
-def test_factory_returns_codex_cli_without_api_key(monkeypatch):
-    monkeypatch.setattr(
-        "note_generator.infrastructure.codex_cli_client.shutil.which",
-        lambda _: "/usr/local/bin/codex",
-    )
-    client = build_llm_client("codex", {})
-    assert isinstance(client, CodexCLIClient)
-
-
-def test_factory_raises_when_claude_code_cli_missing(monkeypatch):
-    monkeypatch.setattr(
-        "note_generator.infrastructure.claude_code_cli_client.shutil.which",
-        lambda _: None,
-    )
-    with pytest.raises(RuntimeError, match="CLI not found"):
-        build_llm_client("claude-code", {})
-
-
-def test_factory_raises_when_codex_cli_missing(monkeypatch):
-    monkeypatch.setattr(
-        "note_generator.infrastructure.codex_cli_client.shutil.which",
-        lambda _: None,
-    )
-    with pytest.raises(RuntimeError, match="CLI not found"):
-        build_llm_client("codex", {})
 
 
 def test_factory_raises_for_unknown_provider():

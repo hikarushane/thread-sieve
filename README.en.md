@@ -199,19 +199,17 @@ Each considered file gets one JSONL event with `processed`, `skipped`, `failed`,
 
 ## LLM provider
 
-ThreadSieve uses an LLM for classification, title generation, and image OCR. The default backend is Google Gemini (SDK), but `config.json` or `.env` can switch to Anthropic Claude, OpenAI ChatGPT, or the locally installed, logged-in Claude Code CLI / OpenAI Codex CLI.
+ThreadSieve uses an LLM for classification, title generation, and image OCR. The default backend is Google Gemini (SDK), but `config.json` or `.env` can switch to Anthropic Claude or OpenAI ChatGPT.
 
-| Provider (`llm.provider` value) | API key env var       | Default text model     | Default vision model   |
-|---------------------------------|-----------------------|------------------------|------------------------|
-| `gemini`                        | `GEMINI_API_KEY`      | `gemini-2.5-flash`     | `gemini-2.5-flash`     |
-| `anthropic`                     | `ANTHROPIC_API_KEY`   | `claude-sonnet-4-6`    | `claude-sonnet-4-6`    |
-| `openai`                        | `OPENAI_API_KEY`      | `gpt-4o-mini`          | `gpt-4o`               |
-| `claude-code`                   | not needed            | CLI's default model    | CLI's default model    |
-| `codex`                         | not needed            | CLI's default model    | CLI's default model    |
+| Provider  | API key env var       | Default text model     | Default vision model   |
+|-----------|-----------------------|------------------------|------------------------|
+| Gemini    | `GEMINI_API_KEY`      | `gemini-2.5-flash`     | `gemini-2.5-flash`     |
+| Anthropic | `ANTHROPIC_API_KEY`   | `claude-sonnet-4-6`    | `claude-sonnet-4-6`    |
+| OpenAI    | `OPENAI_API_KEY`      | `gpt-4o-mini`          | `gpt-4o`               |
 
-`claude-code` and `codex` shell out to the locally installed, logged-in CLI (`claude -p` / `codex exec`) — no API key required; leave the model fields empty to use the CLI's own default model. Both run inside an isolated temp directory, and codex additionally uses `--sandbox read-only`, so they never touch your project.
+Pick a provider with `LLM_PROVIDER=...` in `.env`, or set `"llm": { "provider": "..." }` in `config.json`. Only the API key for the selected provider needs to be filled in.
 
-Pick a provider with `LLM_PROVIDER=...` in `.env`, or set `"llm": { "provider": "..." }` in `config.json`. For API backends, only the API key for the selected provider needs to be filled in.
+Supporting only provider APIs — and not local agent CLIs such as `claude -p` / `codex exec` — is a deliberate design decision: for batch classification, per-call CLI startup overhead, subscription-quota consumption, and the inability to set `temperature=0` make CLIs a poor fit. See [docs/decisions/ADR-001](docs/decisions/ADR-001-use-llm-provider-apis-not-agent-clis.md) for the full rationale.
 
 Per-stage model overrides: env vars `THREADS_LLM_CLASSIFIER_MODEL` / `THREADS_LLM_TITLE_MODEL` / `THREADS_LLM_OCR_MODEL`, or `config.json` keys `llm.text-model` / `llm.title-model` / `llm.vision-model`.
 
