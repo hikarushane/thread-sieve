@@ -262,7 +262,7 @@ The ancestor context (but never the reply section) is also fed to classification
 | `image-ocr.trigger-categories` | `["AI"]` | categories that trigger image OCR |
 | `thread-context.enabled` | `true` | ancestor/replies capture toggle; `false` restores the previous behavior |
 | `thread-context.min-reply-chars` | `12` | minimum comment length for the reply section (the original poster's replies are exempt) |
-| `thread-context.max-replies` | `30` | maximum reply threads kept (extra ones are truncated, noted in the callout header) |
+| `thread-context.max-replies` | `30` | maximum reply *threads* kept (one thread may contain several messages; the original poster's replies are always kept and don't count toward the cap; extras are truncated, noted in the callout header) |
 
 Path values may be relative or absolute. For Windows absolute paths in JSON you MUST use forward slashes (`C:/Users/<you>/...`) or escape every backslash as `\\` (`C:\\Users\\<you>\\...`). A single `\` is the JSON escape character, so `"D:\shane\..."` raises `json.decoder.JSONDecodeError: Invalid \escape`.
 
