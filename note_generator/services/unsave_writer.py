@@ -22,12 +22,12 @@ def build_unsave_payload(
     failed_count: int = 0,
 ) -> dict:
     items_out = []
-    ai_count = 0
-    not_ai_count = 0
+    unsave_count = 0
+    keep_count = 0
 
     for item in classified:
         if item.category in unsaved_categories:
-            ai_count += 1
+            unsave_count += 1
             items_out.append(
                 {
                     "postId": _post_id(item),
@@ -40,7 +40,7 @@ def build_unsave_payload(
                 }
             )
         else:
-            not_ai_count += 1
+            keep_count += 1
 
     unsure_count = max(0, total_count - len(classified))
     return {
@@ -50,8 +50,8 @@ def build_unsave_payload(
         "unsavedCategories": sorted(unsaved_categories),
         "summary": {
             "total": total_count,
-            "ai": ai_count,
-            "not_ai": not_ai_count,
+            "unsave": unsave_count,
+            "keep": keep_count,
             "unsure": unsure_count,
             "failed": failed_count,
         },
