@@ -8,6 +8,8 @@ from note_generator.infrastructure.openai_client import OpenAIClient
 from note_generator.services.llm_client import LLMClient
 
 
+# API providers only — local agent CLIs (claude -p / codex exec) were evaluated
+# and rejected for this batch pipeline; see docs/decisions/ADR-001.
 SUPPORTED_PROVIDERS = ("gemini", "anthropic", "openai")
 
 
