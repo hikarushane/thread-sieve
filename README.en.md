@@ -27,23 +27,9 @@ Two coupled layers:
 
 ## What it does
 
-```
-[Threads /saved (browser-panel scrape)] -> catch.json
-                                            |
-                                            v
- double-click run_classify.cmd / .command (or auto-trigger via watch_pipeline.py)
-                                            |
-                                            v
-                 scripts/import_bookmarks_to_markdown.py
-                 (classify once -> markdown notes + unsave.json)
-                                            |
-                                            v
-                    scripts/image_ocr_to_markdown.py
-                    (image OCR -> ## 圖片文字)
-                                            |
-                                            v
-                  userscript "取消儲存" button: pick unsave.json → confirm → unsave
-```
+![ThreadSieve flow overview](docs/flow-overview.png)
+
+(full branch adds a watcher path: `watch_pipeline.py` watches `catch.json` and auto-triggers classification, replacing the double-click step.)
 
 Two usage paths after setup: **No-typing (double-click)** (scrape via browser panel + double-click `run_classify.cmd` / `.command`) or **With Terminal** (watcher auto-triggers on `catch.json` + agent-driven scrape).
 
