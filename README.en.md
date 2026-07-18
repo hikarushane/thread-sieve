@@ -2,8 +2,10 @@
 
 [繁體中文](README.md)
 
+> **Latest update (2026-07-18)**: browser panel redesign — the manual-tools section and the Auto AI Sync panel are gone, replaced by a single big **取消儲存** (unsave) button that re-picks `unsave.json` on every run, eliminating accidental runs against stale classification results; install is now a one-line command; new macOS double-click launcher. Full history in [RELEASE_NOTES.md](RELEASE_NOTES.md).
+
 > **This branch is the power-user build** — includes `watch_pipeline.py`, `agent_driver.py`, and Chandra/vLLM OCR backend. Requires Node.js, Claude Code + `superpowers-chrome` plugin, and Chrome `--remote-debugging-port=9222`.  
-> If you just want to **double-click and go** (no plugin, no terminal), use the [`lite` branch](https://github.com/hikaru-yeh/thread-sieve) — it's the repo's default branch.
+> If you just want to **double-click and go** (no plugin, no terminal), use the [`lite` branch](https://github.com/hikarushane/thread-sieve) — it's the repo's default branch.
 
 The problem with Threads bookmarks:
 
@@ -12,38 +14,38 @@ The problem with Threads bookmarks:
   ❌ can't find anything
   ❌ they just sit there rotting
 
-ThreadSieve is a local automation pipeline that turns Threads saved posts into categorized markdown notes, and automatically unsave posts that have already been organized in specified categories.
+ThreadSieve is a local automation pipeline that turns Threads saved posts into categorized markdown notes, and unsaves posts in specified categories with a one-button flow.
 
-Post content passed into classification and note generation includes the main post text, comments from the post author in the same thread, and text extracted from post images with OCR.
+Post content passed into classification and note generation includes the main post text, comments from the post author in the same thread, and text extracted from post images with OCR. When the saved item is a reply, the note also carries the reply's single-line ancestor context (the full chain from the root post down to the reply) and a reply section (the original poster's replies plus substantive comments, rendered collapsed).
 
 Two coupled layers:
 
-- `userscripts/threads-scriber-auto.user.js` — browser-side Tampermonkey userscript; scrapes the Threads saved page and writes `catch.json`.
-- `scripts/*.py` — Python pipeline; handles classification, note generation, image OCR, and agent-driven browser operations.
+- `userscripts/threads-scriber-auto.user.js` — Tampermonkey userscript; scrapes the Threads saved page and writes `catch.json`.
+- `scripts/*.py` — Python pipeline; LLM classification, markdown notes, image OCR, and agent-driven browser operations.
 
 ---
 
 ## What it does
 
 ```
-[Browser scrape via ThreadSieve userscript] ─→ catch.json (fixed path)
-                                              │
-                                              ▼ (mtime + debounce)
-                          scripts/watch_pipeline.py
-                                              │
-                          ▼
-          scripts/import_bookmarks_to_markdown.py
-          (classify once → markdown notes + unsave.json)
-                          │
-                          ▼
+[Threads /saved (browser-panel scrape)] -> catch.json
+                                            |
+                                            v
+ double-click run_classify.cmd / .command (or auto-trigger via watch_pipeline.py)
+                                            |
+                                            v
+                 scripts/import_bookmarks_to_markdown.py
+                 (classify once -> markdown notes + unsave.json)
+                                            |
+                                            v
                     scripts/image_ocr_to_markdown.py
-                    (image OCR → ## 圖片文字)
-                          │
-                          ▼ (FS Access API poll lastModified)
-   ThreadSieve userscript: auto-load + confirmed auto-unsave
+                    (image OCR -> ## 圖片文字)
+                                            |
+                                            v
+                  userscript "取消儲存" button: pick unsave.json → confirm → unsave
 ```
 
-Two usage paths after setup: **No-typing (double-click)** (scrape via browser panel + double-click `run_classify.cmd`) or **With Terminal** (watcher auto-triggers on `catch.json` + agent-driven scrape with a confirmation gate).
+Two usage paths after setup: **No-typing (double-click)** (scrape via browser panel + double-click `run_classify.cmd` / `.command`) or **With Terminal** (watcher auto-triggers on `catch.json` + agent-driven scrape).
 
 ---
 
@@ -51,24 +53,86 @@ Two usage paths after setup: **No-typing (double-click)** (scrape via browser pa
 
 | Requirement | Why needed |
 | --- | --- |
-| Python 3.11+ | watcher, classifier, note generator |
-| Node.js 18+ | `chrome-ws` CLI (agent driver) |
-| Google Chrome / Edge | browser automation via Chrome DevTools Protocol |
+| Python 3.10+ (not needed for the one-line install — uv downloads 3.12 automatically) | classifier, markdown generator, image OCR |
+| Google Chrome / Edge | browser |
 | Tampermonkey extension | userscript injection |
-| Claude Code with [`superpowers-chrome`](https://github.com/obra/superpowers-chrome) plugin | provides the `chrome-ws` CDP CLI used by `agent_driver.py` |
+| LLM API key (one of Gemini / Anthropic / OpenAI; Gemini by default) | classification + titles + image OCR |
+| Node.js 18+ (Path 2 only) | `chrome-ws` CLI (agent driver) |
+| Claude Code with [`superpowers-chrome`](https://github.com/obra/superpowers-chrome) plugin (Path 2 only) | provides the `chrome-ws` CDP CLI used by `agent_driver.py` |
 
 ---
 
 ## Install
 
-### 0. Clone the repo
+### 0. One-line install (clone + Python environment)
+
+**Windows (PowerShell):**
 
 ```powershell
-git clone https://github.com/hikaru-yeh/thread-sieve.git
-cd thread-sieve
+irm https://raw.githubusercontent.com/hikarushane/thread-sieve/main/install.ps1 | iex
 ```
 
-### 1. superpowers-chrome (CDP automation, required for `agent_driver.py`)
+**macOS (Terminal):**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/hikarushane/thread-sieve/main/install.sh | bash
+```
+
+One line does it all: clone the repo → install [uv](https://docs.astral.sh/uv/) if missing → create a Python 3.12 virtual environment → install dependencies and Chromium → generate `.env` / `config.json`. **It doesn't matter which Python version your system has**: uv downloads the right one automatically and uses it only inside this project's `.venv`, leaving your existing setup untouched.
+
+> Note: the one-line install clones the default branch (`main`, i.e. lite). To use this full branch, run `git checkout full` inside the project directory after the install finishes.
+
+<details>
+<summary>Prefer not to <code>curl | bash</code>? Manual steps here</summary>
+
+```powershell
+# Windows (PowerShell); requires Python 3.10+
+git clone https://github.com/hikarushane/thread-sieve.git
+cd thread-sieve
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+playwright install chromium
+copy .env.example .env
+copy config.json.example config.json
+```
+
+```bash
+# macOS (Terminal); requires Python 3.10+
+git clone https://github.com/hikarushane/thread-sieve.git
+cd thread-sieve
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+playwright install chromium
+cp .env.example .env
+cp config.json.example config.json
+```
+
+</details>
+
+### 1. Fill in the config
+
+Edit `.env`: fill in the API key for your chosen provider (default Gemini → `GEMINI_API_KEY`; see "LLM provider" below to switch).
+
+Edit `config.json`:
+
+| Key | What to set |
+| --- | --- |
+| `paths.catch-json` | Path to `data/catch.json` (relative or absolute) |
+| `paths.unsave-json` | Path to `data/unsave.json` (relative or absolute) |
+| `paths.markdown-output-root` | Where markdown notes are written (default: `output`) |
+| `paths.chrome-ws-cli` | Full path to the `chrome-ws` CLI from step 0 |
+| `categories` | Ordered list of categories the classifier can output |
+| `unsaved-categories` | Subset of `categories` whose posts get added to `unsave.json` |
+| `hints` | Free-text rules injected into the classifier prompt for edge cases |
+| `llm.provider` (optional) | `gemini` (default) / `anthropic` / `openai` |
+
+`category-overrides` is optional — keyword/regex rules that force a category before calling the LLM.
+
+ThreadSieve includes its own markdown note generator at `scripts/import_bookmarks_to_markdown.py`; it no longer calls a sibling `PROJECT_threads-to-note` repo. Markdown notes are written to `config.json` → `paths.markdown-output-root` (default: `output`).
+
+### 2. superpowers-chrome (CDP automation, required for `agent_driver.py`; Path 2 only)
 
 `agent_driver.py` drives the browser through the [`superpowers-chrome`](https://github.com/obra/superpowers-chrome) plugin, which ships a `chrome-ws` Node.js CLI for Chrome DevTools Protocol commands.
 
@@ -166,46 +230,15 @@ Both hooks only target `agent_driver.py` and `push_userscript.py`. They block th
 
 ---
 
-### 2. Python side
-
-```powershell
-cd path\to\threads-sieve
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-playwright install chromium
-copy .env.example .env
-copy config.json.example config.json
-```
-
-Edit `.env`: fill in `GEMINI_API_KEY`.
-
-Edit `config.json`:
-
-| Key | What to set |
-| --- | --- |
-| `paths.catch-json` | Path to `data/catch.json` (relative or absolute) |
-| `paths.unsave-json` | Path to `data/unsave.json` (relative or absolute) |
-| `paths.markdown-output-root` | Where markdown notes are written (default: `output`) |
-| `paths.chrome-ws-cli` | Full path to the `chrome-ws` CLI from step 0 |
-| `categories` | Ordered list of categories the classifier can output |
-| `unsaved-categories` | Subset of `categories` whose posts get added to `unsave.json` |
-| `hints` | Free-text rules injected into the Gemini prompt to guide edge-case decisions |
-
-`category-overrides` is optional — keyword/regex rules that force a category before calling Gemini.
-
-ThreadSieve includes its own markdown note generator at `scripts/import_bookmarks_to_markdown.py`; it no longer calls a sibling `PROJECT_threads-to-note` repo. Markdown notes are written to `config.json` → `paths.markdown-output-root` (default: `output`).
-
 ### 3. Browser side (one-time setup)
 
-1. Launch Chrome with `--remote-debugging-port=9222` (see above).
-2. Navigate to `https://www.threads.com/saved` and keep this tab open.
-3. Install [Tampermonkey](https://www.tampermonkey.net/) in Chrome / Edge.
-4. If you previously installed `threads-scriber.user.js` in this Chrome profile, disable it first. First-time ThreadSieve installs can skip this step.
-5. Open `userscripts/threads-scriber-auto.user.js` and click "Install" in Tampermonkey.
-6. Reload the `/saved` tab. A floating panel "ThreadSieve · Auto AI Sync" appears bottom-right.
+1. Launch Chrome with the debug profile set up above (plain Chrome / Edge is fine if you only use Path 1). Navigate to `https://www.threads.com/saved` and keep this tab open.
+2. Install [Tampermonkey](https://www.tampermonkey.net/) in this Chrome profile.
+3. If you previously installed `threads-scriber.user.js` in this Chrome profile, disable it first. First-time ThreadSieve installs can skip this step.
+4. Open `userscripts/threads-scriber-auto.user.js` and click "Install" in Tampermonkey.
+5. Reload the `/saved` tab. The **ThreadSieve** panel appears (the Auto AI Sync panel is gone as of userscript 0.4.1).
 
-The `catch.json` autosave grant, `unsave.json` binding, and `agent_driver.py probe` check are part of the daily SOP below. Treat browser File System Access handles as per-run setup because Chrome may require the grants again before writing or reading files.
+The `catch.json` autosave grant and the `agent_driver.py probe` check are part of the daily SOP below. Treat browser File System Access handles as per-run setup because Chrome may require the grants again. `unsave.json` is never persistently bound — every unsave run re-picks the file (by design).
 
 ---
 
@@ -217,22 +250,20 @@ Two usage paths. Choose based on your setup:
 | --- | --- | --- |
 | Requires `agent_driver.py` | No | Yes |
 | Requires Chrome debug port | No | Yes |
-| Classify trigger | Double-click `run_classify.cmd` | Automatic (watcher detects `catch.json`) |
+| Classify trigger | Double-click `run_classify.cmd` / `.command` | Automatic (watcher detects `catch.json`) |
 | Best for | Occasional use, quick runs | Daily automation |
 
 ---
 
 ### Path 1 — No-typing (double-click)
 
-Scrape via the browser panel, then double-click `run_classify.cmd` to run classify once. No commands to type.
+Scrape via the browser panel, then double-click `run_classify.cmd` / `.command` to run classify once. No commands to type.
 
 #### Step 1 · Prepare the browser session
 
 1. Open Chrome and navigate to `https://www.threads.com/saved`.
-2. If needed, reload the `/saved` tab so the **ThreadSieve** panel and **Auto AI Sync** panel appear.
+2. If needed, reload the `/saved` tab so the **ThreadSieve** panel appears.
 3. In the **ThreadSieve panel**: click **設定自動存檔** → pick `data/catch.json`.
-4. In the **Auto AI Sync panel**: click **綁定 unsave.json** → pick `data/unsave.json`.
-5. Tick **自動載入 unsave.json**.
 
 #### Step 2 · Scrape via the panel
 
@@ -242,25 +273,39 @@ Scrape via the browser panel, then double-click `run_classify.cmd` to run classi
 
 #### Step 3 · Run classify
 
-Double-click `run_classify.cmd` in the project root. A console window opens, activates `.venv`, runs `scripts/import_bookmarks_to_markdown.py`, then prints `[DONE]` or `[FAILED]` and waits for any key.
+- **Windows**: double-click `run_classify.cmd` in the project root.
+- **macOS**: double-click `run_classify.command` in the project root (first run may need `chmod +x run_classify.command`, or right-click → Open to get past Gatekeeper).
 
-Optional desktop shortcut: right-click `run_classify.cmd` → Send to → Desktop (create shortcut). Then double-click the shortcut from anywhere.
+A console/Terminal window opens, activates `.venv`, runs `scripts/import_bookmarks_to_markdown.py`, then prints `[DONE]` or `[FAILED]` and waits for any key.
+
+Optional desktop shortcut:
+
+- **Windows**: right-click `run_classify.cmd` → Send to → Desktop (create shortcut).
+- **macOS**: ⌥⌘-drag `run_classify.command` to the Desktop to make an alias.
+
+Then double-click the shortcut from anywhere.
 
 This classifies every post once and writes both markdown notes and `unsave.json`. Image OCR runs automatically for posts whose category matches `config.json` → `image-ocr.trigger-categories`.
 
 Fallback for users who prefer a shell:
 
 ```powershell
+# Windows
 .\.venv\Scripts\Activate.ps1
+python scripts/import_bookmarks_to_markdown.py
+```
+
+```bash
+# macOS
+source .venv/bin/activate
 python scripts/import_bookmarks_to_markdown.py
 ```
 
 #### Step 4 · Confirm unsave in the browser
 
-The Auto AI Sync panel polls `unsave.json` every 3 s. Once it loads the new file it shows the candidate count and `generatedAt` timestamp.
+In the ThreadSieve panel, click the big **取消儲存** button → pick `data/unsave.json` in the file picker → the panel shows the candidate count and highlights the posts → a confirm dialog runs the unsave pass after you accept.
 
-- Click **立即檢查** to force an immediate poll.
-- Tick **載入後自動取消儲存** before the file updates, or click the unsave button manually, to unsave the AI candidates.
+Re-picking the file on every run is deliberate: the file pick itself is your confirmation that the latest classification result is being used, preventing accidental runs against a stale file.
 
 ---
 
@@ -283,12 +328,10 @@ Logs stream to console and `pipeline.log`. Stop with `Ctrl+C`.
 
 1. Launch Chrome with `--remote-debugging-port=9222` using the same debug profile from setup.
 2. Open `https://www.threads.com/saved` and keep this tab open.
-3. If needed, reload the `/saved` tab so the **ThreadSieve** panel and **Auto AI Sync** panel appear.
+3. If needed, reload the `/saved` tab so the **ThreadSieve** panel appears.
 4. In the **ThreadSieve panel**: click **設定自動存檔** → pick `data/catch.json`.
-5. In the **Auto AI Sync panel**: click **綁定 unsave.json** → pick `data/unsave.json`.
-6. Tick **自動載入 unsave.json**.
-7. Leave **載入後自動取消儲存** off when using the Terminal B confirmation gate; `agent_driver.py scrape` will run the confirmed one-shot unsave after you type `y`.
-8. Optional: click **立即檢查** to force one AI classification load. If it succeeds, the small Auto AI Sync panel closes so it no longer covers the main panel.
+
+> **Behavior change as of userscript 0.4.1**: the Auto AI Sync panel, persistent `unsave.json` binding, and auto-unsave-on-load are gone. After classify writes a fresh `unsave.json`, the final unsave always happens in the browser panel via the single **取消儲存** button with a fresh file pick; `agent_driver.py`'s old unsave confirmation gate (`--no-unsave-confirm`, `--unsave-timeout-seconds`) no longer applies to the 0.4.1 panel.
 
 ##### Step 2 · Verify panel readiness
 
@@ -303,10 +346,8 @@ Expected output ends with `OK: panel ready for agent-driven scrape`.
 | Problem | Fix |
 | --- | --- |
 | `panel missing` | Reload the `/saved` tab; wait for Tampermonkey to inject |
-| `scriptVersion=X expected 0.3.2` | Re-install `userscripts/threads-scriber-auto.user.js` in Tampermonkey |
+| `scriptVersion=X expected 0.3.2` | The userscript is now 0.4.1 and `agent_driver.py`'s expected version has not caught up with the panel redesign; scrape still works — for unsave see the behavior-change note above |
 | `autosave (catch.json) not bound` | Click **設定自動存檔** in the panel, pick `data/catch.json`; re-run probe |
-| `unsave.json handle not bound in AutoAiSync panel` | Click **綁定 unsave.json** in the Auto AI Sync panel, pick `data/unsave.json`; re-run probe |
-| `AutoAiSync panel missing` | Reload `/saved` tab; this refers to the Auto AI Sync panel |
 
 ##### Step 3 · Trigger scrape
 
@@ -322,8 +363,6 @@ python scripts/agent_driver.py scrape --cutoff 2025-01-01 --wait-seconds 120
 Each `scrape` run first clicks **清空結果** so `catch.json` contains only the current run, not stale panel/localStorage items from an earlier cutoff.
 `--wait-seconds` polls `狀態` until idle (`待機中` / `完成` / `已停止`) or timeout.
 
-`--no-unsave-confirm` skips the Terminal B confirmation gate and lets browser auto-unsave run as soon as `unsave.json` updates. `--unsave-timeout-seconds` (default `600`) bounds how long the gate waits for the watcher to write a fresh `unsave.json` after scrape completes.
-
 ##### Step 4 · Wait for pipeline
 
 Watch Terminal A. After `catch.json` stabilises, the watcher runs the note workflow, which classifies each post once and writes both markdown notes and `unsave.json`:
@@ -337,16 +376,11 @@ pipeline starting: items=N
 
 After `notes` finishes, `scripts/image_ocr_to_markdown.py` reads this run's `catch.json` and `unsave.json`. For posts whose classification reason matches `config.json` → `image-ocr.trigger-categories`, it renders the Threads post with Playwright, OCRs attached images, and appends a `## 圖片文字` section to the matching markdown note. Gemini OCR is the default backend; Chandra can be selected in `config.json`.
 
-##### Step 5 · Terminal B confirmation gate
+##### Step 5 · Run the unsave in the browser
 
-After a fresh `unsave.json` is generated, Terminal B prints each candidate as `作者:<author>| 貼文:<first sentence>` and asks `確認執行?(y/n)`.
+After the watcher writes a fresh `unsave.json`, go back to the browser and click **取消儲存** in the ThreadSieve panel → pick `data/unsave.json` → accept the confirm dialog to run the unsave pass (as of userscript 0.4.1, Terminal B's y/n gate and auto-unsave no longer drive the browser side — see the behavior-change note above).
 
-- Type `y` to force-load `unsave.json` and run the one-shot unsave flow.
-- Type `n` to keep `unsave.json` on disk and leave browser auto-unsave disabled; nothing on Threads changes.
-
-The gate sets browser auto-unsave to off at the start of every `scrape` run unless `--no-unsave-confirm` is passed. The ThreadSieve userscript still polls `unsave.json` every 3 s and shows the loaded `generatedAt` timestamp and candidate count in the Auto AI Sync panel.
-
-Manual export, manual AI classification loading, manual selection, and debug tools are still available in the ThreadSieve panel, but they are collapsed under **手動工具** and **診斷** to keep the normal workflow uncluttered.
+As of 0.4.1 the ThreadSieve panel keeps only the scrape controls and the single **取消儲存** button; the old manual tools, manual AI classification loading, and debug panels have been removed.
 
 ---
 
@@ -421,9 +455,23 @@ ThreadSieve uses an LLM for classification, title generation, and image OCR. The
 
 Pick a provider with `LLM_PROVIDER=...` in `.env`, or set `"llm": { "provider": "..." }` in `config.json`. Only the API key for the selected provider needs to be filled in.
 
+Supporting only provider APIs — and not local agent CLIs such as `claude -p` / `codex exec` — is a deliberate design decision: for batch classification, per-call CLI startup overhead, subscription-quota consumption, and the inability to set `temperature=0` make CLIs a poor fit. See [docs/decisions/ADR-001](docs/decisions/ADR-001-use-llm-provider-apis-not-agent-clis.md) for the full rationale.
+
 Per-stage model overrides: env vars `THREADS_LLM_CLASSIFIER_MODEL` / `THREADS_LLM_TITLE_MODEL` / `THREADS_LLM_OCR_MODEL`, or `config.json` keys `llm.text-model` / `llm.title-model` / `llm.vision-model`.
 
 Note: the standalone `scripts/image_ocr_to_markdown.py` CLI currently supports only `--ocr-backend gemini`; the multi-provider factory is wired into the main pipeline (`scripts/import_bookmarks_to_markdown.py` + workflow).
+
+---
+
+## Ancestor context and replies for saved replies
+
+When the saved bookmark is a reply (not a root post), the classify stage opens the post permalink anonymously and extracts from the page's embedded data:
+
+- **Ancestor context**: the full single line from the root post down to the saved reply, written into the note's `## 上文脈絡` section (nested blockquotes, each post labeled with `@author`).
+- **Reply section**: the original poster's replies (paired with the comment they answer) plus comments above a length threshold, written into a collapsible Obsidian callout (`> [!quote]- 回覆（N 則…）`), collapsed by default.
+- Frontmatter gains `saved_kind: root|reply`, marking whether the saved item is a root post or a reply.
+
+The ancestor context (but never the reply section) is also fed to classification and title generation, improving accuracy for saved replies — with no extra network requests or LLM quota.
 
 ---
 
@@ -435,15 +483,21 @@ Edit this file to customise local paths and per-user categories without touching
 
 | Key | Default | Used by |
 | --- | --- | --- |
-| `paths.catch-json` | `data/catch.json` | watcher, note workflow, userscript handle |
-| `paths.unsave-json` | `data/unsave.json` | note workflow, OCR, watcher, userscript handle |
-| `paths.markdown-output-root` | `output` | markdown note output root; ThreadSieve writes notes here and OCR scans this tree |
-| `paths.chrome-ws-cli` | _required for browser automation_ | `agent_driver.py`, `push_userscript.py` |
-| `categories` | project example list | Ordered list of categories the Gemini classifier can output |
-| `unsaved-categories` | project example subset | Subset of `categories` that map to `decision="ai"` — posts in these categories get auto-unsaved |
-| `category-overrides` | `[]` | Optional keyword / regex rules that force a category before calling Gemini; use this for personal taxonomy rules |
-| `image-ocr` | see below | Non-secret image OCR behavior: backend, Chandra method, prompt type, max output tokens, headers/footers toggle, and trigger categories |
-| `hints` | project example rules | Free-text rules injected into the Gemini prompt to guide priority decisions between categories |
+| `paths.catch-json` | `data/catch.json` | userscript writes, classify/watcher reads |
+| `paths.unsave-json` | `data/unsave.json` | classify writes, userscript reads |
+| `paths.markdown-output-root` | `output` | markdown note root; OCR scans this tree |
+| `paths.chrome-ws-cli` | _required for browser automation_ | `agent_driver.py`, `push_userscript.py` (Path 2 only) |
+| `categories` | example list | classifier output categories |
+| `unsaved-categories` | example subset | posts in these categories are written to `unsave.json` |
+| `category-overrides` | `[]` | optional keyword/regex forced categories |
+| `hints` | example rules | classifier prompt nudges |
+| `llm.provider` | `gemini` | LLM provider: `gemini` / `anthropic` / `openai` |
+| `llm.text-model` / `title-model` / `vision-model` | provider default | per-stage model overrides (leave unset for provider defaults) |
+| `image-ocr.backend` | `gemini` | `gemini` or `chandra` (Chandra config below) |
+| `image-ocr.trigger-categories` | `["AI"]` | categories that trigger image OCR |
+| `thread-context.enabled` | `true` | ancestor/replies capture toggle; `false` restores the previous behavior |
+| `thread-context.min-reply-chars` | `12` | minimum comment length for the reply section (the original poster's replies are exempt) |
+| `thread-context.max-replies` | `30` | maximum reply *threads* kept (one thread may contain several messages; the original poster's replies are always kept and don't count toward the cap; extras are truncated, noted in the callout header) |
 
 Path values may be relative to the project root or absolute local paths. For Windows absolute paths in JSON you MUST use forward slashes (`C:/Users/<you>/...`) or escape every backslash as `\\` (`C:\\Users\\<you>\\...`). A single `\` is the JSON escape character, so `"D:\shane\..."` raises `json.decoder.JSONDecodeError: Invalid \escape`.
 
@@ -491,10 +545,14 @@ Set `"backend": "chandra"` to use Chandra. With `"method": "vllm"`, Chandra call
 
 | Key | Default | Used by |
 | --- | --- | --- |
-| `GEMINI_API_KEY` | _required_ | classifier, and image OCR when `image-ocr.backend` is `gemini` |
-| `CLASSIFIER_MODEL` | `gemini-2.5-flash` | classifier |
+| `LLM_PROVIDER` | `gemini` | `gemini` / `anthropic` / `openai` (also settable via `llm.provider` in `config.json`) |
+| `GEMINI_API_KEY` / `ANTHROPIC_API_KEY` / `OPENAI_API_KEY` | — | fill in only the one for the selected provider |
+| `THREADS_LLM_CLASSIFIER_MODEL` / `THREADS_LLM_TITLE_MODEL` / `THREADS_LLM_OCR_MODEL` | provider default | per-stage model overrides |
+| `CLASSIFIER_MODEL` / `IMAGE_OCR_MODEL` | — | legacy Gemini overrides, still honored; prefer `THREADS_LLM_*` |
 | `IMAGE_OCR_ENABLED` | `true` | OCR step toggle |
-| `IMAGE_OCR_MODEL` | `gemini-2.5-flash` | Gemini image OCR model when `image-ocr.backend` is `gemini` |
+| `THREADS_CONTEXT_ENABLED` | `true` | overrides `thread-context.enabled` |
+| `THREADS_CONTEXT_MIN_REPLY_CHARS` | `12` | overrides `thread-context.min-reply-chars` |
+| `THREADS_CONTEXT_MAX_REPLIES` | `30` | overrides `thread-context.max-replies` |
 | `MODEL_CHECKPOINT` | `datalab-to/chandra-ocr-2` | Chandra model setting when `image-ocr.backend` is `chandra` |
 | `MAX_OUTPUT_TOKENS` | `12384` | Chandra max output tokens; can be overridden by `image-ocr.max-output-tokens` |
 | `VLLM_API_BASE` | `http://localhost:8000/v1` | Chandra vLLM OpenAI-compatible endpoint |
@@ -504,6 +562,8 @@ Set `"backend": "chandra"` to use Chandra. With `"method": "vllm"`, Chandra call
 | `POLL_SECONDS` | `1.0` | watcher |
 
 The public Chandra defaults in `.env.example` come from [datalab-to/chandra](https://github.com/datalab-to/chandra); check that repo for the latest upstream settings.
+
+The pipeline writes a `threads_events.jsonl` event log into the output directory; ancestor/replies capture outcomes are logged as `reply_fetch_fetched_structured` (structured parse succeeded) and `reply_fetch_fetched_fallback` (fell back to plain-text parsing) events.
 
 ---
 
@@ -527,13 +587,15 @@ Tests cover:
 
 ## Known limitations
 
-- **Browser must be open + on the saved page** for auto-unsave to fire. The watcher will still produce `unsave.json` and markdown notes regardless, but the unsave step is a no-op until you visit `/saved`.
-- **File System Access grants are per-run setup** in the daily SOP. If the Auto AI Sync panel status shows "handle: not bound" or `probe` reports missing handles, re-select `data/catch.json` and `data/unsave.json`.
-- **Gemini quota**: each scrape classifies each post once, then uses Gemini again for title generation. If `image-ocr.backend` is `gemini`, OCR also consumes quota from the same key.
+- **Browser must be on `/saved`** to run the unsave pass (the button reports an error otherwise). The classify step still writes `unsave.json` and markdown regardless.
+- **File System Access grants are per-run setup**. Re-pick `catch.json` for autosave if the panel loses the grant; `unsave.json` is re-picked on every unsave run by design.
+- **LLM quota**: each classify run classifies every post once, then calls the LLM again for title generation and (when triggered) image OCR — all from the same API key.
+- **Markdown image OCR scans the markdown root**: set `config.json` → `paths.markdown-output-root` if you do not want the default `output` folder.
+- **Playwright is required for image OCR**: the OCR step renders each matching Threads post to find carousel images. If browser binaries are missing, run `playwright install chromium`.
+- **The reply section only captures anonymously visible replies**: deeply nested replies and content behind the login wall are not collected.
+- **Threads redesigns may break the embedded-data parse**: the pipeline then falls back to the previous plain-text parsing (that note temporarily has no ancestor/reply sections; the main content is unaffected), and `saved_kind` is a best-effort `root`.
 - **Chandra OCR is optional**: set `config.json` → `image-ocr.backend` to `chandra`. For `method=vllm`, you must provide a reachable Chandra/vLLM OpenAI-compatible endpoint through `VLLM_API_BASE`.
 - **Chandra CLI still needs a viable backend**: `chandra --method vllm` is a CLI client and still requires a running vLLM server. `chandra --method hf` runs locally, but Chandra OCR 2 downloads a 10GB+ model and can be impractically slow or fail on low-resource Windows machines. Use Gemini OCR when no suitable Chandra backend is available.
-- **Markdown image OCR scans the markdown root**: set `config.json` → `paths.markdown-output-root` if you do not want the default `output` folder.
-- **Markdown image OCR uses Playwright**: the OCR step renders each matching Threads post to find carousel images. If Playwright browser binaries are missing, run `playwright install chromium`.
 
 ---
 
@@ -541,14 +603,14 @@ Tests cover:
 
 | Symptom | Likely cause | Fix |
 | --- | --- | --- |
+| Double-clicking `run_classify.cmd`/`run_classify.command` shows `.venv not found` | venv never created | Run the one-line install once (pick the command for your OS) |
 | Watcher prints "missing required config" | `config.json` paths are empty | Verify `paths.catch-json` and `paths.unsave-json` in `config.json` |
 | classify exits with `json.decoder.JSONDecodeError: Invalid \escape` | Windows path in `config.json` uses single `\` | Use `/` (`D:/foo/bar`) or `\\` (`D:\\foo\\bar`) |
+| classify / `notes` subprocess exits with `<PROVIDER>_API_KEY missing` | the selected provider's key not in `.env`, or the subprocess didn't pick it up | Confirm the matching `..._API_KEY=...` in `.env`; double-click again or restart the watcher |
 | `catch.json` written but watcher idle | mtime change happened during the debounce window of another run | Wait `DEBOUNCE_SECONDS`; or shrink `POLL_SECONDS` |
-| `notes` subprocess fails with `GEMINI_API_KEY missing` | env not propagated to subprocess | Confirm key is in `.env` (not just shell), restart watcher |
 | OCR fails with `GEMINI_API_KEY missing` | `image-ocr.backend` is `gemini` but no key is available | Set `GEMINI_API_KEY`, or switch `config.json` → `image-ocr.backend` to `chandra` |
 | Chandra OCR cannot connect to vLLM | `image-ocr.backend=chandra` but `VLLM_API_BASE` is not reachable | Start your Chandra/vLLM server or update `VLLM_API_BASE` |
-| Userscript panel never shows an AI classification load | handle not bound, permission revoked, or `autoLoad` off | Click **綁定 unsave.json** again, tick **自動載入 unsave.json**, or click **立即檢查**; check browser console for `[threads-sieve]` warnings |
-| Auto-unsave skipped with "not on saved page" | Tab navigated away | Switch the tab back to `/saved` |
+| Unsave button does nothing | not on `/saved`, or the file picker was cancelled | Switch the tab back to `https://www.threads.com/saved`, click the button and pick the file again |
 | `probe` reports autosave not bound | Current browser session has not granted the `catch.json` autosave handle | Click **設定自動存檔** in the panel and pick `data/catch.json`, then re-run probe |
 | `scrape` exits 2 with timeout | Scrape still running (large backlog) or panel stalled | Increase `--wait-seconds`; check panel status with `python scripts/agent_driver.py status` |
 | `catch.json` stays 0 bytes after scrape | Autosave handle not bound | Re-grant via 設定自動存檔, then re-run scrape |
