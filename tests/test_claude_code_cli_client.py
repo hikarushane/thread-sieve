@@ -49,7 +49,7 @@ def test_generate_text_invokes_print_mode(monkeypatch):
     assert text == "Tech"
     call = captured[0]
     assert call["command"] == [
-        "claude", "-p", "--bare", "--output-format", "text", "--model", "sonnet"
+        "claude", "-p", "--output-format", "text", "--model", "sonnet"
     ]
     assert call["input"] == "classify this"
 

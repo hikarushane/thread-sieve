@@ -16,8 +16,7 @@ class ClaudeCodeCLIClient:
     """LLMClient adapter that shells out to the local Claude Code CLI (`claude -p`).
 
     Uses the CLI's own login session — no API key required. An empty
-    `model_name` defers to the CLI's configured default model. Requires a
-    Claude Code CLI recent enough to support `--bare` (2.1.x+).
+    `model_name` defers to the CLI's configured default model.
     """
 
     def __init__(
@@ -57,9 +56,10 @@ class ClaudeCodeCLIClient:
             return self._run_cli(full_prompt, model_name=model_name, cwd=workdir)
 
     def _run_cli(self, prompt: str, *, model_name: str, cwd: str) -> str:
-        # `--bare` skips hooks/plugins and cwd points at a throwaway directory,
-        # so no project CLAUDE.md or user hook output can leak into the prompt.
-        command = [self._executable, "-p", "--bare", "--output-format", "text"]
+        # cwd points at a throwaway directory so no project CLAUDE.md or project
+        # hook output can leak into the prompt. (`--bare` would isolate further
+        # but breaks CLI-session auth on some setups, so it is deliberately not used.)
+        command = [self._executable, "-p", "--output-format", "text"]
         normalized_model = model_name.strip()
         if normalized_model:
             command += ["--model", normalized_model]

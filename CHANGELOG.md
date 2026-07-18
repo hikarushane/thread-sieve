@@ -6,8 +6,7 @@
 
 - **`llm.provider` 新選項 `claude-code` 與 `codex`**：分類／標題／圖片 OCR 可改走本機已登入的 Claude Code CLI（`claude -p`）或 OpenAI Codex CLI（`codex exec`），不需 API key。
   - model 欄位留空＝使用 CLI 自己設定的預設模型；仍可用 `text-model` 等欄位或 `THREADS_LLM_*` env 指定。
-  - `claude-code` 需較新版 CLI（支援 `--bare`，2.1.x+）。
-  - 兩者皆在隔離的暫存目錄執行：claude 以 `--bare` 跳過 hooks 與專案 CLAUDE.md，codex 以 `--sandbox read-only` 執行，不會碰使用者專案。
+  - 兩者皆在隔離的暫存目錄執行（擋掉專案 CLAUDE.md／專案 hooks）；codex 另以 `--sandbox read-only` 執行，不會碰使用者專案。
 - `.env.example` 與 `config.json.example` 補上五種 provider（gemini｜anthropic｜openai｜claude-code｜codex）的填寫範例與說明。
 
 ## 2026-07-18 — macOS launcher 與跨平台安裝說明
