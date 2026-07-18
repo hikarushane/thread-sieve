@@ -29,8 +29,6 @@ Two coupled layers:
 
 ![ThreadSieve flow overview](docs/flow-overview.png)
 
-(full branch adds a watcher path: `watch_pipeline.py` watches `catch.json` and auto-triggers classification, replacing the double-click step.)
-
 Two usage paths after setup: **No-typing (double-click)** (scrape via browser panel + double-click `run_classify.cmd` / `.command`) or **With Terminal** (watcher auto-triggers on `catch.json` + agent-driven scrape).
 
 ---
