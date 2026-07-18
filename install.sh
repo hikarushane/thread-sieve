@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # ThreadSieve 一行安裝 bootstrap（macOS）
-# 用法：curl -fsSL https://raw.githubusercontent.com/hikaru-yeh/thread-sieve/main/install.sh | bash
+# 用法：curl -fsSL https://raw.githubusercontent.com/hikarushane/thread-sieve/main/install.sh | bash
 set -euo pipefail
 
-REPO_URL="https://github.com/hikaru-yeh/thread-sieve.git"
+REPO_URL="https://github.com/hikarushane/thread-sieve.git"
 TARGET_DIR="${THREADSIEVE_DIR:-thread-sieve}"
 PYTHON_VERSION="3.12"
 

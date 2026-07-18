@@ -65,13 +65,13 @@ Two layers:
 **Windows (PowerShell):**
 
 ```powershell
-irm https://raw.githubusercontent.com/hikaru-yeh/thread-sieve/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/hikarushane/thread-sieve/main/install.ps1 | iex
 ```
 
 **macOS (Terminal):**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hikaru-yeh/thread-sieve/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/hikarushane/thread-sieve/main/install.sh | bash
 ```
 
 One line does it all: clone the repo → install [uv](https://docs.astral.sh/uv/) if missing → create a Python 3.12 virtual environment → install dependencies and Chromium → generate `.env` / `config.json`. **It doesn't matter which Python version your system has**: uv downloads the right one automatically and uses it only inside this project's `.venv`, leaving your existing setup untouched.
@@ -81,7 +81,7 @@ One line does it all: clone the repo → install [uv](https://docs.astral.sh/uv/
 
 ```powershell
 # Windows (PowerShell); requires Python 3.10+
-git clone https://github.com/hikaru-yeh/thread-sieve.git
+git clone https://github.com/hikarushane/thread-sieve.git
 cd thread-sieve
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
@@ -93,7 +93,7 @@ copy config.json.example config.json
 
 ```bash
 # macOS (Terminal); requires Python 3.10+
-git clone https://github.com/hikaru-yeh/thread-sieve.git
+git clone https://github.com/hikarushane/thread-sieve.git
 cd thread-sieve
 python3 -m venv .venv
 source .venv/bin/activate
