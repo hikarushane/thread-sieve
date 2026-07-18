@@ -2,6 +2,7 @@
 
 ## 2026-07-18
 
+- **安裝簡化為一行指令**（Windows：`irm … | iex`；macOS：`curl … | bash`）：自動 clone、建立正確版本的 Python 環境（系統裝什麼版本都不影響）、安裝依賴與瀏覽器、產生設定檔範本。手動安裝步驟仍保留在 README。
 - 新增 macOS 雙擊啟動器 `run_classify.command`，與 Windows 的 `run_classify.cmd` 對應——兩個平台都是雙擊即跑完整流程。
 - 安裝說明（中英 README）拆成 Windows 與 macOS 兩版，SOP、疑難排解、流程圖同步更新。
 
