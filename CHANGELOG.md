@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-18 — macOS launcher 與跨平台安裝說明
+
+### 新功能
+
+- **`run_classify.command`**：macOS 版雙擊啟動器，對應既有的 Windows `run_classify.cmd`。activate `.venv` 後執行 `scripts/import_bookmarks_to_markdown.py`，結束顯示 `[DONE]`／`[FAILED]`。
+
+### 文件
+
+- README（中英）「安裝 → Python 端」拆成 **Windows（PowerShell）** 與 **macOS（Terminal）** 兩塊；SOP 步驟 3、指令列備案、桌面捷徑、Troubleshooting、流程圖同步兩平台。
+
 ## 2026-07-14 — 存回應時擷取單線上文與回覆區
 
 突破先前已知限制：「存的是某個回應就看不到上文」「看不到原始帖作者的回覆」。

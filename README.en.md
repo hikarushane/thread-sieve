@@ -29,7 +29,7 @@ Two layers:
 [Threads /saved (browser-panel scrape)] -> catch.json
                                             |
                                             v
-                              double-click run_classify.cmd
+                 double-click run_classify.cmd / .command
                                             |
                                             v
                  scripts/import_bookmarks_to_markdown.py
@@ -67,6 +67,8 @@ cd thread-sieve
 
 ### 1. Python side
 
+**Windows (PowerShell):**
+
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
@@ -74,6 +76,17 @@ pip install -r requirements.txt
 playwright install chromium
 copy .env.example .env
 copy config.json.example config.json
+```
+
+**macOS (Terminal):**
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+playwright install chromium
+cp .env.example .env
+cp config.json.example config.json
 ```
 
 Edit `.env`: fill in `GEMINI_API_KEY`.
@@ -120,16 +133,31 @@ Edit `config.json`:
 
 #### Step 3 · Run classify
 
-Double-click `run_classify.cmd` in the project root. A console window opens, activates `.venv`, runs `scripts/import_bookmarks_to_markdown.py`, then prints `[DONE]` or `[FAILED]` and waits for any key.
+- **Windows**: double-click `run_classify.cmd` in the project root.
+- **macOS**: double-click `run_classify.command` in the project root (first run may need `chmod +x run_classify.command`, or right-click → Open to get past Gatekeeper).
 
-Optional desktop shortcut: right-click `run_classify.cmd` → Send to → Desktop (create shortcut). Then double-click the shortcut from anywhere.
+A console/Terminal window opens, activates `.venv`, runs `scripts/import_bookmarks_to_markdown.py`, then prints `[DONE]` or `[FAILED]` and waits for any key.
+
+Optional desktop shortcut:
+
+- **Windows**: right-click `run_classify.cmd` → Send to → Desktop (create shortcut).
+- **macOS**: ⌥⌘-drag `run_classify.command` to the Desktop to make an alias.
+
+Then double-click the shortcut from anywhere.
 
 This classifies every post once and writes both markdown notes and `unsave.json`. Image OCR runs automatically for posts whose category matches `config.json` → `image-ocr.trigger-categories`.
 
 Fallback for shell users:
 
 ```powershell
+# Windows
 .\.venv\Scripts\Activate.ps1
+python scripts/import_bookmarks_to_markdown.py
+```
+
+```bash
+# macOS
+source .venv/bin/activate
 python scripts/import_bookmarks_to_markdown.py
 ```
 
@@ -251,7 +279,7 @@ The pipeline writes a `threads_events.jsonl` event log into the output directory
 
 | Symptom | Likely cause | Fix |
 | --- | --- | --- |
-| Double-clicking `run_classify.cmd` shows `.venv not found` | venv never created | Run the install → Python side block once |
+| Double-clicking `run_classify.cmd`/`run_classify.command` shows `.venv not found` | venv never created | Run the install → Python side block once (pick Windows/macOS) |
 | classify exits with `json.decoder.JSONDecodeError: Invalid \escape` | Windows path in `config.json` uses single `\` | Use `/` (`D:/foo/bar`) or `\\` (`D:\\foo\\bar`) |
 | classify exits with `GEMINI_API_KEY missing` | key not in `.env` or venv didn't pick it up | Confirm `GEMINI_API_KEY=...` in `.env`, double-click again |
 | Panel never loads AI classification | handle not bound / autoLoad off | Re-bind `unsave.json`, tick **自動載入 unsave.json** |
