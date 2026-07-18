@@ -6,6 +6,8 @@
   },
   "llm": {
     "provider": "gemini",
+    "_provider-options": "gemini | anthropic | openai | claude-code | codex",
+    "_cli-note": "claude-code / codex run the locally installed CLI (no API key needed); with those providers, leave the *-model fields empty (or remove them) to use the CLI's default model",
     "text-model": "gemini-2.5-flash",
     "title-model": "gemini-2.5-flash",
     "vision-model": "gemini-2.5-flash"
