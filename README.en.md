@@ -27,23 +27,7 @@ Two layers:
 
 ## What it does
 
-```
-[Threads /saved (browser-panel scrape)] -> catch.json
-                                            |
-                                            v
-                 double-click run_classify.cmd / .command
-                                            |
-                                            v
-                 scripts/import_bookmarks_to_markdown.py
-                 (classify once -> markdown notes + unsave.json)
-                                            |
-                                            v
-                    scripts/image_ocr_to_markdown.py
-                    (image OCR -> ## 圖片文字)
-                                            |
-                                            v
-                  userscript "取消儲存" button: pick unsave.json → confirm → unsave
-```
+![ThreadSieve flow overview](docs/flow-overview.png)
 
 ---
 
