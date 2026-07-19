@@ -137,7 +137,7 @@ Edit `config.json`:
 - **Windows**: double-click `run_classify.cmd` in the project root.
 - **macOS**: double-click `run_classify.command` in the project root (first run may need `chmod +x run_classify.command`, or right-click → Open to get past Gatekeeper).
 
-A console/Terminal window opens, activates `.venv`, runs `scripts/import_bookmarks_to_markdown.py`, then prints `[DONE]` or `[FAILED]` and waits for any key.
+A console/Terminal window opens, activates `.venv`, and runs `scripts/import_bookmarks_to_markdown.py`. While it runs it prints per-bookmark progress lines `[n/total] title category` (already-imported posts are marked as skipped), then a summary line (total bookmarks, progress, markdown output path), and finally `[DONE]` or `[FAILED]`, waiting for any key.
 
 Optional desktop shortcut:
 

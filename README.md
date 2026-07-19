@@ -137,7 +137,7 @@ cp config.json.example config.json
 - **Windows**：雙擊專案根目錄的 `run_classify.cmd`。
 - **macOS**：雙擊專案根目錄的 `run_classify.command`（首次可能需 `chmod +x run_classify.command`，或右鍵 → 打開以繞過 Gatekeeper）。
 
-會跳出一個 console／Terminal 視窗，自動 activate `.venv` 並執行 `scripts/import_bookmarks_to_markdown.py`，結束時顯示 `[DONE]` 或 `[FAILED]`，按任意鍵關閉。
+會跳出一個 console／Terminal 視窗，自動 activate `.venv` 並執行 `scripts/import_bookmarks_to_markdown.py`。執行中會逐筆顯示進度 `[n/總數] 標題 分類`（已存在的標「已存在，略過」），結尾顯示總結行（共 X 個書籤、進度、markdown 存檔路徑），最後顯示 `[DONE]` 或 `[FAILED]`，按任意鍵關閉。
 
 若想做桌面捷徑：
 
