@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ThreadSieve (Auto)
 // @namespace    https://local-only.example/threads-sieve/
-// @version      0.4.1
+// @version      0.4.2
 // @description  ThreadSieve captures Threads saved posts and runs the AI-post unsave flow from a single pick-and-run button.
 // @author       threads-sieve
 // @match        https://threads.com/*
@@ -16,7 +16,7 @@
   "use strict";
 
   const STORAGE_KEY = "threadsSavedExportState";
-  const SCRIPT_VERSION = "0.4.1";
+  const SCRIPT_VERSION = "0.4.2";
   const PANEL_ID = "threads-saved-export-panel";
   const FILE_HANDLE_DB = "threadsSavedExportFileDb";
   const FILE_HANDLE_STORE = "handles";
@@ -708,6 +708,13 @@
       for (const entry of this.dedupeEntriesByKey(entries)) {
         const aiItem = this.getAiItemForPost(entry.post);
         if (this.getDecisionTier(aiItem) === "none" || processedKeys.has(entry.key)) {
+          continue;
+        }
+        // 本地關鍵詞 fallback（localCandidate）只做視覺提示，絕不自動加入
+        // 取消選取：未列在 unsave.json 的貼文不能被自動取消儲存。
+        // （2026-07-19 事故：fallback 自動選取誤取消了 10 篇分類器沒審過的舊收藏。）
+        if (aiItem?.localCandidate) {
+          this.updateArticleSelectionState(entry.article, entry.key);
           continue;
         }
         if (!state.selectedAiKeys.has(entry.key)) {
