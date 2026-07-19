@@ -73,6 +73,35 @@ class _WorkflowEventLogger(Protocol):
         ...
 
 
+class _ProgressReporter(Protocol):
+    def start(self, total: int) -> None:
+        ...
+
+    def item(self, index: int, total: int, topic: str, category: str, status: str) -> None:
+        ...
+
+    def finish(self, summary: ImportSummary, output_dir: Path) -> None:
+        ...
+
+
+class _NullProgressReporter:
+    def start(self, total: int) -> None:
+        pass
+
+    def item(self, index: int, total: int, topic: str, category: str, status: str) -> None:
+        pass
+
+    def finish(self, summary: ImportSummary, output_dir: Path) -> None:
+        pass
+
+
+def _topic_snippet(text: str, limit: int = 30) -> str:
+    flattened = " ".join(text.split())
+    if len(flattened) <= limit:
+        return flattened
+    return flattened[: limit - 1] + "…"
+
+
 class _DisabledThreadPageClient:
     def fetch_body_text(self, url: str) -> str:
         raise RuntimeError("Playwright enrichment disabled by configuration")
@@ -107,6 +136,7 @@ class ImportBookmarksToMarkdownWorkflow:
         unsave_output_path: Path | None = None,
         source_file_name: str = "catch.json",
         classification_model: str = "",
+        progress_reporter: _ProgressReporter | None = None,
     ) -> None:
         self._reader = reader
         self._enricher = enricher
@@ -122,6 +152,7 @@ class ImportBookmarksToMarkdownWorkflow:
         self._unsave_output_path = unsave_output_path
         self._source_file_name = source_file_name
         self._classification_model = classification_model
+        self._progress_reporter = progress_reporter or _NullProgressReporter()
 
     @classmethod
     def from_config(cls, config: AppConfig) -> "ImportBookmarksToMarkdownWorkflow":
@@ -177,6 +208,8 @@ class ImportBookmarksToMarkdownWorkflow:
 
     def run(self) -> ImportSummary:
         source_items = self._reader.read()
+        total = len(source_items)
+        self._progress_reporter.start(total)
         existing_output_urls = self._load_existing_output_urls()
         written_count = 0
         skipped_count = 0
@@ -184,7 +217,7 @@ class ImportBookmarksToMarkdownWorkflow:
         classification_failed_count = 0
         classified_items = []
 
-        for source in source_items:
+        for index, source in enumerate(source_items, start=1):
             classified = None
 
             self._event_logger.emit(
@@ -214,6 +247,13 @@ class ImportBookmarksToMarkdownWorkflow:
                         author_handle=source.author_handle,
                         status="skipped_existing",
                     )
+                    self._progress_reporter.item(
+                        index,
+                        total,
+                        _topic_snippet(source.content_text),
+                        classified.category,
+                        "skipped",
+                    )
                     continue
 
                 classified = self._ocr_enricher.enrich(classified)
@@ -238,6 +278,13 @@ class ImportBookmarksToMarkdownWorkflow:
                     output_path=str(written_path),
                 )
                 existing_output_urls.add(source.post_url)
+                self._progress_reporter.item(
+                    index,
+                    total,
+                    titled.generated_title,
+                    classified.category,
+                    "written",
+                )
             except Exception:
                 failed_count += 1
                 if classified is None:
@@ -248,6 +295,13 @@ class ImportBookmarksToMarkdownWorkflow:
                     post_url=source.post_url,
                     author_handle=source.author_handle,
                     status="failed",
+                )
+                self._progress_reporter.item(
+                    index,
+                    total,
+                    _topic_snippet(source.content_text),
+                    classified.category if classified is not None else "—",
+                    "failed",
                 )
 
         if self._unsave_output_path is not None:
@@ -268,6 +322,7 @@ class ImportBookmarksToMarkdownWorkflow:
             failed_count=failed_count,
         )
         logger.info("Workflow summary: %s", summary)
+        self._progress_reporter.finish(summary, self._output_dir)
         return summary
 
     def _load_existing_output_urls(self) -> set[str]:

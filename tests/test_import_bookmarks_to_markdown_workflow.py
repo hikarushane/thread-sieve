@@ -293,3 +293,100 @@ def test_workflow_end_to_end_with_reply_context(tmp_path) -> None:
     assert "## 上文脈絡" in body
     assert "> **@original_poster**（原帖）：" in body
     assert "> [!quote]- 回覆（2 則，含原作者 1 則）" in body
+
+
+class FakeProgressReporter:
+    def __init__(self) -> None:
+        self.calls: list[tuple] = []
+
+    def start(self, total: int) -> None:
+        self.calls.append(("start", total))
+
+    def item(self, index: int, total: int, topic: str, category: str, status: str) -> None:
+        self.calls.append(("item", index, total, topic, category, status))
+
+    def finish(self, summary, output_dir) -> None:
+        self.calls.append(("finish", summary.processed_count, str(output_dir)))
+
+
+def _make_items() -> list[SourceBookmark]:
+    return [
+        SourceBookmark(
+            post_url="https://threads/post/1",
+            author_handle="@demo",
+            content_text="AI topic",
+            metadata={"postId": "p_ai"},
+        ),
+        SourceBookmark(
+            post_url="https://threads/post/2",
+            author_handle="@demo",
+            content_text="Food topic",
+            metadata={"postId": "p_food"},
+        ),
+    ]
+
+
+def _make_workflow(tmp_path: Path, reporter, categories: dict[str, str]):
+    return ImportBookmarksToMarkdownWorkflow(
+        reader=FakeReader(_make_items()),
+        enricher=FakeEnricher(),
+        classifier=FakeClassifier(categories),
+        ocr_enricher=FakeOcrEnricher(),
+        title_generator=FakeTitleGenerator(),
+        filename_builder=FakeFilenameBuilder(),
+        content_builder=MarkdownContentBuilder(),
+        writer=FakeWriter(),
+        output_dir=tmp_path / "notes",
+        event_logger=FakeEventLogger(),
+        progress_reporter=reporter,
+    )
+
+
+def test_workflow_reports_written_and_skipped_progress(tmp_path: Path) -> None:
+    output_dir = tmp_path / "notes"
+    output_dir.mkdir(parents=True)
+    # post/1 已存在於輸出資料夾 → 會走 skipped 分支
+    (output_dir / "existing.md").write_text(
+        'url: "https://threads/post/1"\n', encoding="utf-8"
+    )
+    reporter = FakeProgressReporter()
+    workflow = _make_workflow(
+        tmp_path, reporter, {"p_ai": "AI", "p_food": "Food"}
+    )
+
+    workflow.run()
+
+    assert reporter.calls == [
+        ("start", 2),
+        ("item", 1, 2, "AI topic", "AI", "skipped"),
+        ("item", 2, 2, "title-p_food", "Food", "written"),
+        ("finish", 2, str(output_dir)),
+    ]
+
+
+def test_workflow_reports_failed_progress_with_snippet(tmp_path: Path) -> None:
+    reporter = FakeProgressReporter()
+    # p_food 不在分類表 → FakeClassifier raise KeyError → failed 分支，classified 為 None
+    workflow = _make_workflow(tmp_path, reporter, {"p_ai": "AI"})
+
+    workflow.run()
+
+    assert reporter.calls[1] == ("item", 1, 2, "title-p_ai", "AI", "written")
+    assert reporter.calls[2] == ("item", 2, 2, "Food topic", "—", "failed")
+
+
+def test_workflow_without_reporter_still_runs(tmp_path: Path) -> None:
+    workflow = _make_workflow(tmp_path, None, {"p_ai": "AI", "p_food": "Food"})
+    # progress_reporter=None（預設情境）不得炸掉
+    summary = workflow.run()
+    assert summary.written_count == 2
+
+
+def test_topic_snippet_truncates_and_flattens() -> None:
+    from note_generator.workflows.import_bookmarks_to_markdown import _topic_snippet
+
+    assert _topic_snippet("短句") == "短句"
+    assert _topic_snippet("第一行\n第二行") == "第一行 第二行"
+    long_text = "字" * 40
+    assert _topic_snippet(long_text) == "字" * 29 + "…"
+    assert len(_topic_snippet(long_text)) == 30
