@@ -16,6 +16,7 @@ from note_generator.services.category_classifier import CategoryClassifier
 from note_generator.services.event_logger import EventLogger
 from note_generator.services.image_ocr_enricher import ImageOCREnricher
 from note_generator.services.markdown_writer import MarkdownWriter
+from note_generator.services.progress_reporter import ConsoleProgressReporter
 from note_generator.services.threads_reply_enricher import (
     PlaywrightThreadPageClient,
     ThreadsReplyEnricher,
@@ -204,6 +205,7 @@ class ImportBookmarksToMarkdownWorkflow:
             unsave_output_path=config.unsave_path,
             source_file_name=config.input_path.name,
             classification_model=config.model_for_classification,
+            progress_reporter=ConsoleProgressReporter(),
         )
 
     def run(self) -> ImportSummary:
