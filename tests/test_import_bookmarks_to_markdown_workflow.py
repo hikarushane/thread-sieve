@@ -390,3 +390,54 @@ def test_topic_snippet_truncates_and_flattens() -> None:
     long_text = "字" * 40
     assert _topic_snippet(long_text) == "字" * 29 + "…"
     assert len(_topic_snippet(long_text)) == 30
+
+
+def test_from_config_wires_console_progress_reporter(monkeypatch, tmp_path):
+    """from_config must wire ConsoleProgressReporter so CLI runs show progress with zero script changes."""
+    from note_generator.config import AppConfig
+    from note_generator.services.progress_reporter import ConsoleProgressReporter
+
+    def fake_factory(provider: str, api_keys):
+        class _StubClient:
+            def generate_text(self, prompt: str, *, model_name: str) -> str:
+                return ""
+
+            def generate_text_from_image(self, image_bytes: bytes, prompt: str, *, model_name: str) -> str:
+                return ""
+
+        return _StubClient()
+
+    monkeypatch.setattr(
+        "note_generator.workflows.import_bookmarks_to_markdown.build_llm_client",
+        fake_factory,
+    )
+
+    catch_path = tmp_path / "catch.json"
+    catch_path.write_text("[]", encoding="utf-8")
+    unsave_path = tmp_path / "unsave.json"
+    output_dir = tmp_path / "output"
+    output_dir.mkdir()
+
+    cfg = AppConfig(
+        input_path=catch_path,
+        unsave_path=unsave_path,
+        output_dir=output_dir,
+        categories=["AI", "Tech"],
+        unsaved_categories=set(),
+        hints=[],
+        category_overrides=[],
+        llm_provider="gemini",
+        llm_api_keys={"gemini": "g", "anthropic": "a", "openai": "o"},
+        model_for_classification="m-classify",
+        model_for_title="m-title",
+        model_for_ocr="m-ocr",
+        image_ocr_enabled=False,
+        image_ocr_categories=set(),
+        playwright_enabled=False,
+        playwright_headless=True,
+        event_log_filename="threads_events.jsonl",
+    )
+
+    workflow = ImportBookmarksToMarkdownWorkflow.from_config(cfg)
+
+    assert isinstance(workflow._progress_reporter, ConsoleProgressReporter)
