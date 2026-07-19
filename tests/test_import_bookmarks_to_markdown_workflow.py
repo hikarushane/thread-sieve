@@ -441,3 +441,45 @@ def test_from_config_wires_console_progress_reporter(monkeypatch, tmp_path):
     workflow = ImportBookmarksToMarkdownWorkflow.from_config(cfg)
 
     assert isinstance(workflow._progress_reporter, ConsoleProgressReporter)
+
+
+class FailingTitleGenerator:
+    """Like FakeTitleGenerator, but raises for one specific postId.
+
+    Lets a test drive the `failed` progress branch *after* classification
+    already succeeded, so `classified` is not None when the exception fires.
+    """
+
+    def __init__(self, failing_post_id: str) -> None:
+        self._failing_post_id = failing_post_id
+
+    def generate(self, item: ClassifiedBookmark) -> TitledBookmark:
+        post_id = str(item.enriched.source.metadata["postId"])
+        if post_id == self._failing_post_id:
+            raise RuntimeError(f"forced title failure for {post_id}")
+        return TitledBookmark(classified=item, generated_title=f"title-{post_id}")
+
+
+def test_workflow_reports_failed_after_classification_with_category(tmp_path: Path) -> None:
+    # both items classify successfully; the second fails afterwards (title generation),
+    # so the failed-branch progress call must carry the real category, not the
+    # classified-is-None "—" placeholder.
+    reporter = FakeProgressReporter()
+    workflow = ImportBookmarksToMarkdownWorkflow(
+        reader=FakeReader(_make_items()),
+        enricher=FakeEnricher(),
+        classifier=FakeClassifier({"p_ai": "AI", "p_food": "Food"}),
+        ocr_enricher=FakeOcrEnricher(),
+        title_generator=FailingTitleGenerator("p_food"),
+        filename_builder=FakeFilenameBuilder(),
+        content_builder=MarkdownContentBuilder(),
+        writer=FakeWriter(),
+        output_dir=tmp_path / "notes",
+        event_logger=FakeEventLogger(),
+        progress_reporter=reporter,
+    )
+
+    workflow.run()
+
+    assert reporter.calls[1] == ("item", 1, 2, "title-p_ai", "AI", "written")
+    assert reporter.calls[2] == ("item", 2, 2, "Food topic", "Food", "failed")

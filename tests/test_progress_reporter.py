@@ -41,3 +41,14 @@ def test_finish_line_without_failures_omits_failed_note(capsys) -> None:
     )
     ConsoleProgressReporter().finish(summary, Path("/notes/out"))
     assert capsys.readouterr().out == "共 2 個書籤，進度 2/2，存檔路徑 /notes/out\n"
+
+
+def test_zero_bookmarks_start_and_finish(capsys) -> None:
+    ConsoleProgressReporter().start(0)
+    assert capsys.readouterr().out == "共 0 個書籤，開始處理…\n"
+
+    summary = ImportSummary(
+        processed_count=0, written_count=0, skipped_count=0, failed_count=0
+    )
+    ConsoleProgressReporter().finish(summary, Path("/notes/out"))
+    assert capsys.readouterr().out == "共 0 個書籤，進度 0/0，存檔路徑 /notes/out\n"
