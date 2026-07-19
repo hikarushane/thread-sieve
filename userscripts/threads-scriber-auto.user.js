@@ -1936,7 +1936,18 @@
         reconciledMissingCount: reconciledMissingKeys.length
       }).catch(() => {});
       if (state.selectedAiKeys.size > 0) {
-        setError(`${summary}。仍有 ${state.selectedAiKeys.size} 篇未執行，可能尚未捲到、或按鈕未成功辨識。`);
+        // 區分「頁面上找不到（多半已在先前執行取消）」與「真的沒捲到」，
+        // 避免使用者把已完成的取消誤判為失敗而重複執行。
+        const missingCount = reconciledMissingKeys.length;
+        const notReachedCount = state.selectedAiKeys.size - missingCount;
+        const detailParts = [];
+        if (missingCount > 0) {
+          detailParts.push(`${missingCount} 篇整輪未在頁面出現，可能已在先前執行取消（請重新整理頁面確認）`);
+        }
+        if (notReachedCount > 0) {
+          detailParts.push(`${notReachedCount} 篇未執行，可能尚未捲到、或按鈕未成功辨識`);
+        }
+        setError(`${summary}。${detailParts.join("；")}。`);
       } else if (finalFailedKeys.length > 0) {
         setError(`${summary}。找不到按鈕或點擊失敗: ${finalFailedKeys.slice(0, 3).join(", ")}${finalFailedKeys.length > 3 ? "..." : ""}`);
       } else {
