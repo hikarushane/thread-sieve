@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ThreadSieve (Auto)
 // @namespace    https://local-only.example/threads-sieve/
-// @version      0.4.2
+// @version      0.5.4
 // @description  ThreadSieve captures Threads saved posts and runs the AI-post unsave flow from a single pick-and-run button.
 // @author       threads-sieve
 // @match        https://threads.com/*
@@ -16,14 +16,13 @@
   "use strict";
 
   const STORAGE_KEY = "threadsSavedExportState";
-  const SCRIPT_VERSION = "0.4.2";
+  const SCRIPT_VERSION = "0.5.4";
   const PANEL_ID = "threads-saved-export-panel";
   const FILE_HANDLE_DB = "threadsSavedExportFileDb";
   const FILE_HANDLE_STORE = "handles";
   const FILE_HANDLE_KEY = "catch-json";
   const DEBUG_LOG_FILE_HANDLE_KEY = "threads-debug-log";
   const DEFAULT_SCROLL_DELAY = 1400;
-  const UNSAVE_AFTER_LOAD_DELAY_MS = 600;
   const DEFAULT_MAX_PENDING_LOAD_ROUNDS = 8;
   const DEFAULT_MAX_OLD_ONLY_ROUNDS = 1;
   const DEFAULT_MAX_ITEMS = 0;
@@ -31,17 +30,16 @@
   const SCROLL_BOTTOM_NUDGE_DELAY = 180;
   const HIGH_CONFIDENCE_THRESHOLD = 0.85;
   const LOW_CONFIDENCE_THRESHOLD = 0.55;
-  const UNSAVE_CLICK_DELAY = 450;
-  const UNSAVE_SCROLL_DELAY = 700;
   const UNSAVE_MENU_TIMEOUT = 3500;
-  const UNSAVE_MAX_STALLED_ROUNDS = 6;
-  const UNSAVE_MAX_BOTTOM_WAIT_ROUNDS = 3;
-  const UNSAVE_MAX_FAILURES_PER_KEY = 2;
-  const UNSAVE_VIEWPORT_SETTLE_DELAY = 350;
-  const UNSAVE_MAX_VIEWPORT_DRAIN_ROUNDS = 6;
   const UNSAVE_MENU_CLOSE_TIMEOUT = 3000;
-  const UNSAVE_MAX_NO_NEW_SELECTED_ROUNDS = 200;
   const CAPTURE_STALE_ITEMS_WARN_MS = 6 * 60 * 60 * 1000;
+  const URL_UNSAVE_TASK_KEY = "threadsSieveUrlUnsaveTask";
+  const URL_UNSAVE_RESULT_KEY = "threadsSieveUrlUnsaveResult";
+  const URL_UNSAVE_TASK_MAX_AGE_MS = 3 * 60 * 1000;
+  const URL_UNSAVE_RESULT_TIMEOUT = 30000;
+  const URL_UNSAVE_STEP_DELAY = 1600;
+  const URL_UNSAVE_MAX_CONSECUTIVE_FAILURES = 5;
+  const URL_UNSAVE_WORKER_FIND_TIMEOUT = 15000;
 
   const state = createState();
 
@@ -552,6 +550,7 @@
       state.highlightedKeys = new Set();
       state.unsaveAttemptedKeys = new Set();
       state.unsaveVerifiedKeys = new Set();
+      state.unsaveSkippedKeys = new Set();
       state.unsaveFailedKeys = new Set();
       state.aiReviewStats = createAiReviewStats();
       this.clearHighlights();
@@ -701,31 +700,6 @@
         })
         .map((entry) => entry.key)
         .filter(Boolean);
-    },
-
-    addHighlightedEntriesToSelection(entries = this.getLoadedArticleEntries()) {
-      let addedCount = 0;
-      const processedKeys = this.getSuppressedKeySet();
-      for (const entry of this.dedupeEntriesByKey(entries)) {
-        const aiItem = this.getAiItemForPost(entry.post);
-        if (this.getDecisionTier(aiItem) === "none" || processedKeys.has(entry.key)) {
-          continue;
-        }
-        // 本地關鍵詞 fallback（localCandidate）只做視覺提示，絕不自動加入
-        // 取消選取：未列在 unsave.json 的貼文不能被自動取消儲存。
-        // （2026-07-19 事故：fallback 自動選取誤取消了 10 篇分類器沒審過的舊收藏。）
-        if (aiItem?.localCandidate) {
-          this.updateArticleSelectionState(entry.article, entry.key);
-          continue;
-        }
-        if (!state.selectedAiKeys.has(entry.key)) {
-          state.selectedAiKeys.add(entry.key);
-          addedCount += 1;
-        }
-        this.updateArticleSelectionState(entry.article, entry.key);
-      }
-      state.aiReviewStats.selected = state.selectedAiKeys.size;
-      return addedCount;
     },
 
     isElementVisible(element) {
@@ -1065,13 +1039,6 @@
       }).catch(() => {});
       setError(`已寫入 ${diagnostics.length} 筆分類 key 診斷到 debug log。`);
       UI.update();
-    },
-
-    getActionableVisibleSelectedEntries(progress, visibleEntries = this.getVisibleArticleEntries()) {
-      return this.dedupeEntriesByKey(visibleEntries)
-        .filter((entry) => state.selectedAiKeys.has(entry.key))
-        .filter((entry) => !progress.processedKeys.has(entry.key))
-        .filter((entry) => (progress.failedAttemptsByKey.get(entry.key) || 0) < UNSAVE_MAX_FAILURES_PER_KEY);
     },
 
     resolveVisibleEntryByKey(key) {
@@ -1469,6 +1436,36 @@
       return null;
     },
 
+    findSaveOrUnsaveMenuItem() {
+      const unsaveItem = this.findUnsaveMenuItem();
+      if (unsaveItem) {
+        return { type: "unsave", item: unsaveItem };
+      }
+      // 「儲存」只做全字比對：它是「取消儲存」的子字串，寬鬆比對會誤中。
+      const saveItem = Array.from(document.querySelectorAll("[role='menuitem']"))
+        .filter((item) => item?.isConnected)
+        .find((item) => {
+          const text = this.normalizeMenuItemText(item.textContent);
+          return text === "儲存" || text === "Save";
+        });
+      if (saveItem) {
+        return { type: "save", item: saveItem };
+      }
+      return null;
+    },
+
+    async waitForSaveOrUnsaveMenuItem(timeout = UNSAVE_MENU_TIMEOUT) {
+      const startedAt = Date.now();
+      while (Date.now() - startedAt < timeout) {
+        const found = this.findSaveOrUnsaveMenuItem();
+        if (found) {
+          return found;
+        }
+        await wait(100);
+      }
+      return null;
+    },
+
     async waitForMenuToClose(timeout = UNSAVE_MENU_CLOSE_TIMEOUT) {
       const startedAt = Date.now();
       while (Date.now() - startedAt < timeout) {
@@ -1484,24 +1481,10 @@
       document.body?.click();
     },
 
-    async waitForUnsaveEffect(entry) {
-      const startedAt = Date.now();
-      while (Date.now() - startedAt < 2500) {
-        if (!entry.article?.isConnected) {
-          return "verified";
-        }
-        const currentButton = this.findMoreButton(entry.article);
-        if (!currentButton) {
-          return "verified";
-        }
-        await wait(200);
-      }
-      return "attempted";
-    },
-
     markUnsaveOutcome(key, outcome) {
       state.unsaveAttemptedKeys.delete(key);
       state.unsaveVerifiedKeys.delete(key);
+      state.unsaveSkippedKeys.delete(key);
       state.unsaveFailedKeys.delete(key);
       if (outcome === "verified") {
         state.unsaveVerifiedKeys.add(key);
@@ -1510,129 +1493,6 @@
         state.unsaveAttemptedKeys.add(key);
       } else if (outcome === "failed") {
         state.unsaveFailedKeys.add(key);
-      }
-    },
-
-    async processVisibleSelectedEntries(entries, progress) {
-      for (const queuedEntry of this.dedupeEntriesByKey(entries)) {
-        const entry = this.resolveVisibleEntryByKey(queuedEntry.key);
-        if (!entry) {
-          DebugLogUtils.appendEvent("unsave_item_deferred", {
-            key: queuedEntry.key,
-            reason: "not_visible_after_refresh"
-          }).catch(() => {});
-          continue;
-        }
-        const currentFailureCount = progress.failedAttemptsByKey.get(entry.key) || 0;
-        if (progress.processedKeys.has(entry.key) || currentFailureCount >= UNSAVE_MAX_FAILURES_PER_KEY) {
-          continue;
-        }
-        try {
-          entry.article.scrollIntoView({ block: "center", inline: "nearest", behavior: "auto" });
-          await wait(120);
-          const button = this.findMoreButton(entry.article);
-          if (!button) {
-            const nextFailureCount = currentFailureCount + 1;
-            progress.failedAttemptsByKey.set(entry.key, nextFailureCount);
-            this.recordProgressFailure(progress, entry.key);
-            this.markUnsaveOutcome(entry.key, "failed");
-            if (nextFailureCount >= UNSAVE_MAX_FAILURES_PER_KEY) {
-              progress.processedKeys.add(entry.key);
-            }
-            DebugLogUtils.appendEvent("unsave_item_failed", {
-              key: entry.key,
-              reason: "button_not_found",
-              stage: "more_button",
-              diagnostics: this.collectMoreButtonDiagnostics(entry.article),
-              failureCount: nextFailureCount
-            }).catch(() => {});
-            continue;
-          }
-          const beforeState = this.describeButton(button);
-          if (beforeState.disabled) {
-            const nextFailureCount = currentFailureCount + 1;
-            progress.failedAttemptsByKey.set(entry.key, nextFailureCount);
-            this.recordProgressFailure(progress, entry.key);
-            this.markUnsaveOutcome(entry.key, "failed");
-            progress.processedKeys.add(entry.key);
-            DebugLogUtils.appendEvent("unsave_item_failed", {
-              key: entry.key,
-              reason: "button_disabled",
-              buttonState: beforeState,
-              failureCount: nextFailureCount
-            }).catch(() => {});
-            continue;
-          }
-          this.triggerElementClick(button);
-          const unsaveItem = await this.waitForUnsaveMenuItem();
-          if (!unsaveItem) {
-            const nextFailureCount = currentFailureCount + 1;
-            progress.failedAttemptsByKey.set(entry.key, nextFailureCount);
-            this.closeOpenMenu();
-            this.recordProgressFailure(progress, entry.key);
-            this.markUnsaveOutcome(entry.key, "failed");
-            if (nextFailureCount >= UNSAVE_MAX_FAILURES_PER_KEY) {
-              progress.processedKeys.add(entry.key);
-            }
-            DebugLogUtils.appendEvent("unsave_item_failed", {
-              key: entry.key,
-              reason: "menuitem_not_found",
-              stage: "unsave_menuitem",
-              buttonState: beforeState,
-              visibleMenuItems: this.collectVisibleMenuItemTexts(),
-              failureCount: nextFailureCount
-            }).catch(() => {});
-            await wait(UNSAVE_CLICK_DELAY);
-            continue;
-          }
-
-          const menuItemText = this.normalizeMenuItemText(unsaveItem.textContent);
-          this.triggerElementClick(unsaveItem);
-
-          const menuClosed = await this.waitForMenuToClose();
-          if (!menuClosed) {
-            DebugLogUtils.appendEvent("unsave_menu_still_open", {
-              key: entry.key,
-              buttonState: beforeState,
-              menuItemText
-            }).catch(() => {});
-          }
-
-          const outcome = await this.waitForUnsaveEffect(entry);
-          this.markUnsaveOutcome(entry.key, outcome);
-          this.clearProgressFailure(progress, entry.key);
-          progress.processedKeys.add(entry.key);
-          state.selectedAiKeys.delete(entry.key);
-          DebugLogUtils.appendEvent("unsave_item_result", {
-            key: entry.key,
-            outcome,
-            buttonStateBefore: beforeState,
-            menuItemText
-          }).catch(() => {});
-          if (outcome === "verified") {
-            progress.verified += 1;
-          } else {
-            progress.attempted += 1;
-          }
-          this.syncHighlights();
-          setStatus(
-            `取消儲存進行中: 已驗證 ${progress.verified} / 待刷新 ${progress.attempted} / 失敗 ${state.unsaveFailedKeys.size} / 剩餘 ${state.selectedAiKeys.size}`
-          );
-          await wait(UNSAVE_CLICK_DELAY);
-        } catch (_error) {
-          const nextFailureCount = currentFailureCount + 1;
-          progress.failedAttemptsByKey.set(entry.key, nextFailureCount);
-          this.recordProgressFailure(progress, entry.key);
-          this.markUnsaveOutcome(entry.key, "failed");
-          if (nextFailureCount >= UNSAVE_MAX_FAILURES_PER_KEY) {
-            progress.processedKeys.add(entry.key);
-          }
-          DebugLogUtils.appendEvent("unsave_item_failed", {
-            key: entry.key,
-            reason: "exception",
-            failureCount: nextFailureCount
-          }).catch(() => {});
-        }
       }
     },
 
@@ -1665,293 +1525,189 @@
         return;
       }
       await this.loadAiResultsFromHandle(fileHandle);
-      // 選檔即宣告「此檔為當前真相」：清掉歷次累積的排除鍵，避免舊的
-      // 誤判 verified（Threads 虛擬捲動造成的 article detach）永久吃掉候選。
-      // 已真正取消的貼文不會出現在頁面上，巡覽迴圈會自行略過。
+      // 選檔即宣告「此檔為當前真相」：清掉歷次累積的排除鍵。逐篇流程
+      // 以每篇選單實際顯示的儲存狀態為準（顯示「儲存」＝已取消，自動跳過），
+      // 不再需要用排除鍵防鬼魂。
       if (state.suppressedAiKeys.size > 0) {
         state.suppressedAiKeys = new Set();
         saveState();
       }
-      try {
-        this.applyHighlights();
-        await wait(UNSAVE_AFTER_LOAD_DELAY_MS);
-        this.selectHighConfidence();
-        if (state.selectedAiKeys.size === 0) {
-          setError("沒有建議取消的貼文，未執行取消儲存。");
-          return;
-        }
-        await this.unsaveSelected();
-      } finally {
-        // 一鍵流程結束即停用標亮同步；否則 MutationObserver 與
-        // syncHighlights/UI.update 的 DOM 寫入互相觸發，形成無限重繪迴圈。
-        this.clearHighlights();
-        UI.update();
+      await UrlUnsaveUtils.run();
+    }
+  };
+
+  const UrlUnsaveUtils = {
+    running: false,
+    abortRequested: false,
+
+    requestAbort() {
+      if (this.running) {
+        this.abortRequested = true;
+        setStatus("停止請求已送出，將在目前貼文處理完後停止…");
       }
     },
 
-    async unsaveSelected({ skipConfirm = false } = {}) {
-      if (state.aiHighlightsActive) {
-        this.syncHighlights();
-        const addedHighlightedCount = this.addHighlightedEntriesToSelection();
-        if (addedHighlightedCount > 0) {
-          DebugLogUtils.appendEvent("unsave_visible_highlights_auto_selected", {
-            addedHighlightedCount,
-            selectedCount: state.selectedAiKeys.size,
-            highlightedKeys: this.getHighlightedEntryKeys().slice(0, 20),
-            phase: "start"
-          }).catch(() => {});
-        }
-      }
+    buildQueue() {
+      return state.aiItems
+        .filter((item) => AiReviewUtils.getDecisionTier(item) === "high")
+        .map((item) => ({
+          key: item.postId || item.postUrl,
+          url: item.postUrl
+        }))
+        .filter((entry) => entry.key && entry.url);
+    },
 
-      if (state.selectedAiKeys.size === 0) {
-        setError("目前沒有已選取的貼文可取消儲存。");
+    waitForResult(nonce, timeoutMs) {
+      return new Promise((resolve) => {
+        let settled = false;
+        let pollId = 0;
+        let timeoutId = 0;
+        const finish = (value) => {
+          if (settled) {
+            return;
+          }
+          settled = true;
+          window.removeEventListener("storage", onStorage);
+          window.clearInterval(pollId);
+          window.clearTimeout(timeoutId);
+          resolve(value);
+        };
+        const check = () => {
+          try {
+            const result = JSON.parse(localStorage.getItem(URL_UNSAVE_RESULT_KEY) || "null");
+            if (result && result.nonce === nonce) {
+              finish(result);
+            }
+          } catch (_error) {
+            // Ignore malformed payloads and keep waiting.
+          }
+        };
+        const onStorage = (event) => {
+          if (event.key === URL_UNSAVE_RESULT_KEY) {
+            check();
+          }
+        };
+        window.addEventListener("storage", onStorage);
+        pollId = window.setInterval(check, 500);
+        timeoutId = window.setTimeout(() => finish(null), timeoutMs);
+        check();
+      });
+    },
+
+    async run() {
+      if (this.running) {
         return;
       }
-
-      const selectedCount = state.selectedAiKeys.size;
-      if (!skipConfirm) {
-        const confirmed = window.confirm(
-          `即將自動從頁面頂部往下巡覽，取消儲存 ${selectedCount} 篇已選取貼文。\nThreads 頁面通常不會立即反映結果，腳本會把已點擊的貼文標記為待重新整理確認。是否繼續？`
-        );
-        if (!confirmed) {
-          return;
-        }
+      const queue = this.buildQueue();
+      if (queue.length === 0) {
+        setError("unsave 分類中沒有高信心待取消項目。");
+        return;
       }
-
+      const proceed = window.confirm(
+        `即將逐篇開啟 ${queue.length} 個貼文分頁執行取消儲存，各分頁處理完會自動關閉。\n` +
+        "需要先在 Chrome 允許 threads.com 的彈出式視窗。\n" +
+        "選單顯示「儲存」（代表原本就未收藏）的貼文會自動跳過。是否開始？"
+      );
+      if (!proceed) {
+        return;
+      }
+      this.running = true;
+      this.abortRequested = false;
       setError("");
       state.unsaveFailedKeys = new Set();
-      const selectedAiIndexes = Array.from(state.selectedAiKeys)
-        .map((key) => state.aiIndexMap.get(key))
-        .filter((index) => Number.isInteger(index));
-      let hasUnindexedSelectedKeys = state.selectedAiKeys.size > selectedAiIndexes.length;
-      const maxSelectedAiIndex = selectedAiIndexes.length > 0 ? Math.max(...selectedAiIndexes) : -1;
-      const selectedTierCounts = Array.from(state.selectedAiKeys).reduce((counts, key) => {
-        const visibleEntry = this.resolveVisibleEntryByKey(key);
-        const item = this.resolveAiItemByKey(key) || (visibleEntry ? this.getAiItemForPost(visibleEntry.post) : null);
-        const tier = this.getDecisionTier(item);
-        counts[tier] = (counts[tier] || 0) + 1;
-        return counts;
-      }, {});
-      const visibleEntriesAtStart = this.getVisibleArticleEntries();
-      DebugLogUtils.appendEvent("unsave_run_started", {
-        selectedCount,
-        visibleEntries: visibleEntriesAtStart.length,
-        visibleHighlightedCount: this.getHighlightedEntryKeys(visibleEntriesAtStart).length,
-        visibleSelectedCount: visibleEntriesAtStart.filter((entry) => state.selectedAiKeys.has(entry.key)).length,
-        selectedSampleKeys: Array.from(state.selectedAiKeys).slice(0, 20),
-        selectedTierCounts,
-        hasUnindexedSelectedKeys,
-        selectedIndexMin: selectedAiIndexes.length > 0 ? Math.min(...selectedAiIndexes) : null,
-        selectedIndexMax: maxSelectedAiIndex >= 0 ? maxSelectedAiIndex : null
-      }).catch(() => {});
-      const progress = {
-        verified: 0,
-        attempted: 0,
-        failed: 0,
-        failedKeys: [],
-        processedKeys: new Set(),
-        failedAttemptsByKey: new Map(),
-        seenVisibleSelectedKeys: new Set()
-      };
-      const scrollContainer = Scroller.getScrollContainer();
-      Scroller.scrollToStart(scrollContainer);
-      await wait(UNSAVE_SCROLL_DELAY);
-
-      let maxSeenAiIndex = -1;
-      let aiOrderBoundaryLogged = false;
-      let stalledRounds = 0;
-      let bottomWaitRounds = 0;
-      let consecutiveNoNewSelectedRounds = 0;
+      state.unsaveSkippedKeys = new Set();
+      UI.update();
+      const counts = { unsaved: 0, skipped: 0, failed: 0 };
+      const failedKeys = [];
+      let consecutiveFailures = 0;
       let stopReason = "completed";
-      while (state.selectedAiKeys.size > 0) {
-        this.syncHighlights();
-        const autoAddedInRound = state.aiHighlightsActive ? this.addHighlightedEntriesToSelection() : 0;
-        if (autoAddedInRound > 0) {
-          hasUnindexedSelectedKeys = true;
-          DebugLogUtils.appendEvent("unsave_visible_highlights_auto_selected", {
-            addedHighlightedCount: autoAddedInRound,
-            selectedCount: state.selectedAiKeys.size,
-            highlightedKeys: this.getHighlightedEntryKeys().slice(0, 20),
-            phase: "scroll"
-          }).catch(() => {});
-        }
-        const visibleEntries = this.getVisibleArticleEntries();
-        const beforeSignature = this.getEntrySignature(visibleEntries);
-        const beforeMetrics = Scroller.getScrollMetrics(scrollContainer);
-        const visibleSelectedEntries = this.dedupeEntriesByKey(visibleEntries)
-          .filter((entry) => state.selectedAiKeys.has(entry.key));
-        for (const entry of visibleEntries) {
-          const aiIndex = state.aiIndexMap.get(entry.key);
-          if (Number.isInteger(aiIndex)) {
-            maxSeenAiIndex = Math.max(maxSeenAiIndex, aiIndex);
-          }
-        }
-
-        const prevSeenCount = progress.seenVisibleSelectedKeys.size;
-        for (const entry of visibleSelectedEntries) {
-          progress.seenVisibleSelectedKeys.add(entry.key);
-        }
-        if (progress.seenVisibleSelectedKeys.size > prevSeenCount) {
-          consecutiveNoNewSelectedRounds = 0;
-        } else if (visibleSelectedEntries.length === 0) {
-          consecutiveNoNewSelectedRounds += 1;
-          if (consecutiveNoNewSelectedRounds >= UNSAVE_MAX_NO_NEW_SELECTED_ROUNDS) {
-            stopReason = "no_progress";
+      DebugLogUtils.appendEvent("url_unsave_run_started", {
+        queueLength: queue.length,
+        sampleKeys: queue.slice(0, 10).map((entry) => entry.key)
+      }).catch(() => {});
+      try {
+        for (let index = 0; index < queue.length; index += 1) {
+          if (this.abortRequested) {
+            stopReason = "aborted";
             break;
           }
-        }
-        if (visibleSelectedEntries.length === 0
-            && maxSelectedAiIndex >= 0
-            && !hasUnindexedSelectedKeys
-            && maxSeenAiIndex > maxSelectedAiIndex
-            && !aiOrderBoundaryLogged) {
-          aiOrderBoundaryLogged = true;
-          DebugLogUtils.appendEvent("unsave_ai_order_boundary_seen", {
-            remainingSelected: state.selectedAiKeys.size,
-            seenSelectedCount: progress.seenVisibleSelectedKeys.size,
-            visibleEntryKeys: visibleEntries.map((entry) => entry.key).slice(0, 20),
-            maxSelectedAiIndex,
-            maxSeenAiIndex
-          }).catch(() => {});
-          stopReason = "ai_order_boundary_no_selected";
-          break;
-        }
-
-        let selectedEntries = this.getActionableVisibleSelectedEntries(progress, visibleEntries);
-
-        if (selectedEntries.length > 0) {
-          let drainRounds = 0;
-          while (selectedEntries.length > 0 && drainRounds < UNSAVE_MAX_VIEWPORT_DRAIN_ROUNDS) {
-            await this.processVisibleSelectedEntries(selectedEntries, progress);
-            stalledRounds = 0;
-            bottomWaitRounds = 0;
-            drainRounds += 1;
-
-            await wait(UNSAVE_VIEWPORT_SETTLE_DELAY);
-            this.syncHighlights();
-
-            const refreshedVisibleEntries = this.getVisibleArticleEntries();
-            const refreshedSelectedEntries = this.getActionableVisibleSelectedEntries(progress, refreshedVisibleEntries);
-            if (refreshedSelectedEntries.length === 0) {
-              break;
-            }
-
-            for (const entry of this.dedupeEntriesByKey(refreshedVisibleEntries).filter((item) => state.selectedAiKeys.has(item.key))) {
-              progress.seenVisibleSelectedKeys.add(entry.key);
-            }
-
-            DebugLogUtils.appendEvent("unsave_viewport_pending_after_process", {
-              pendingCount: refreshedSelectedEntries.length,
-              drainRounds,
-              keys: refreshedSelectedEntries.map((entry) => entry.key).slice(0, 12)
-            }).catch(() => {});
-            selectedEntries = refreshedSelectedEntries;
+          const entry = queue[index];
+          const nonce = `${Date.now()}-${index}-${Math.random().toString(36).slice(2, 8)}`;
+          localStorage.setItem(URL_UNSAVE_TASK_KEY, JSON.stringify({
+            nonce,
+            key: entry.key,
+            url: entry.url,
+            createdAt: Date.now()
+          }));
+          const tab = window.open(entry.url, "_blank");
+          if (!tab) {
+            stopReason = "popup_blocked";
+            setError("彈出式視窗被封鎖：請點網址列右側的封鎖圖示，允許 threads.com 的彈出式視窗後重新執行。");
+            break;
           }
-          stalledRounds = 0;
-          bottomWaitRounds = 0;
-        }
-
-        if (state.selectedAiKeys.size === 0) {
-          break;
-        }
-
-        const atBottom = beforeMetrics.top + beforeMetrics.client >= beforeMetrics.height - 8;
-        if (atBottom) {
-          Scroller.scrollToEnd(scrollContainer);
-        } else {
-          Scroller.scrollByStep(scrollContainer);
-        }
-
-        await wait(UNSAVE_SCROLL_DELAY);
-        this.syncHighlights();
-
-        const afterVisibleEntries = this.getVisibleArticleEntries();
-        const afterSignature = this.getEntrySignature(afterVisibleEntries);
-        const afterMetrics = Scroller.getScrollMetrics(scrollContainer);
-        const scrollAdvanced = afterMetrics.top > beforeMetrics.top || afterMetrics.height > beforeMetrics.height;
-        const viewportChanged = afterSignature !== beforeSignature;
-
-        if (scrollAdvanced || viewportChanged) {
-          stalledRounds = 0;
-          bottomWaitRounds = 0;
-          continue;
-        }
-
-        stalledRounds += 1;
-        if (atBottom) {
-          bottomWaitRounds += 1;
-        }
-
-        DebugLogUtils.appendEvent("unsave_scroll_stalled", {
-          remainingSelected: state.selectedAiKeys.size,
-          stalledRounds,
-          bottomWaitRounds,
-          atBottom,
-          beforeSignature,
-          afterSignature,
-          beforeMetrics,
-          afterMetrics,
-          visibleSelectedCount: selectedEntries.length,
-          visibleEntryCount: visibleEntries.length
-        }).catch(() => {});
-
-        if (bottomWaitRounds >= UNSAVE_MAX_BOTTOM_WAIT_ROUNDS) {
-          stopReason = "bottom_stalled";
-          break;
-        }
-        if (stalledRounds >= UNSAVE_MAX_STALLED_ROUNDS) {
-          stopReason = "scroll_stalled";
-          break;
-        }
-      }
-
-      let reconciledMissingKeys = [];
-      if ((stopReason === "bottom_stalled" || stopReason === "no_progress" || stopReason === "ai_order_boundary_no_selected")
-          && state.selectedAiKeys.size > 0) {
-        reconciledMissingKeys = Array.from(state.selectedAiKeys)
-          .filter((key) => !progress.seenVisibleSelectedKeys.has(key));
-        if (reconciledMissingKeys.length > 0) {
-          DebugLogUtils.appendEvent("unsave_missing_keys_reconciled", {
-            count: reconciledMissingKeys.length,
-            persisted: false,
-            selectedCleared: false,
-            keys: reconciledMissingKeys.slice(0, 20)
+          const result = await this.waitForResult(nonce, URL_UNSAVE_RESULT_TIMEOUT);
+          try {
+            if (!tab.closed) {
+              tab.close();
+            }
+          } catch (_error) {
+            // Tab may have navigated or closed itself; ignore.
+          }
+          const outcome = result?.outcome || "failed";
+          const detail = result?.detail || "timeout";
+          if (outcome === "unsaved") {
+            counts.unsaved += 1;
+            consecutiveFailures = 0;
+            AiReviewUtils.markUnsaveOutcome(entry.key, "verified");
+          } else if (outcome === "skipped") {
+            counts.skipped += 1;
+            consecutiveFailures = 0;
+            state.unsaveSkippedKeys.add(entry.key);
+            AiReviewUtils.suppressKeys([entry.key]);
+          } else {
+            counts.failed += 1;
+            consecutiveFailures += 1;
+            failedKeys.push(entry.key);
+            AiReviewUtils.markUnsaveOutcome(entry.key, "failed");
+          }
+          DebugLogUtils.appendEvent("url_unsave_item_result", {
+            key: entry.key,
+            url: entry.url,
+            outcome,
+            detail,
+            index,
+            queueLength: queue.length
           }).catch(() => {});
+          setStatus(`逐篇取消進行中 (${index + 1}/${queue.length}): 已取消 ${counts.unsaved} / 跳過 ${counts.skipped} / 失敗 ${counts.failed}`);
+          UI.update();
+          if (consecutiveFailures >= URL_UNSAVE_MAX_CONSECUTIVE_FAILURES) {
+            stopReason = "consecutive_failures";
+            break;
+          }
+          await wait(URL_UNSAVE_STEP_DELAY);
         }
+      } finally {
+        localStorage.removeItem(URL_UNSAVE_TASK_KEY);
+        localStorage.removeItem(URL_UNSAVE_RESULT_KEY);
+        this.running = false;
       }
-
-      const finalFailedKeys = Array.from(state.unsaveFailedKeys);
-      const finalFailedCount = finalFailedKeys.length;
-      state.aiReviewStats.selected = state.selectedAiKeys.size;
-      this.syncHighlights();
-      const summary = `取消儲存完成: ${progress.verified} 已驗證 / ${progress.attempted} 已點擊待刷新 / ${finalFailedCount} 失敗`;
+      const summary = `逐篇取消完成: ${counts.unsaved} 已取消 / ${counts.skipped} 原本未儲存跳過 / ${counts.failed} 失敗`;
       setStatus(summary);
-      DebugLogUtils.appendEvent("unsave_run_finished", {
-        summary,
-        verified: progress.verified,
-        attempted: progress.attempted,
-        failed: finalFailedCount,
-        remainingSelected: state.selectedAiKeys.size,
-        failedKeys: finalFailedKeys,
+      DebugLogUtils.appendEvent("url_unsave_run_finished", {
+        ...counts,
         stopReason,
-        reconciledMissingCount: reconciledMissingKeys.length
+        failedKeys: failedKeys.slice(0, 20)
       }).catch(() => {});
-      if (state.selectedAiKeys.size > 0) {
-        // 區分「頁面上找不到（多半已在先前執行取消）」與「真的沒捲到」，
-        // 避免使用者把已完成的取消誤判為失敗而重複執行。
-        const missingCount = reconciledMissingKeys.length;
-        const notReachedCount = state.selectedAiKeys.size - missingCount;
-        const detailParts = [];
-        if (missingCount > 0) {
-          detailParts.push(`${missingCount} 篇整輪未在頁面出現，可能已在先前執行取消（請重新整理頁面確認）`);
-        }
-        if (notReachedCount > 0) {
-          detailParts.push(`${notReachedCount} 篇未執行，可能尚未捲到、或按鈕未成功辨識`);
-        }
-        setError(`${summary}。${detailParts.join("；")}。`);
-      } else if (finalFailedKeys.length > 0) {
-        setError(`${summary}。找不到按鈕或點擊失敗: ${finalFailedKeys.slice(0, 3).join(", ")}${finalFailedKeys.length > 3 ? "..." : ""}`);
-      } else {
+      if (stopReason === "popup_blocked") {
+        // 不可被下面的失敗清單訊息蓋掉：彈窗設定是使用者必須採取的行動。
+        setError(`${summary}。彈出式視窗被封鎖：請點網址列右側的封鎖圖示，選「一律允許 threads.com 的彈出式視窗」後重新執行。`);
+      } else if (stopReason === "consecutive_failures") {
+        setError(`${summary}。連續 ${URL_UNSAVE_MAX_CONSECUTIVE_FAILURES} 篇失敗，自動中止（可能被限流或頁面結構改變，稍後再試）。`);
+      } else if (stopReason === "aborted") {
+        setError(`${summary}。已手動停止。`);
+      } else if (counts.failed > 0) {
+        setError(`${summary}。失敗: ${failedKeys.slice(0, 3).join(", ")}${failedKeys.length > 3 ? "..." : ""}`);
+      } else if (stopReason === "completed") {
         setError("");
       }
       UI.update();
@@ -2853,19 +2609,24 @@
         }
       });
       this.elements.clear.addEventListener("click", () => clearResults());
-      this.elements.unsaveRun.addEventListener("click", async () => {
-        const button = this.elements.unsaveRun;
-        if (button.disabled) {
+      this.elements.unsaveRun.addEventListener("click", () => {
+        if (UrlUnsaveUtils.running) {
+          UrlUnsaveUtils.requestAbort();
+          UI.update();
           return;
         }
-        button.disabled = true;
-        try {
-          await AiReviewUtils.runUnsaveFromPickedFile();
-        } catch (error) {
-          setError(`取消儲存失敗: ${error instanceof Error ? error.message : String(error)}`);
-        } finally {
-          button.disabled = false;
+        if (this.unsaveLaunchInFlight) {
+          return;
         }
+        this.unsaveLaunchInFlight = true;
+        AiReviewUtils.runUnsaveFromPickedFile()
+          .catch((error) => {
+            setError(`取消儲存失敗: ${error instanceof Error ? error.message : String(error)}`);
+          })
+          .finally(() => {
+            this.unsaveLaunchInFlight = false;
+            UI.update();
+          });
       });
       this.elements.diagnoseAiKeys.addEventListener("click", () => AiReviewUtils.diagnoseAiKeys());
       this.elements.debugLog.addEventListener("click", async () => {
@@ -2886,6 +2647,10 @@
     update() {
       if (!this.elements.meta) {
         return;
+      }
+
+      if (this.elements.unsaveRun) {
+        this.elements.unsaveRun.textContent = UrlUnsaveUtils.running ? "停止逐篇取消" : "取消儲存";
       }
 
       const target = DateUtils.parseTargetDate(state.cutoffDate);
@@ -2909,7 +2674,7 @@
         `目前畫面分布(建議/其他/待確認): ${state.aiReviewStats.highConfidence}/${state.aiReviewStats.lowConfidence}/${state.aiReviewStats.unsure}`,
         `目前畫面本地候選: ${state.aiReviewStats.localCandidate}`,
         `已排除(已處理/頁面不存在): ${state.suppressedAiKeys.size}`,
-        `取消儲存 已驗證/待刷新/失敗: ${state.unsaveVerifiedKeys.size}/${state.unsaveAttemptedKeys.size}/${state.unsaveFailedKeys.size}`,
+        `逐篇取消 已取消/跳過/失敗: ${state.unsaveVerifiedKeys.size}/${state.unsaveSkippedKeys.size}/${state.unsaveFailedKeys.size}`,
         `來源頁面: ${location.pathname}`
       ];
 
@@ -3310,6 +3075,7 @@
       suppressedAiKeys: new Set(Array.isArray(stored.suppressedAiKeys) ? stored.suppressedAiKeys.filter(Boolean) : []),
       unsaveAttemptedKeys: new Set(),
       unsaveVerifiedKeys: new Set(),
+      unsaveSkippedKeys: new Set(),
       unsaveFailedKeys: new Set(),
       aiReviewStats: createAiReviewStats(),
       debug: {
@@ -3517,6 +3283,7 @@
     state.suppressedAiKeys = new Set();
     state.unsaveAttemptedKeys = new Set();
     state.unsaveVerifiedKeys = new Set();
+    state.unsaveSkippedKeys = new Set();
     state.unsaveFailedKeys = new Set();
     state.aiReviewStats = createAiReviewStats();
     state.status = "待機中";
@@ -3548,8 +3315,144 @@
     return /saved/i.test(pageText);
   }
 
+  function readUrlUnsaveTask() {
+    try {
+      const task = JSON.parse(localStorage.getItem(URL_UNSAVE_TASK_KEY) || "null");
+      if (!task || !task.nonce || !task.url) {
+        return null;
+      }
+      // 過期任務不執行：避免使用者日後自然瀏覽到同一篇貼文時，
+      // 殘留的舊任務誤觸發取消儲存。
+      if (!Number.isFinite(task.createdAt) || Date.now() - task.createdAt > URL_UNSAVE_TASK_MAX_AGE_MS) {
+        return null;
+      }
+      return task;
+    } catch (_error) {
+      return null;
+    }
+  }
+
+  function writeUrlUnsaveResult(task, outcome, detail) {
+    localStorage.setItem(URL_UNSAVE_RESULT_KEY, JSON.stringify({
+      nonce: task.nonce,
+      key: task.key,
+      outcome,
+      detail,
+      finishedAt: new Date().toISOString()
+    }));
+  }
+
+  function findWorkerMoreButton(article) {
+    const viaShared = AiReviewUtils.findMoreButton(article);
+    if (viaShared) {
+      return viaShared;
+    }
+    // 貼文內頁的主貼文列可能包在 header 元素內，共用的 findMoreButton
+    // 會因排除 header 而漏抓，這裡直接在 article 範圍內找「更多」圖示。
+    const svg = article.querySelector('svg[aria-label="更多"], svg[aria-label="More"]');
+    return svg ? svg.closest("[role='button'], button") : null;
+  }
+
+  async function maybeRunUnsaveWorker() {
+    const task = readUrlUnsaveTask();
+    if (!task) {
+      return;
+    }
+    let taskPath = "";
+    try {
+      taskPath = new URL(task.url, location.origin).pathname;
+    } catch (_error) {
+      return;
+    }
+    if (location.pathname !== taskPath) {
+      return;
+    }
+    try {
+      const existing = JSON.parse(localStorage.getItem(URL_UNSAVE_RESULT_KEY) || "null");
+      if (existing && existing.nonce === task.nonce) {
+        return;
+      }
+    } catch (_error) {
+      // Malformed previous result; proceed and overwrite it.
+    }
+
+    const finish = (outcome, detail) => {
+      writeUrlUnsaveResult(task, outcome, detail);
+      window.setTimeout(() => window.close(), 300);
+    };
+
+    const targetPostId = AiReviewUtils.extractPostIdFromUrl(task.url);
+
+    const findLiveButton = () => {
+      const articles = Array.from(document.querySelectorAll("article"));
+      let article = null;
+      if (targetPostId) {
+        article = articles.find((node) => node.querySelector(`a[href*="/post/${targetPostId}"], a[href*="/t/${targetPostId}"]`)) || null;
+      }
+      // 主貼文常不含指向自身的連結；貼文內頁 DOM 順序第一個 article 即主貼文。
+      if (!article) {
+        article = articles[0] || null;
+      }
+      let button = article ? findWorkerMoreButton(article) : null;
+      if (!button) {
+        // 貼文內頁沒有 <article>（只有 feed 用 article）。登入版頁面上
+        // 側欄漢堡與其他非貼文位置也有「更多」svg（且排在 DOM 更前面），
+        // 判別器：貼文的「更多」一定在 [data-pressable-container] 內，
+        // 導覽列的沒有。取第一顆符合者＝主貼文（回覆都排在其後）。
+        const svg = Array.from(document.querySelectorAll('svg[aria-label="更多"], svg[aria-label="More"]'))
+          .find((node) => node.closest("[data-pressable-container]") && !node.closest("[data-ai-review-control='true']"));
+        button = svg ? svg.closest("[role='button'], button") : null;
+      }
+      return button && button.isConnected ? button : null;
+    };
+    const isLiveReactNode = (node) => Boolean(node) && Object.keys(node).some((key) => key.startsWith("__react"));
+
+    // SSR 殼層的按鈕會被 React 客戶端渲染整棵換掉：抓太早會拿到孤兒節點
+    // （永遠不 hydrate、點了沒反應，2026-07-19 第四輪 18 篇失敗全是這個）。
+    // 因此每次點擊前都「重新查詢」，只點仍連接在 DOM、且 React 已掛上
+    // handler（__react* key 存在）的節點。
+    const deadline = Date.now() + URL_UNSAVE_WORKER_FIND_TIMEOUT;
+    let menuEntry = null;
+    let sawButton = false;
+    let sawLiveButton = false;
+    let clickAttempts = 0;
+    while (Date.now() < deadline && !menuEntry) {
+      const button = findLiveButton();
+      if (!button) {
+        await wait(300);
+        continue;
+      }
+      sawButton = true;
+      if (!isLiveReactNode(button)) {
+        await wait(300);
+        continue;
+      }
+      sawLiveButton = true;
+      AiReviewUtils.triggerElementClick(button);
+      clickAttempts += 1;
+      menuEntry = await AiReviewUtils.waitForSaveOrUnsaveMenuItem(2500);
+    }
+    if (!menuEntry) {
+      const menuItemCount = document.querySelectorAll("[role='menuitem']").length;
+      const dialogCount = document.querySelectorAll("[role='dialog'],[role='menu']").length;
+      const menuItemTexts = AiReviewUtils.collectVisibleMenuItemTexts().join("|");
+      AiReviewUtils.closeOpenMenu();
+      finish("failed", `menu_not_opened sawButton=${sawButton} sawLive=${sawLiveButton} clicks=${clickAttempts} menuitems=${menuItemCount} dialogs=${dialogCount} texts=${menuItemTexts.slice(0, 140)}`);
+      return;
+    }
+    if (menuEntry.type === "save") {
+      AiReviewUtils.closeOpenMenu();
+      finish("skipped", "already_unsaved");
+      return;
+    }
+    AiReviewUtils.triggerElementClick(menuEntry.item);
+    await AiReviewUtils.waitForMenuToClose();
+    finish("unsaved", "");
+  }
+
   function boot() {
     UI.init();
+    maybeRunUnsaveWorker().catch(() => {});
     AutoSaveUtils.refreshStatus().catch(() => {
       state.autoSaveReady = false;
       state.autoSaveFileName = "";
