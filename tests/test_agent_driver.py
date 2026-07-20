@@ -68,7 +68,7 @@ def test_confirmation_gate_reads_fresh_payload_and_calls_bridge(tmp_path: Path, 
 
     def fake_bridge(tab_index: int, payload_text: str) -> dict:
         calls.append((tab_index, payload_text))
-        return {"ok": True, "verified": 1, "attempted": 0, "failed": 0, "remainingSelected": 0}
+        return {"ok": True, "unsaved": 1, "skipped": 0, "failed": 0, "stopReason": "completed"}
 
     monkeypatch.setattr(mod, "run_agent_bridge_unsave", fake_bridge)
 

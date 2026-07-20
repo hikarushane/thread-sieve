@@ -528,7 +528,11 @@
 
     async loadAiResultsFromHandle(fileHandle) {
       const file = await fileHandle.getFile();
-      const payload = JSON.parse(await file.text());
+      await this.loadAiResultsFromPayloadText(await file.text(), fileHandle.name || "unsave.json");
+    },
+
+    async loadAiResultsFromPayloadText(payloadText, fileName = "unsave.json") {
+      const payload = JSON.parse(payloadText);
       const sourceItems = Array.isArray(payload) ? payload : Array.isArray(payload?.items) ? payload.items : null;
       if (!sourceItems) {
         throw new Error("unsave 分類格式不正確，找不到 items 陣列。");
@@ -540,7 +544,7 @@
       state.aiIndexMap = this.buildAiIndexMap(items);
       const payloadSummary = payload?.summary && typeof payload.summary === "object" ? payload.summary : null;
       state.aiLoadStatus = `已載入 ${items.length} 筆 unsave 分類`;
-      state.aiResultFileName = fileHandle.name || "unsave.json";
+      state.aiResultFileName = fileName;
       state.aiResultGeneratedAt = typeof payload?.generatedAt === "string" ? payload.generatedAt : "";
       state.aiResultBackend = typeof payload?.backend === "string" ? payload.backend : "";
       state.aiResultSourceFile = typeof payload?.sourceFile === "string" ? payload.sourceFile : "";
@@ -1533,6 +1537,25 @@
         saveState();
       }
       await UrlUnsaveUtils.run();
+    },
+
+    // Agent 路徑（full 分支）：直接吃 unsave.json 內容、跳過檔案選擇器。
+    // Terminal 端的 y/n 確認取代選檔確認——呼叫方在執行當下才從磁碟讀檔，
+    // 防舊檔誤執行的保證不變。
+    async runUnsaveFromPayloadText(payloadText, { skipConfirm = true, fileName = "unsave.json (agent)" } = {}) {
+      if (!isLikelySavedPage()) {
+        return { ok: false, error: "not on /saved — open https://www.threads.com/saved first" };
+      }
+      try {
+        await this.loadAiResultsFromPayloadText(payloadText, fileName);
+      } catch (error) {
+        return { ok: false, error: error instanceof Error ? error.message : String(error) };
+      }
+      if (state.suppressedAiKeys.size > 0) {
+        state.suppressedAiKeys = new Set();
+        saveState();
+      }
+      return UrlUnsaveUtils.run({ skipConfirm });
     }
   };
 
@@ -1594,22 +1617,24 @@
       });
     },
 
-    async run() {
+    async run({ skipConfirm = false } = {}) {
       if (this.running) {
-        return;
+        return { ok: false, error: "unsave run already in progress" };
       }
       const queue = this.buildQueue();
       if (queue.length === 0) {
         setError("unsave 分類中沒有高信心待取消項目。");
-        return;
+        return { ok: true, unsaved: 0, skipped: 0, failed: 0, note: "no candidates" };
       }
-      const proceed = window.confirm(
-        `即將逐篇開啟 ${queue.length} 個貼文分頁執行取消儲存，各分頁處理完會自動關閉。\n` +
-        "需要先在 Chrome 允許 threads.com 的彈出式視窗。\n" +
-        "選單顯示「儲存」（代表原本就未收藏）的貼文會自動跳過。是否開始？"
-      );
-      if (!proceed) {
-        return;
+      if (!skipConfirm) {
+        const proceed = window.confirm(
+          `即將逐篇開啟 ${queue.length} 個貼文分頁執行取消儲存，各分頁處理完會自動關閉。\n` +
+          "需要先在 Chrome 允許 threads.com 的彈出式視窗。\n" +
+          "選單顯示「儲存」（代表原本就未收藏）的貼文會自動跳過。是否開始？"
+        );
+        if (!proceed) {
+          return { ok: false, error: "cancelled by user" };
+        }
       }
       this.running = true;
       this.abortRequested = false;
@@ -1711,6 +1736,7 @@
         setError("");
       }
       UI.update();
+      return { ok: true, unsaved: counts.unsaved, skipped: counts.skipped, failed: counts.failed, stopReason };
     }
   };
 
@@ -3473,6 +3499,13 @@
     document.addEventListener("scroll", () => AiReviewUtils.scheduleSync(), true);
     window.setInterval(() => AiReviewUtils.scheduleSync(), 1000);
   }
+
+  // Agent bridge（full 分支限定）：scripts/agent_driver.py 經 CDP 呼叫。
+  // 從 lite（main）同步 userscript 時要保留這個區塊。
+  window.ThreadSieveAgent = {
+    scriptVersion: SCRIPT_VERSION,
+    runUnsave: (payloadText, options) => AiReviewUtils.runUnsaveFromPayloadText(payloadText, options)
+  };
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot, { once: true });

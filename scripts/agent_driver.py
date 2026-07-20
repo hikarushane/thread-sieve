@@ -74,7 +74,7 @@ def resolve_chrome_ws_path() -> Path | None:
 
 
 CHROME_WS: Path | None = resolve_chrome_ws_path()
-EXPECTED_VERSION = "0.4.2"
+EXPECTED_VERSION = "0.5.4"
 PANEL_ID = "threads-saved-export-panel"
 SAVED_URL_SUBSTR = "/saved"
 
@@ -316,10 +316,10 @@ def run_unsave_confirmation_gate(
     result = run_agent_bridge_unsave(tab_index, payload_text)
     print(
         "已執行取消儲存；"
-        f"verified={result.get('verified', '?')} "
-        f"attempted={result.get('attempted', '?')} "
+        f"unsaved={result.get('unsaved', '?')} "
+        f"skipped={result.get('skipped', '?')} "
         f"failed={result.get('failed', '?')} "
-        f"remaining={result.get('remainingSelected', '?')}"
+        f"stopReason={result.get('stopReason', '?')}"
     )
     return 0
 
