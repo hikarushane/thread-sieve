@@ -2,7 +2,7 @@
 
 [繁體中文](README.md)
 
-> **Latest update (2026-07-18)**: browser panel redesign — the manual-tools section and the Auto AI Sync panel are gone, replaced by a single big **取消儲存** (unsave) button that re-picks `unsave.json` on every run, eliminating accidental runs against stale classification results; install is now a one-line command; new macOS double-click launcher. Full history in [RELEASE_NOTES.md](RELEASE_NOTES.md).
+> **Latest update (2026-07-20)**: the unsave mechanism is completely rebuilt (userscript 0.5.4) — instead of scrolling through /saved, the script now opens each post in its own tab, so it is no longer limited by how deep Threads lets the saved feed load; only posts explicitly listed in `unsave.json` are touched, already-unsaved posts are skipped automatically, and re-runs are safe. One-time setup: allow pop-ups for `www.threads.com`. Full history in [RELEASE_NOTES.md](RELEASE_NOTES.md).
 
 > End-user branch: no `superpowers-chrome`, no watcher, no Chrome debug port.  
 > For the full automation build (terminal watcher + agent-driven scrape + Chandra OCR), switch to the `full` branch.
@@ -164,7 +164,11 @@ python scripts/import_bookmarks_to_markdown.py
 
 #### Step 4 · Confirm unsave in the browser
 
-In the ThreadSieve panel, click the big **取消儲存** button → pick `data/unsave.json` in the file picker → the panel shows the candidate count and highlights the posts → a confirm dialog runs the unsave pass after you accept.
+In the ThreadSieve panel, click the big **取消儲存** (unsave) button → pick `data/unsave.json` in the file picker → accept the confirm dialog. The script then opens each listed post in its own tab, clicks "⋯ → Unsave" automatically, closes the tab, and moves on — the panel shows live progress (unsaved / skipped / failed).
+
+- **One-time setup**: allow pop-ups for `www.threads.com` in Chrome (the panel tells you if the first run gets blocked; click the icon at the right end of the address bar to allow).
+- Only posts explicitly listed in `unsave.json` are touched. If a post's menu shows "Save" (meaning it is not currently saved — e.g. unsaved in an earlier run), it is skipped automatically, so re-runs are safe.
+- While running, the button turns into a stop button; five consecutive failures abort the run automatically.
 
 Re-picking the file on every run is deliberate: the file pick itself is your confirmation that the latest classification result is being used, preventing accidental runs against a stale file.
 
@@ -271,7 +275,8 @@ The pipeline writes a `threads_events.jsonl` event log into the output directory
 
 ## Known limitations
 
-- **Browser must be on `/saved`** to run the unsave pass (the button reports an error otherwise). The classify step still writes `unsave.json` and markdown regardless.
+- **Browser must be on `/saved`** to run the unsave pass (the button reports an error otherwise), and Chrome must allow pop-ups for `www.threads.com`. The classify step still writes `unsave.json` and markdown regardless.
+- **Clear results before re-capturing**: starting a capture with a previous session's data still in the panel writes already-unsaved posts back into `catch.json`, so the next classify lists them again; the panel warns when it detects data older than 6 hours.
 - **File System Access grants are per-run setup**. Re-pick `catch.json` for autosave if the panel loses the grant; `unsave.json` is re-picked on every unsave run by design.
 - **LLM quota**: each classify run classifies every post once, then calls the LLM again for title generation and (when triggered) image OCR — all from the same API key.
 - **Playwright is required for image OCR**: if browser binaries are missing, run `playwright install chromium`.
@@ -288,6 +293,8 @@ The pipeline writes a `threads_events.jsonl` event log into the output directory
 | classify exits with `json.decoder.JSONDecodeError: Invalid \escape` | Windows path in `config.json` uses single `\` | Use `/` (`D:/foo/bar`) or `\\` (`D:\\foo\\bar`) |
 | classify exits with `<PROVIDER>_API_KEY missing` | the selected provider's key not in `.env`, or venv didn't pick it up | Confirm the matching `..._API_KEY=...` in `.env`, double-click again |
 | Unsave button does nothing | not on `/saved`, or the file picker was cancelled | Switch the tab back to `https://www.threads.com/saved`, click the button and pick the file again |
+| Per-post unsave aborts after opening 1–2 tabs | Chrome blocked the pop-ups | Click the blocked-popup icon in the address bar → always allow `www.threads.com` → run again |
+| Many "failed" results and the panel mentions possible rate limiting | the consecutive-failure brake fired | Wait a few minutes and run again (already-unsaved posts are skipped); if it persists, enable the panel debug log and report |
 
 ---
 
