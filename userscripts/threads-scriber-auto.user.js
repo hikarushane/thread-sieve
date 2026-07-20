@@ -41,6 +41,7 @@
   const UNSAVE_MAX_VIEWPORT_DRAIN_ROUNDS = 6;
   const UNSAVE_MENU_CLOSE_TIMEOUT = 3000;
   const UNSAVE_MAX_NO_NEW_SELECTED_ROUNDS = 200;
+  const CAPTURE_STALE_ITEMS_WARN_MS = 6 * 60 * 60 * 1000;
 
   const state = createState();
 
@@ -3164,6 +3165,30 @@
       if (!target) {
         setError("請先輸入有效的截止日期，格式需為 YYYY-MM-DD。");
         return;
+      }
+
+      // 累積式 state 陷阱防呆：state 帶著前次 session 的舊資料繼續抓，
+      // 會把「已取消儲存的貼文」一起寫進 catch.json，讓 classify 重新
+      // 把它們列入待取消清單（2026-07-19 事故：53 篇鬼魂）。
+      // 清空必須發生在抓取「之前」才有效，這裡在開抓前主動提醒。
+      if (state.items.length > 0) {
+        const newestCollectedMs = state.items.reduce((max, item) => {
+          const ms = Date.parse(item.collectedAt || "");
+          return Number.isFinite(ms) && ms > max ? ms : max;
+        }, 0);
+        if (newestCollectedMs > 0 && Date.now() - newestCollectedMs >= CAPTURE_STALE_ITEMS_WARN_MS) {
+          const staleLabel = new Date(newestCollectedMs).toLocaleString();
+          const proceed = window.confirm(
+            `偵測到 ${state.items.length} 筆先前收集的舊資料（最後收集於 ${staleLabel}）。\n` +
+            "繼續抓取會把舊資料一起累積寫入 catch.json；若上次抓取後已執行過「取消儲存」，" +
+            "已取消的貼文會再次被列入待取消清單。\n" +
+            "建議先按「清空結果」再重新抓取。仍要繼續累積嗎？"
+          );
+          if (!proceed) {
+            setError("已取消抓取：請先按「清空結果」再重新開始。");
+            return;
+          }
+        }
       }
 
       setError("");
