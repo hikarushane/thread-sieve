@@ -2,7 +2,7 @@
 
 [繁體中文](README.md)
 
-> **Latest update (2026-07-18)**: browser panel redesign — the manual-tools section and the Auto AI Sync panel are gone, replaced by a single big **取消儲存** (unsave) button that re-picks `unsave.json` on every run, eliminating accidental runs against stale classification results; install is now a one-line command; new macOS double-click launcher. Full history in [RELEASE_NOTES.md](RELEASE_NOTES.md).
+> **Latest update (2026-07-20)**: the unsave mechanism is completely rebuilt (userscript 0.5.4) — instead of scrolling through /saved, the script now opens each post in its own tab, so it is no longer limited by how deep Threads lets the saved feed load; only posts explicitly listed in `unsave.json` are touched, already-unsaved posts are skipped automatically, and re-runs are safe. One-time setup: allow pop-ups for `www.threads.com`. Full history in [RELEASE_NOTES.md](RELEASE_NOTES.md).
 
 > **This branch is the power-user build** — includes `watch_pipeline.py`, `agent_driver.py`, and Chandra/vLLM OCR backend. Requires Node.js, Claude Code + `superpowers-chrome` plugin, and Chrome `--remote-debugging-port=9222`.  
 > If you just want to **double-click and go** (no plugin, no terminal), use the [`lite` branch](https://github.com/hikarushane/thread-sieve) — it's the repo's default branch.
@@ -287,7 +287,11 @@ python scripts/import_bookmarks_to_markdown.py
 
 #### Step 4 · Confirm unsave in the browser
 
-In the ThreadSieve panel, click the big **取消儲存** button → pick `data/unsave.json` in the file picker → the panel shows the candidate count and highlights the posts → a confirm dialog runs the unsave pass after you accept.
+In the ThreadSieve panel, click the big **取消儲存** (unsave) button → pick `data/unsave.json` in the file picker → accept the confirm dialog. The script then opens each listed post in its own tab, clicks "⋯ → Unsave" automatically, closes the tab, and moves on — the panel shows live progress (unsaved / skipped / failed).
+
+- **One-time setup**: allow pop-ups for `www.threads.com` in Chrome (the panel tells you if the first run gets blocked; click the icon at the right end of the address bar to allow).
+- Only posts explicitly listed in `unsave.json` are touched. If a post's menu shows "Save" (meaning it is not currently saved — e.g. unsaved in an earlier run), it is skipped automatically, so re-runs are safe.
+- While running, the button turns into a stop button; five consecutive failures abort the run automatically.
 
 Re-picking the file on every run is deliberate: the file pick itself is your confirmation that the latest classification result is being used, preventing accidental runs against a stale file.
 
@@ -576,7 +580,8 @@ Tests cover:
 
 ## Known limitations
 
-- **Browser must be on `/saved`** to run the unsave pass (the button reports an error otherwise). The classify step still writes `unsave.json` and markdown regardless.
+- **Browser must be on `/saved`** to run the unsave pass (the button reports an error otherwise), and Chrome must allow pop-ups for `www.threads.com`. The classify step still writes `unsave.json` and markdown regardless.
+- **Clear results before re-capturing**: starting a capture with a previous session's data still in the panel writes already-unsaved posts back into `catch.json`, so the next classify lists them again; the panel warns when it detects data older than 6 hours.
 - **File System Access grants are per-run setup**. Re-pick `catch.json` for autosave if the panel loses the grant; `unsave.json` is re-picked on every unsave run by design.
 - **LLM quota**: each classify run classifies every post once, then calls the LLM again for title generation and (when triggered) image OCR — all from the same API key.
 - **Markdown image OCR scans the markdown root**: set `config.json` → `paths.markdown-output-root` if you do not want the default `output` folder.
@@ -600,6 +605,8 @@ Tests cover:
 | OCR fails with `GEMINI_API_KEY missing` | `image-ocr.backend` is `gemini` but no key is available | Set `GEMINI_API_KEY`, or switch `config.json` → `image-ocr.backend` to `chandra` |
 | Chandra OCR cannot connect to vLLM | `image-ocr.backend=chandra` but `VLLM_API_BASE` is not reachable | Start your Chandra/vLLM server or update `VLLM_API_BASE` |
 | Unsave button does nothing | not on `/saved`, or the file picker was cancelled | Switch the tab back to `https://www.threads.com/saved`, click the button and pick the file again |
+| Per-post unsave aborts after opening 1–2 tabs | Chrome blocked the pop-ups | Click the blocked-popup icon in the address bar → always allow `www.threads.com` → run again |
+| Many "failed" results and the panel mentions possible rate limiting | the consecutive-failure brake fired | Wait a few minutes and run again (already-unsaved posts are skipped); if it persists, enable the panel debug log and report |
 | `probe` reports autosave not bound | Current browser session has not granted the `catch.json` autosave handle | Click **設定自動存檔** in the panel and pick `data/catch.json`, then re-run probe |
 | `scrape` exits 2 with timeout | Scrape still running (large backlog) or panel stalled | Increase `--wait-seconds`; check panel status with `python scripts/agent_driver.py status` |
 | `catch.json` stays 0 bytes after scrape | Autosave handle not bound | Re-grant via 設定自動存檔, then re-run scrape |

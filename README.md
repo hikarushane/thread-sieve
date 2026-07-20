@@ -2,7 +2,7 @@
 
 [English](README.en.md)
 
-> **最新更新（2026-07-18）**：瀏覽器面板改版——移除「手動工具」與 Auto AI Sync 面板，改為單一「取消儲存」大按鈕，每次執行都重新選擇 `unsave.json`，杜絕拿舊分類結果誤執行；安裝簡化為一行指令；新增 macOS 雙擊啟動器。完整紀錄見 [RELEASE_NOTES.md](RELEASE_NOTES.md)。
+> **最新更新（2026-07-20）**：取消儲存機制整個換掉（userscript 0.5.4）——不再捲動 /saved 巡覽，改為逐篇開分頁執行，不受 Threads 收藏列表載入深度限制；只處理 `unsave.json` 明列貼文，已取消過的自動跳過，重複執行安全。需一次性允許 `www.threads.com` 彈出式視窗。完整紀錄見 [RELEASE_NOTES.md](RELEASE_NOTES.md)。
 
 > **此分支為 power-user 版本**，包含 `watch_pipeline.py`、`agent_driver.py`、Chandra/vLLM OCR backend，需要 Node.js、Claude Code + `superpowers-chrome` plugin、Chrome `--remote-debugging-port=9222`。  
 > 只想 **雙擊跑、不裝 plugin、不開 terminal** 的一般使用者請改用 [`lite` 分支](https://github.com/hikarushane/thread-sieve)（即 repo 預設 branch）。
@@ -285,7 +285,11 @@ python scripts/import_bookmarks_to_markdown.py
 
 #### 步驟 4：在瀏覽器確認 unsave
 
-在 ThreadSieve panel 點大按鈕 **取消儲存** → 檔案選擇器選 `data/unsave.json` → panel 顯示候選筆數並標亮貼文 → confirm 對話框確認後自動巡覽取消儲存。
+在 ThreadSieve panel 點大按鈕 **取消儲存** → 檔案選擇器選 `data/unsave.json` → confirm 對話框確認後，腳本逐篇用新分頁開啟清單內的貼文，自動點「⋯ → 取消儲存」後關閉分頁換下一篇，面板即時顯示進度（已取消／跳過／失敗）。
+
+- **首次使用需一次性設定**：Chrome 對 `www.threads.com` 允許彈出式視窗（首次執行被擋時面板會提示，點網址列右側圖示允許即可）。
+- 只會處理 `unsave.json` 明列的貼文；貼文選單顯示「儲存」（代表其實未收藏，例如先前已取消過）會自動跳過——重複執行安全。
+- 執行中按鈕變「停止逐篇取消」，可隨時喊停；連續 5 篇失敗會自動中止。
 
 每次執行都要重新選檔——這是刻意設計：選檔動作即是「用的是最新分類結果」的確認，避免拿舊檔誤執行。
 
@@ -563,7 +567,8 @@ pytest tests/
 
 ## 已知限制
 
-- 取消儲存需要瀏覽器停在 `/saved`（不在時按鈕會直接報錯）。
+- 取消儲存需要瀏覽器停在 `/saved`（不在時按鈕會直接報錯），且 Chrome 需允許 `www.threads.com` 的彈出式視窗。
+- 重新抓取前建議先按「清空結果」：帶著前次舊資料續抓會把已取消的貼文再次寫進 `catch.json`，讓下一輪分類重複列入；面板偵測到超過 6 小時的舊資料時會主動提醒。
 - File System Access 授權視為每次日常使用前的準備步驟；「設定自動存檔」的授權遺失時重新設定即可。`unsave.json` 不做持久綁定——每次執行取消儲存都重新選檔（刻意設計）。
 - markdown image OCR 會掃描 markdown root；若不想使用預設 `output`，請設定 `config.json` 的 `paths.markdown-output-root`。
 - OCR 會用 Playwright render Threads post；若缺 browser binary，執行 `playwright install chromium`。
@@ -587,5 +592,7 @@ pytest tests/
 | OCR 顯示 `GEMINI_API_KEY missing` | `image-ocr.backend=gemini` 但沒有 key | 設定 `GEMINI_API_KEY`，或把 `config.json` 的 `image-ocr.backend` 改成 `chandra` |
 | Chandra OCR 連不到 vLLM | `image-ocr.backend=chandra` 但 `VLLM_API_BASE` 不可連線 | 啟動 Chandra/vLLM server，或修正 `VLLM_API_BASE` |
 | 取消儲存按鈕沒動作 | 不在 `/saved` 頁，或選檔時按了取消 | 把 tab 切回 `https://www.threads.com/saved`，重新點按鈕選檔 |
+| 逐篇取消開了 1–2 個分頁就中止 | 彈出式視窗被 Chrome 封鎖 | 點網址列右側封鎖圖示 → 一律允許 `www.threads.com` → 重新執行 |
+| 大量「失敗」且面板提示可能被限流 | 連續失敗自動中止保險觸發 | 稍等幾分鐘再重新執行（已取消的會自動跳過）；仍失敗則開面板 debug log 回報 |
 | `probe` 說 autosave not bound | 本次 browser session 尚未授權 `catch.json` | 重新點 **設定自動存檔** |
 | `scrape` timeout | backlog 太大或 panel 卡住 | 增加 `--wait-seconds`，用 `agent_driver.py status` 檢查 |
