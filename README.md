@@ -161,6 +161,8 @@ node "C:\Users\<you>\.claude\plugins\cache\superpowers-marketplace\superpowers-c
 
 Chrome 136 之後，remote debugging 不能直接使用預設 Chrome profile，必須搭配非預設的 `--user-data-dir`。這個資料夾就是另一個 Chrome profile；Tampermonkey、userscript、Threads login cookie 都存在這裡。每次都用同一個 `--user-data-dir`，才不用一直重裝和重新登入。
 
+0.5.4 起取消儲存改為逐篇開分頁執行（`window.open`），這個 debug profile 也要**一次性允許 `www.threads.com` 的彈出式視窗**——首次跑 unsave gate 被擋時，在該 profile 的 Chrome 視窗點網址列右側圖示允許即可。
+
 啟動前先把所有 Chrome 視窗關掉，否則 Windows 可能沿用已經啟動、但沒有 `--remote-debugging-port=9222` 的 Chrome process。
 
 ```powershell

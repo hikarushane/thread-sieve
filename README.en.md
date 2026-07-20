@@ -161,6 +161,8 @@ Chrome must be launched with `--remote-debugging-port=9222` **before** running a
 
 Chrome 136+ requires remote debugging to use a non-default user data directory. That directory is a separate Chrome profile, so extensions and login cookies live there. Use the same `--user-data-dir` every time; otherwise Chrome starts with a fresh profile and you will need to install Tampermonkey and log in again.
 
+Since 0.5.4 the unsave pass opens each post in its own tab (`window.open`), so this debug profile also needs a **one-time pop-up allowance for `www.threads.com`** — if the first unsave-gate run gets blocked, click the icon at the right end of the address bar in that profile's Chrome window and allow it.
+
 **Option 1 — PowerShell launcher**
 
 Close all existing Chrome windows first. If Chrome is already running without the flag, Windows may reuse that process and the debugging port will not open.
