@@ -203,7 +203,7 @@ Each considered file gets one JSONL event with `processed`, `skipped`, `failed`,
 
 ## LLM provider
 
-ThreadSieve uses an LLM for classification, title generation, and image OCR. The default backend is Google Gemini (SDK), but `config.json` or `.env` can switch to Anthropic Claude or OpenAI ChatGPT.
+ThreadSieve uses an LLM for classification, title generation, tag generation, and image OCR. The default backend is Google Gemini (SDK), but `config.json` or `.env` can switch to Anthropic Claude or OpenAI ChatGPT.
 
 | Provider  | API key env var       | Default text model     | Default vision model   |
 |-----------|-----------------------|------------------------|------------------------|
@@ -229,7 +229,7 @@ When the saved bookmark is a reply (not a root post), the classify stage opens t
 - **Reply section**: the original poster's replies (paired with the comment they answer) plus comments above a length threshold, written into a collapsible Obsidian callout (`> [!quote]- 回覆（N 則…）`), collapsed by default.
 - Frontmatter gains `saved_kind: root|reply`, marking whether the saved item is a root post or a reply.
 
-The ancestor context (but never the reply section) is also fed to classification and title generation, improving accuracy for saved replies — with no extra network requests or LLM quota.
+The ancestor context (but never the reply section) is also fed to classification, title generation, and tag generation, improving accuracy for saved replies — with no extra network requests or LLM quota.
 
 ---
 
@@ -278,7 +278,7 @@ The pipeline writes a `threads_events.jsonl` event log into the output directory
 - **Browser must be on `/saved`** to run the unsave pass (the button reports an error otherwise), and Chrome must allow pop-ups for `www.threads.com`. The classify step still writes `unsave.json` and markdown regardless.
 - **Clear results before re-capturing**: starting a capture with a previous session's data still in the panel writes already-unsaved posts back into `catch.json`, so the next classify lists them again; the panel warns when it detects data older than 6 hours.
 - **File System Access grants are per-run setup**. Re-pick `catch.json` for autosave if the panel loses the grant; `unsave.json` is re-picked on every unsave run by design.
-- **LLM quota**: each classify run classifies every post once, then calls the LLM again for title generation and (when triggered) image OCR — all from the same API key.
+- **LLM quota**: each classify run classifies every post once, then calls the LLM again for title generation and tag generation, plus (when triggered) image OCR — all from the same API key.
 - **Playwright is required for image OCR**: if browser binaries are missing, run `playwright install chromium`.
 - **The reply section only captures anonymously visible replies**: deeply nested replies and content behind the login wall are not collected.
 - **Threads redesigns may break the embedded-data parse**: the pipeline then falls back to the previous plain-text parsing (that note temporarily has no ancestor/reply sections; the main content is unaffected), and `saved_kind` is a best-effort `root`.

@@ -203,7 +203,7 @@ python scripts/backfill_image_ocr.py --path "<wiki-folder>" --log data/backfill-
 
 ## LLM provider 選擇
 
-ThreadSieve 的分類、標題、圖片 OCR 三個階段都走 LLM。預設使用 Google Gemini SDK，但可以在 `config.json` 或 `.env` 中切換成 Anthropic Claude 或 OpenAI ChatGPT。
+ThreadSieve 的分類、標題、tag 生成、圖片 OCR 四個階段都走 LLM。預設使用 Google Gemini SDK，但可以在 `config.json` 或 `.env` 中切換成 Anthropic Claude 或 OpenAI ChatGPT。
 
 | Provider  | `.env` API key 變數    | 預設 text model        | 預設 vision model      |
 |-----------|------------------------|------------------------|------------------------|
@@ -236,7 +236,7 @@ ThreadSieve 的分類、標題、圖片 OCR 三個階段都走 LLM。預設使�
 - **回覆區**：原帖作者的回覆（連同被回覆的留言成對呈現）與長度達門檻的留言，寫進 Obsidian 可摺疊 callout（`> [!quote]- 回覆（N 則…）`），預設收合。
 - frontmatter 增加 `saved_kind: root|reply`，標記收藏的是原帖還是回應。
 
-上文會一併餵給分類與標題生成（回覆不會），提升存回應時的分類準確度；不增加額外網路請求與 LLM quota。
+上文會一併餵給分類、標題與 tag 生成（回覆不會），提升存回應時的分類準確度；不增加額外網路請求與 LLM quota。
 
 ---
 
@@ -286,7 +286,7 @@ pipeline 會在輸出目錄寫 `threads_events.jsonl` 事件紀錄；上文／�
 - 重新抓取前建議先按「清空結果」：帶著前次舊資料續抓會把已取消的貼文再次寫進 `catch.json`，讓下一輪分類重複列入；面板偵測到超過 6 小時的舊資料時會主動提醒。
 - File System Access 授權視為每次日常使用前的準備步驟；「設定自動存檔」的授權遺失時重新設定即可。`unsave.json` 不做持久綁定——每次執行取消儲存都重新選檔（刻意設計）。
 - OCR 會用 Playwright render Threads post；若缺 browser binary，執行 `playwright install chromium`。
-- LLM quota：每次 classify 對每篇貼文分類一次，接著為 markdown 標題再各呼叫一次；圖片 OCR 也消耗同一把 API key 的 quota。
+- LLM quota：每次 classify 對每篇貼文分類一次，接著為 markdown 標題和 tag 各呼叫一次；圖片 OCR 也消耗同一把 API key 的 quota。
 - 回覆區只收「匿名可見」的回覆：深層回覆與登入後才看得到的內容不會收錄。
 - Threads 改版可能使內嵌資料解析失效；此時自動退回舊的純文字解析（該篇筆記暫時沒有上文與回覆區，主文不受影響），`saved_kind` 會以 best-effort 標為 `root`。
 

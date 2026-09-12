@@ -71,6 +71,7 @@ class ClassifiedBookmark:
 class TitledBookmark:
     classified: ClassifiedBookmark
     generated_title: str
+    tags: list[str] = field(default_factory=list)
     resolved_filename: str | None = None
 
 

@@ -71,13 +71,17 @@ class MarkdownContentBuilder:
         if replies_callout:
             content_block += "\n\n" + replies_callout
 
+        tags = item.tags
+        tags_line = "tags: [" + ", ".join(_yaml_str(t) for t in tags) + "]\n" if tags else ""
+
         markdown_body = (
             "---\n"
             f"url: {_yaml_str(enriched.source.post_url)}\n"
             f"author: {_yaml_str(enriched.source.author_handle)}\n"
             f"clip_type: {_yaml_str(category)}\n"
             f"saved_kind: {_yaml_str(enriched.saved_kind)}\n"
-            "---\n\n"
+            + tags_line
+            + "---\n\n"
             f"{content_block}\n"
         )
 

@@ -21,6 +21,7 @@ from note_generator.services.threads_reply_enricher import (
     PlaywrightThreadPageClient,
     ThreadsReplyEnricher,
 )
+from note_generator.services.tag_generator import TagGenerator
 from note_generator.services.title_generator import TitleGenerator
 from note_generator.services.unsave_writer import build_unsave_payload, write_unsave_payload
 
@@ -51,6 +52,11 @@ class _ImageOCREnricher(Protocol):
 
 class _TitleGenerator(Protocol):
     def generate(self, item: object) -> object:
+        ...
+
+
+class _TagGenerator(Protocol):
+    def generate(self, item: object) -> list[str]:
         ...
 
 
@@ -138,12 +144,14 @@ class ImportBookmarksToMarkdownWorkflow:
         source_file_name: str = "catch.json",
         classification_model: str = "",
         progress_reporter: _ProgressReporter | None = None,
+        tag_generator: _TagGenerator | None = None,
     ) -> None:
         self._reader = reader
         self._enricher = enricher
         self._classifier = classifier
         self._ocr_enricher = ocr_enricher
         self._title_generator = title_generator
+        self._tag_generator = tag_generator
         self._filename_builder = filename_builder
         self._content_builder = content_builder
         self._writer = writer
@@ -206,6 +214,10 @@ class ImportBookmarksToMarkdownWorkflow:
             source_file_name=config.input_path.name,
             classification_model=config.model_for_classification,
             progress_reporter=ConsoleProgressReporter(),
+            tag_generator=TagGenerator(
+                llm_client=llm_client,
+                model_name=config.model_for_title,
+            ),
         )
 
     def run(self) -> ImportSummary:
@@ -260,6 +272,9 @@ class ImportBookmarksToMarkdownWorkflow:
 
                 classified = self._ocr_enricher.enrich(classified)
                 titled = self._title_generator.generate(classified)
+                if self._tag_generator is not None:
+                    tags = self._tag_generator.generate(classified)
+                    titled = replace(titled, tags=tags)
                 filename = self._filename_builder.build(titled.generated_title)
                 titled = replace(
                     titled,
