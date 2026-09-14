@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from note_generator.models import ImportSummary
@@ -17,7 +18,17 @@ class ConsoleProgressReporter:
     def start(self, total: int) -> None:
         print(f"共 {total} 個書籤，開始處理…", flush=True)
 
-    def item(self, index: int, total: int, topic: str, category: str, status: str) -> None:
+    def item(
+        self,
+        index: int,
+        total: int,
+        topic: str,
+        category: str,
+        status: str,
+        *,
+        post_url: str = "",
+        output_path: str = "",
+    ) -> None:
         suffix = _STATUS_SUFFIX.get(status, "")
         print(f"[{index}/{total}] {topic}  {category}{suffix}", flush=True)
 
@@ -31,3 +42,50 @@ class ConsoleProgressReporter:
         if summary.failed_count:
             line += f"（失敗 {summary.failed_count} 筆）"
         print(line, flush=True)
+
+
+class JsonlProgressReporter:
+    """One JSON object per line on stdout; consumed by the desktop app's sidecar runner."""
+
+    def start(self, total: int) -> None:
+        self._emit({"event": "start", "total": total})
+
+    def item(
+        self,
+        index: int,
+        total: int,
+        topic: str,
+        category: str,
+        status: str,
+        *,
+        post_url: str = "",
+        output_path: str = "",
+    ) -> None:
+        payload = {
+            "event": "item",
+            "index": index,
+            "total": total,
+            "postUrl": post_url,
+            "topic": topic,
+            "category": category,
+            "status": status,
+        }
+        if status == "written" and output_path:
+            payload["outputPath"] = output_path
+        self._emit(payload)
+
+    def finish(self, summary: ImportSummary, output_dir: Path) -> None:
+        self._emit(
+            {
+                "event": "finish",
+                "processed": summary.processed_count,
+                "written": summary.written_count,
+                "skipped": summary.skipped_count,
+                "failed": summary.failed_count,
+                "outputDir": str(output_dir),
+            }
+        )
+
+    @staticmethod
+    def _emit(payload: dict) -> None:
+        print(json.dumps(payload, ensure_ascii=False), flush=True)
