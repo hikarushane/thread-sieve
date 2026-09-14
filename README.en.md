@@ -2,7 +2,7 @@
 
 [繁體中文](README.md)
 
-> **Latest update (2026-07-20)**: the unsave mechanism is completely rebuilt (userscript 0.5.4) — instead of scrolling through /saved, the script now opens each post in its own tab, so it is no longer limited by how deep Threads lets the saved feed load; only posts explicitly listed in `unsave.json` are touched, already-unsaved posts are skipped automatically, and re-runs are safe. One-time setup: allow pop-ups for `www.threads.com`. Full history in [RELEASE_NOTES.md](RELEASE_NOTES.md).
+> **Latest update (2026-09-15)**: fixed scraped post text being merged with neighbouring posts (userscript 0.5.5) — `/saved` is a virtualized feed, and when a post's own text was momentarily unavailable the old parser swallowed the whole page (nearby posts plus the site footer) as that post's content, which misled classification; content is now only expanded within the post's own container. Reinstall the userscript in Tampermonkey. Full history in [RELEASE_NOTES.md](RELEASE_NOTES.md).
 
 > End-user branch: no `superpowers-chrome`, no watcher, no Chrome debug port.  
 > For the full automation build (terminal watcher + agent-driven scrape + Chandra OCR), switch to the `full` branch.
