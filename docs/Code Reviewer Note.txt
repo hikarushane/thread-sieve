@@ -1,0 +1,3 @@
+ Code reviewer notes (none blocking, optional polish for future):
+  - Comment on os.replace outside-try rationale in classify_to_scribe_ai.py
+  - Extract shared fixture for the two atomic-write tests if a third lands

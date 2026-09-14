@@ -1,0 +1,2882 @@
+[
+  {
+    "postId": "DdRbpWFEfF4",
+    "postUrl": "https://www.threads.com/@pengyuc_/post/DdRbpWFEfF4",
+    "authorHandle": "@pengyuc_",
+    "authorName": "",
+    "contentText": "如果你是 Apple 平台的獨立開發者，而且你的 App 還不到 200 萬次下載：\n趕快去申請 PCC。\nApple 現在開放開發者使用 Private Cloud Compute 上的伺服器模型。\n看完 WWDC26 影片介紹後，覺得這對獨立開發者來說滿值得注意的。 1/10",
+    "publishedTime": "2026-09-14T15:13:47.000Z",
+    "collectedAt": "2026-09-14T18:41:44.638Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DdRRrPKk77i",
+    "postUrl": "https://www.threads.com/@jingpinyuan.tw/post/DdRRrPKk77i",
+    "authorHandle": "@jingpinyuan.tw",
+    "authorName": "",
+    "contentText": "從一張草圖到現在，整整一年。\n老實說，一開始我們以為3個月就能上市。\n結果證明，我們遠遠低估了老闆的吹毛求疵。\n19次改版。\n帶到環境部活動，直接聽民眾當面的意見。\n帶到防火防災應用展，收集第一線消防與防災人員的反饋。\n跟消防安全顧問一次次核對細節，確保不是好看但沒用的擺設。\n甚至扛著它飛到防災大國日本參展，回來重新調整。\n一年很長，但防災包這種東西，你只有「用到的那一刻」，沒有第二次機會。\n我們寧願慢一點，也不想讓你在關鍵時刻，發現少了什麼、或者用不順手。\nATLAS，正式上線 1/2",
+    "publishedTime": "2026-09-14T13:46:40.000Z",
+    "collectedAt": "2026-09-14T18:41:44.638Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DdORkyGk626",
+    "postUrl": "https://www.threads.com/@iextrastu/post/DdORkyGk626",
+    "authorHandle": "@iextrastu",
+    "authorName": "",
+    "contentText": "Apple 已经把 iPhone Duo 的设计规范写进 HIG 了。\n这次不是简单的「适配一下大屏幕」。\nApple 专门增加了一套：\nDesigning for iPhone Duo\n看完发现，iOS App 的布局思路可能真的要变了。 1/7",
+    "publishedTime": "2026-09-13T09:48:04.000Z",
+    "collectedAt": "2026-09-14T18:41:44.638Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DdMJHwjj3AA",
+    "postUrl": "https://www.threads.com/@sonnngyou.ghost/post/DdMJHwjj3AA",
+    "authorHandle": "@sonnngyou.ghost",
+    "authorName": "",
+    "contentText": "在網路上看了很多資料，發現很多的 AuDHD 都有所謂的「憂鬱＆焦慮循環」或國外有稱為倦怠與反倦怠循環，在整合個人經驗後包括國外的資料整合成圖表了。（想看黑白大圖也可以 Ibon 印！） 1/2",
+    "publishedTime": "2026-09-12T13:55:43.000Z",
+    "collectedAt": "2026-09-14T18:41:44.638Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DdIfbafD58I",
+    "postUrl": "https://www.threads.com/@jaimintf/post/DdIfbafD58I",
+    "authorHandle": "@jaimintf",
+    "authorName": "",
+    "contentText": "before → after\nsame prompt + /goal, both one shotted.\nthe right one used mcp for context & skills for design.  翻譯 1/2",
+    "publishedTime": "2026-09-11T03:54:04.000Z",
+    "collectedAt": "2026-09-14T18:41:44.639Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dc8sy3cD0CH",
+    "postUrl": "https://www.threads.com/@labangram/post/Dc8sy3cD0CH",
+    "authorHandle": "@labangram",
+    "authorName": "",
+    "contentText": "你的 Coding Agent 反應很慢，真的不是因為模型太笨或跑得慢。\n是因為它在「繳稅」。\n很多人沒注意到，Agent 每跑一行終端指令、每讀一個檔案，背後都在重複開關 subshell、重載環境變數。這叫 Tool-Call Tax（工具呼叫稅）。\nLLM 生成文字幾十毫秒，但等工具跑完要幾百毫秒。這種瑣碎的卡頓，就是最打斷開發心流的地方。\n國外熱門的優化外掛 ToolRush 原本只支援 Windows，今天我把它完整移植到 Mac (Apple Silicon) 了。\n實測數據拿出來連我自己都嚇到：\nTerminal 呼叫延遲：45ms -> 7ms（快了 5.7 倍，直接省掉 82% 開銷）\n跨檔案批次搜尋：230ms -> 28ms（快了近 8 倍）\n以前 Agent 跑一半按停止，背景會殘留一堆孤兒行程吃滿 CPU；現在改用 POSIX 行程樹回收，100% 徹底殺乾淨。\n用的是常駐串流熱 Shell + 批次並行 RPC，而且是官方原生 Plugin 架構，完全不用去硬改主程式。 1/3",
+    "publishedTime": "2026-09-06T13:59:35.000Z",
+    "collectedAt": "2026-09-14T18:41:46.167Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dc53K0EEgzD",
+    "postUrl": "https://www.threads.com/@biiiiicyh_/post/Dc53K0EEgzD",
+    "authorHandle": "@biiiiicyh_",
+    "authorName": "",
+    "contentText": "你的 Coding Agent 反應很慢，真的不是因為模型太笨或跑得慢。\n是因為它在「繳稅」。\n很多人沒注意到，Agent 每跑一行終端指令、每讀一個檔案，背後都在重複開關 subshell、重載環境變數。這叫 Tool-Call Tax（工具呼叫稅）。\nLLM 生成文字幾十毫秒，但等工具跑完要幾百毫秒。這種瑣碎的卡頓，就是最打斷開發心流的地方。\n國外熱門的優化外掛 ToolRush 原本只支援 Windows，今天我把它完整移植到 Mac (Apple Silicon) 了。\n實測數據拿出來連我自己都嚇到：\nTerminal 呼叫延遲：45ms -> 7ms（快了 5.7 倍，直接省掉 82% 開銷）\n跨檔案批次搜尋：230ms -> 28ms（快了近 8 倍）\n以前 Agent 跑一半按停止，背景會殘留一堆孤兒行程吃滿 CPU；現在改用 POSIX 行程樹回收，100% 徹底殺乾淨。\n用的是常駐串流熱 Shell + 批次並行 RPC，而且是官方原生 Plugin 架構，完全不用去硬改主程式。 1/3\nNeen的造型真的是這三部裡我最最最喜歡的了\n正在回覆@selfish995\ngithub.com/hkuds…\n這個比較好用 雙層式類 graphRag\nCodex 的工程師寫了一篇文章，教你用 GPT-6 把過時的 Skill 升級。\n我用了後確實找出不少問題，也清理了一部分舊規則和重複內容。\n原本有些地方根本沒寫清楚怎樣才算完成，原本的檢查卻照樣通過；\n一些小修改，卻被安排了不必要的完整流程。\n把以下的 Prompt 發給 Astra 看看：\n來源 X @ pvncher\n我靠在推特刷女同网黄。每翻一个都要感叹震撼美味。 1/3\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-09-05T11:32:31.000Z",
+    "collectedAt": "2026-09-14T18:41:46.175Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dc5RMKzgUzU",
+    "postUrl": "https://www.threads.com/@johnoty/post/Dc5RMKzgUzU",
+    "authorHandle": "@johnoty",
+    "authorName": "",
+    "contentText": "你的 Coding Agent 反應很慢，真的不是因為模型太笨或跑得慢。\n是因為它在「繳稅」。\n很多人沒注意到，Agent 每跑一行終端指令、每讀一個檔案，背後都在重複開關 subshell、重載環境變數。這叫 Tool-Call Tax（工具呼叫稅）。\nLLM 生成文字幾十毫秒，但等工具跑完要幾百毫秒。這種瑣碎的卡頓，就是最打斷開發心流的地方。\n國外熱門的優化外掛 ToolRush 原本只支援 Windows，今天我把它完整移植到 Mac (Apple Silicon) 了。\n實測數據拿出來連我自己都嚇到：\nTerminal 呼叫延遲：45ms -> 7ms（快了 5.7 倍，直接省掉 82% 開銷）\n跨檔案批次搜尋：230ms -> 28ms（快了近 8 倍）\n以前 Agent 跑一半按停止，背景會殘留一堆孤兒行程吃滿 CPU；現在改用 POSIX 行程樹回收，100% 徹底殺乾淨。\n用的是常駐串流熱 Shell + 批次並行 RPC，而且是官方原生 Plugin 架構，完全不用去硬改主程式。 1/3\nNeen的造型真的是這三部裡我最最最喜歡的了\n正在回覆@selfish995\ngithub.com/hkuds…\n這個比較好用 雙層式類 graphRag\nCodex 的工程師寫了一篇文章，教你用 GPT-6 把過時的 Skill 升級。\n我用了後確實找出不少問題，也清理了一部分舊規則和重複內容。\n原本有些地方根本沒寫清楚怎樣才算完成，原本的檢查卻照樣通過；\n一些小修改，卻被安排了不必要的完整流程。\n把以下的 Prompt 發給 Astra 看看：\n來源 X @ pvncher\n我靠在推特刷女同网黄。每翻一个都要感叹震撼美味。 1/3\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "",
+    "collectedAt": "2026-09-14T18:41:46.181Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dc6IhDPlINL",
+    "postUrl": "https://www.threads.com/@ek0519/post/Dc6IhDPlINL",
+    "authorHandle": "@ek0519",
+    "authorName": "",
+    "contentText": "正在回覆@selfish995\ngithub.com/hkuds…\n這個比較好用 雙層式類 graphRag",
+    "publishedTime": "2026-09-05T14:04:06.000Z",
+    "collectedAt": "2026-09-14T18:41:46.181Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dc50ZiOAJe3",
+    "postUrl": "https://www.threads.com/@lo2cin4/post/Dc50ZiOAJe3",
+    "authorHandle": "@lo2cin4",
+    "authorName": "",
+    "contentText": "Codex 的工程師寫了一篇文章，教你用 GPT-6 把過時的 Skill 升級。\n我用了後確實找出不少問題，也清理了一部分舊規則和重複內容。\n原本有些地方根本沒寫清楚怎樣才算完成，原本的檢查卻照樣通過；\n一些小修改，卻被安排了不必要的完整流程。\n把以下的 Prompt 發給 Astra 看看：\n來源 X @ pvncher",
+    "publishedTime": "2026-09-05T11:08:19.000Z",
+    "collectedAt": "2026-09-14T18:41:46.181Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dc3-uXsEbDj",
+    "postUrl": "https://www.threads.com/@ekiya1x/post/Dc3-uXsEbDj",
+    "authorHandle": "@ekiya1x",
+    "authorName": "",
+    "contentText": "我靠在推特刷女同网黄。每翻一个都要感叹震撼美味。 1/3",
+    "publishedTime": "2026-09-04T18:00:03.000Z",
+    "collectedAt": "2026-09-14T18:41:46.182Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dc42bXtiUer",
+    "postUrl": "https://www.threads.com/@katelunggg/post/Dc42bXtiUer",
+    "authorHandle": "@katelunggg",
+    "authorName": "",
+    "contentText": "LOLO是神級助攻王~\n😆小腦袋轉得那麼快\n兩位被攻擊到回答不了 1/2",
+    "publishedTime": "2026-09-05T02:08:50.000Z",
+    "collectedAt": "2026-09-14T18:41:47.818Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dc3T4XtDwIg",
+    "postUrl": "https://www.threads.com/@chiuraynien/post/Dc3T4XtDwIg",
+    "authorHandle": "@chiuraynien",
+    "authorName": "",
+    "contentText": "你的 Coding Agent 反應很慢，真的不是因為模型太笨或跑得慢。\n是因為它在「繳稅」。\n很多人沒注意到，Agent 每跑一行終端指令、每讀一個檔案，背後都在重複開關 subshell、重載環境變數。這叫 Tool-Call Tax（工具呼叫稅）。\nLLM 生成文字幾十毫秒，但等工具跑完要幾百毫秒。這種瑣碎的卡頓，就是最打斷開發心流的地方。\n國外熱門的優化外掛 ToolRush 原本只支援 Windows，今天我把它完整移植到 Mac (Apple Silicon) 了。\n實測數據拿出來連我自己都嚇到：\nTerminal 呼叫延遲：45ms -> 7ms（快了 5.7 倍，直接省掉 82% 開銷）\n跨檔案批次搜尋：230ms -> 28ms（快了近 8 倍）\n以前 Agent 跑一半按停止，背景會殘留一堆孤兒行程吃滿 CPU；現在改用 POSIX 行程樹回收，100% 徹底殺乾淨。\n用的是常駐串流熱 Shell + 批次並行 RPC，而且是官方原生 Plugin 架構，完全不用去硬改主程式。 1/3\nNeen的造型真的是這三部裡我最最最喜歡的了\n正在回覆@selfish995\ngithub.com/hkuds…\n這個比較好用 雙層式類 graphRag\nCodex 的工程師寫了一篇文章，教你用 GPT-6 把過時的 Skill 升級。\n我用了後確實找出不少問題，也清理了一部分舊規則和重複內容。\n原本有些地方根本沒寫清楚怎樣才算完成，原本的檢查卻照樣通過；\n一些小修改，卻被安排了不必要的完整流程。\n把以下的 Prompt 發給 Astra 看看：\n來源 X @ pvncher\n我靠在推特刷女同网黄。每翻一个都要感叹震撼美味。 1/3\nLOLO是神級助攻王~\n😆小腦袋轉得那麼快\n兩位被攻擊到回答不了 1/2\n靠！人生第一次被台灣的體育廣告撞到心坎！這位少年部長真的有夠力的啦！愛上他了🥰🥰🥰\n期待這次的亞運是台灣體育嶄新的一頁！\n3.5 萬\n最近发现一个很适合 Vibe Coding 收藏的新站：\nlibraries.dev\n它把作者做的 UI Effect Libraries 全部放到了一个地方：\n5 个效果库\n20+ Variants\n免费使用\n如果 AI 已经能帮你快速把页面写出来，下一步可能就是解决：\n怎么让它看起来不像默认模板。 1/7\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-09-04T11:45:41.000Z",
+    "collectedAt": "2026-09-14T18:41:47.828Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dc3Hy3kAX3s",
+    "postUrl": "https://www.threads.com/@sports__tw/post/Dc3Hy3kAX3s",
+    "authorHandle": "@sports__tw",
+    "authorName": "",
+    "contentText": "靠！人生第一次被台灣的體育廣告撞到心坎！這位少年部長真的有夠力的啦！愛上他了🥰🥰🥰\n期待這次的亞運是台灣體育嶄新的一頁！\n3.5 萬",
+    "publishedTime": "",
+    "collectedAt": "2026-09-14T18:41:47.828Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dc4xXoqmj5c",
+    "postUrl": "https://www.threads.com/@iextrastu/post/Dc4xXoqmj5c",
+    "authorHandle": "@iextrastu",
+    "authorName": "",
+    "contentText": "最近发现一个很适合 Vibe Coding 收藏的新站：\nlibraries.dev\n它把作者做的 UI Effect Libraries 全部放到了一个地方：\n5 个效果库\n20+ Variants\n免费使用\n如果 AI 已经能帮你快速把页面写出来，下一步可能就是解决：\n怎么让它看起来不像默认模板。 1/7",
+    "publishedTime": "2026-09-05T01:22:36.000Z",
+    "collectedAt": "2026-09-14T18:41:47.828Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dc3T0iYE-4T",
+    "postUrl": "https://www.threads.com/@ormk0.0/post/Dc3T0iYE-4T",
+    "authorHandle": "@ormk0.0",
+    "authorName": "",
+    "contentText": "Orm原本還一臉單純懵懂的\n一被逗就立刻崩潰大尖叫🤣🤣\n不好意思 她是屬於Bibi的!!!!\n：N’Orm，最近可以不要吃太多油炸食物嗎？\nNong Aom：為什麼呀？\n：不然妳會變成「油炸物(Khong Man)」，而不是屬於我(Kong Phi)的。\nOrm：哇啊啊啊啊啊啊啊啊！！！！",
+    "publishedTime": "2026-09-04T11:45:57.000Z",
+    "collectedAt": "2026-09-14T18:41:49.385Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DczsRpNGNzY",
+    "postUrl": "https://www.threads.com/@roka_chang/post/DczsRpNGNzY",
+    "authorHandle": "@roka_chang",
+    "authorName": "",
+    "contentText": "日本燕三條製造的鐵鍋\n居然只要一千多\n還有鎚目紋✨超美 1/4",
+    "publishedTime": "2026-09-03T02:01:53.000Z",
+    "collectedAt": "2026-09-14T18:41:49.385Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dczov6nmhiq",
+    "postUrl": "https://www.threads.com/@iextrastu/post/Dczov6nmhiq",
+    "authorHandle": "@iextrastu",
+    "authorName": "",
+    "contentText": "最近 Vibe Coding 又开始流行一个文件：\nDESIGN. md\n以前我们给 Coding Agent：\nREADME. md\n→ 项目是什么\nAGENTS. md\n→ 应该怎么开发\n现在开始多一个：\nDESIGN. md\n→ 产品应该长什么样\n整理了 9 个值得收藏的网站👇 1/10",
+    "publishedTime": "2026-09-03T01:31:04.000Z",
+    "collectedAt": "2026-09-14T18:41:49.386Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dcy89P2j03n",
+    "postUrl": "https://www.threads.com/@cher.careercrafters/post/Dcy89P2j03n",
+    "authorHandle": "@cher.careercrafters",
+    "authorName": "",
+    "contentText": "在面試中你的cultural fit / 個人特質也是被評核的一環\n當面試官問：如果我問你的同事，他們會怎樣形容你？\n你會怎樣回答？\n很多人的第一反應會説：\n“Hardworking / Responsible / A team player / Easy to work with“\n這些全部都沒有錯，但問題是：\n下10位應徵者很可能也會說一模一樣的東西\n你需要的是去構思一個屬於你的形容詞和回答方式\n因爲面試管真正想聽的是這些東西 1/7",
+    "publishedTime": "2026-09-02T19:08:24.000Z",
+    "collectedAt": "2026-09-14T18:41:49.386Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dcxz19Zk3gr",
+    "postUrl": "https://www.threads.com/@aicodex_invent/post/Dcxz19Zk3gr",
+    "authorHandle": "@aicodex_invent",
+    "authorName": "",
+    "contentText": "‼️ImmerseFree 正式上線‼️\n這是一個台灣人做出來的免費開源專案，沈浸式翻譯最好的替代品，不用擔心個資被外傳，一鍵翻譯，讓你的網路使用體驗不再因為語言而受阻。\n由左而右分別是網頁翻譯、反白翻譯、懸停翻譯的實際使用影片，依據不同的場景適應不同的翻譯方式。（實際使用可以置頂在Chrome 擴充欄，示範時使用無痕模式而無法置頂）\n更詳細的介紹跟使用教學在github上有中英介紹，100%開源，在享受便利的翻譯時又能守護自己的資安，還有更多更強的功能正在開發中。\n喜歡這個想法或是實際使用過覺得很好用的也請幫我按讚轉發這篇文，也不吝給我一顆github ⭐️，讓更多人能被推廣到這個好用又守護的自己資安的專案！github 專案連結在留言區 1/3",
+    "publishedTime": "2026-09-02T08:29:32.000Z",
+    "collectedAt": "2026-09-14T18:41:49.386Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcyQ5q_E8Gy",
+    "postUrl": "https://www.threads.com/@jingo8o6/post/DcyQ5q_E8Gy",
+    "authorHandle": "@jingo8o6",
+    "authorName": "",
+    "contentText": "LingOrm新的起床鬧鐘！\n鄺玲玲整個毫無靈魂欸🤣 1/2",
+    "publishedTime": "2026-09-02T12:45:17.000Z",
+    "collectedAt": "2026-09-14T18:41:50.980Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcxctPKo0wE",
+    "postUrl": "https://www.threads.com/@derekhsu/post/DcxctPKo0wE",
+    "authorHandle": "@derekhsu",
+    "authorName": "",
+    "contentText": "搬去歐洲前，怎麼判斷哪個街區真的好住？\n推薦一個數據化工具：Strado — strado.info\n歐洲 50 城（倫敦、巴黎、柏林、羅馬到塔林）、每個街區用「10 分鐘步行圈」打分。22 個維度：餐飲 / 咖啡 / 夜生活 / 生鮮 / 醫療 / 交通 / 公園 / 教育 / 單車等，20M+ 資料點全部來自 OpenStreetMap，無業配、免費。\n原理很直觀：把城市切成 H3 六角網格逐格評分，像 A- Trastevere, Rome 一目了然。還能依你在乎的項目加權比較，簽約前先看步行生活圈的真相。\n即將推出 App 與 Chrome 擴充（在 Idealista / Rightmove 上直接疊分數）。\n完整介紹我寫在部落格了：\nblog.derekhsu.net/2026…",
+    "publishedTime": "2026-09-02T05:07:38.000Z",
+    "collectedAt": "2026-09-14T18:41:50.980Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dcv4VguGBUB",
+    "postUrl": "https://www.threads.com/@w_ang_h/post/Dcv4VguGBUB",
+    "authorHandle": "@w_ang_h",
+    "authorName": "",
+    "contentText": "今日份的ORM\n她一定沒想到會被調侃成這樣🤣\n一開始還抱著來工作的心情\n從V7️⃣開始被工作人員問Faen有一起來嗎？\n打呼嚨的說有另一半就會來，沒來代表沒另一半\n8️⃣粉絲問ORM的Fane用哪台 要買去撩她\nORM：抱歉喔 已經買給她了，你不用買了（害羞）\n9️⃣請對著「Tee」撒嬌\nORM：哪來的「Tee」，我才沒臉紅。\n大家快救救我，我被調侃到體無完膚\n🔟：這是Tee喜歡的捲度喔～\nORM臉上大寫的救命\n1️⃣1️⃣ 說著這款可以用來捲去「通羅咖啡廳」\n（顯示已放棄🤣）\n1️⃣2️⃣粉絲問：買哪一款才可以得到「港泰混血的另一半」啦？（無視粉絲 開始介紹😌）\n1️⃣3️⃣ ：大家叫你對 Tee說一句「愛你」啦！\nORM：愛 Tee 喔😁🫰🏻🫰🏻（隨便啦 豁出去了🤣）\n這場直播太有趣了！\nORM從頭紅到尾、不知所措 最後放棄掙扎\n但業績破百萬 一切都值得了🤭\n包括那位沒在現場卻從頭被Cue到尾的人\nORM PRESENTER LESASHA\n#OrmLESASHAXShopeeLive",
+    "publishedTime": "2026-09-01T14:30:18.000Z",
+    "collectedAt": "2026-09-14T18:41:50.981Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dcu_tyREcM1",
+    "postUrl": "https://www.threads.com/@leepokai20/post/Dcu_tyREcM1",
+    "authorHandle": "@leepokai20",
+    "authorName": "",
+    "contentText": "我每天讓 claude 用的瀏覽器\n現在已經不是 claude in chrome 了\nclaude in chrome 是裝在人用的瀏覽器上的擴充功能\nego lite 整台瀏覽器根本就是為了 agent 設計的\n用 extension 的時候 它跟我共用同一個視窗\n一次只做一步 一步一步慢慢來\ntoken 燒得快 電腦也感覺比較重\n換成 ego lite 之後\n每個 agent 都有自己的 space 在跑\n一次能做好幾步 快很多\n想看誰在幹嘛 切過去那個 space 就看得到\ntoken 省很多 ram 也明顯降下來 1/4",
+    "publishedTime": "2026-09-01T06:15:37.000Z",
+    "collectedAt": "2026-09-14T18:41:52.526Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DctWthfEyN9",
+    "postUrl": "https://www.threads.com/@tzuhsuanliu320/post/DctWthfEyN9",
+    "authorHandle": "@tzuhsuanliu320",
+    "authorName": "",
+    "contentText": "二十多年前，在日本留學、打工的時候，曾經遇過兩個讓我多年後想起，還是覺得很難忘的人。\n一對來自新疆的姊弟，還有一位讀北海道大學的中國女學生。\n那時候年輕，很多事情其實沒有想得那麼深。\n先說那對新疆姊弟。\n弟弟的名字，我竟然在二十多年後的今天，突然想起來了——ルスタム（Rustam）。\n他曾經跟我說，他的父親在新疆是一位很有名望的醫生，在族人之間非常德高望重，也很有份量。\n他們家裡有很多孩子，父親和長兄、長姊繼承了醫業。\n但後來，他和姊姊想辦法離開中國。\n他告訴我，父親花了很多錢，才讓他和姊姊能夠逃出來，而父親和其他家人則被留下來牽制。\n最讓我印象深刻的是，他說：\n逃出來以後，他們不能再和家人聯絡。\n因為一旦被發現，不只是他們自己會有危險，甚至可能連家人、幫助他們的人，甚至收錢放行的人，都會受到牽連。 1/3",
+    "publishedTime": "2026-08-31T14:58:01.000Z",
+    "collectedAt": "2026-09-14T18:41:52.526Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcsuE0PkwOC",
+    "postUrl": "https://www.threads.com/@aicodex_invent/post/DcsuE0PkwOC",
+    "authorHandle": "@aicodex_invent",
+    "authorName": "",
+    "contentText": "需要閱讀外文網站，需要一個好用的翻譯軟體，但又不想要付錢，更不想用中資的沈浸式翻譯嗎？\n身為台灣開發者，我實在看不下去大家的隱私被隨意打包送去中國伺服器，所以自己做了一款開源平替工具：ImmerseFree。\n我的製作理念非常單純：保護台灣人的數位隱私、拒絕中資監控、並且讓大家都能用到免費的好用翻譯\n* 100% 免費、完全開源，沒有任何需要付費的地方\n* Windows / Mac 雙平台支援，全面解鎖沈浸式翻譯原版付費功能，再額外支援 Netflix 與 Disney+ 即時雙語字幕\n* 串接你自己的 Gemini API、OpenCode API 或 Antigravity CLI 驅動，資料只直連模型商，徹底斬斷中資伺服器的中繼監控\n支援網站插入翻譯、pdf 整份翻譯、選取翻譯、youtube 、disney+、netflix 字幕即時翻譯，支援中英文字幕同時出現，讓你邊看影片邊學英文\n先追蹤我，兩天後正式在 GitHub 開源釋出載點。\n想第一時間使用的在底下留言「+1」，讓app 上線時自動通知你+發送安裝教學 1/2",
+    "publishedTime": "2026-08-31T09:02:56.000Z",
+    "collectedAt": "2026-09-14T18:41:52.526Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcsNNTZlLwz",
+    "postUrl": "https://www.threads.com/@inkacalinka/post/DcsNNTZlLwz",
+    "authorHandle": "@inkacalinka",
+    "authorName": "",
+    "contentText": "搬去歐洲前，怎麼判斷哪個街區真的好住？\n推薦一個數據化工具：Strado — strado.info\n歐洲 50 城（倫敦、巴黎、柏林、羅馬到塔林）、每個街區用「10 分鐘步行圈」打分。22 個維度：餐飲 / 咖啡 / 夜生活 / 生鮮 / 醫療 / 交通 / 公園 / 教育 / 單車等，20M+ 資料點全部來自 OpenStreetMap，無業配、免費。\n原理很直觀：把城市切成 H3 六角網格逐格評分，像 A- Trastevere, Rome 一目了然。還能依你在乎的項目加權比較，簽約前先看步行生活圈的真相。\n即將推出 App 與 Chrome 擴充（在 Idealista / Rightmove 上直接疊分數）。\n完整介紹我寫在部落格了：\nblog.derekhsu.net/2026…\n今日份的ORM\n她一定沒想到會被調侃成這樣🤣\n一開始還抱著來工作的心情\n從V7️⃣開始被工作人員問Faen有一起來嗎？\n打呼嚨的說有另一半就會來，沒來代表沒另一半\n8️⃣粉絲問ORM的Fane用哪台 要買去撩她\nORM：抱歉喔 已經買給她了，你不用買了（害羞）\n9️⃣請對著「Tee」撒嬌\nORM：哪來的「Tee」，我才沒臉紅。\n大家快救救我，我被調侃到體無完膚\n🔟：這是Tee喜歡的捲度喔～\nORM臉上大寫的救命\n1️⃣1️⃣ 說著這款可以用來捲去「通羅咖啡廳」\n（顯示已放棄🤣）\n1️⃣2️⃣粉絲問：買哪一款才可以得到「港泰混血的另一半」啦？（無視粉絲 開始介紹😌）\n1️⃣3️⃣ ：大家叫你對 Tee說一句「愛你」啦！\nORM：愛 Tee 喔😁🫰🏻🫰🏻（隨便啦 豁出去了🤣）\n這場直播太有趣了！\nORM從頭紅到尾、不知所措 最後放棄掙扎\n但業績破百萬 一切都值得了🤭\n包括那位沒在現場卻從頭被Cue到尾的人\nORM PRESENTER LESASHA\n#OrmLESASHAXShopeeLive\n我每天讓 claude 用的瀏覽器\n現在已經不是 claude in chrome 了\nclaude in chrome 是裝在人用的瀏覽器上的擴充功能\nego lite 整台瀏覽器根本就是為了 agent 設計的\n用 extension 的時候 它跟我共用同一個視窗\n一次只做一步 一步一步慢慢來\ntoken 燒得快 電腦也感覺比較重\n換成 ego lite 之後\n每個 agent 都有自己的 space 在跑\n一次能做好幾步 快很多\n想看誰在幹嘛 切過去那個 space 就看得到\ntoken 省很多 ram 也明顯降下來 1/4\n二十多年前，在日本留學、打工的時候，曾經遇過兩個讓我多年後想起，還是覺得很難忘的人。\n一對來自新疆的姊弟，還有一位讀北海道大學的中國女學生。\n那時候年輕，很多事情其實沒有想得那麼深。\n先說那對新疆姊弟。\n弟弟的名字，我竟然在二十多年後的今天，突然想起來了——ルスタム（Rustam）。\n他曾經跟我說，他的父親在新疆是一位很有名望的醫生，在族人之間非常德高望重，也很有份量。\n他們家裡有很多孩子，父親和長兄、長姊繼承了醫業。\n但後來，他和姊姊想辦法離開中國。\n他告訴我，父親花了很多錢，才讓他和姊姊能夠逃出來，而父親和其他家人則被留下來牽制。\n最讓我印象深刻的是，他說：\n逃出來以後，他們不能再和家人聯絡。\n因為一旦被發現，不只是他們自己會有危險，甚至可能連家人、幫助他們的人，甚至收錢放行的人，都會受到牽連。 1/3\n需要閱讀外文網站，需要一個好用的翻譯軟體，但又不想要付錢，更不想用中資的沈浸式翻譯嗎？\n身為台灣開發者，我實在看不下去大家的隱私被隨意打包送去中國伺服器，所以自己做了一款開源平替工具：ImmerseFree。\n我的製作理念非常單純：保護台灣人的數位隱私、拒絕中資監控、並且讓大家都能用到免費的好用翻譯\n* 100% 免費、完全開源，沒有任何需要付費的地方\n* Windows / Mac 雙平台支援，全面解鎖沈浸式翻譯原版付費功能，再額外支援 Netflix 與 Disney+ 即時雙語字幕\n* 串接你自己的 Gemini API、OpenCode API 或 Antigravity CLI 驅動，資料只直連模型商，徹底斬斷中資伺服器的中繼監控\n支援網站插入翻譯、pdf 整份翻譯、選取翻譯、youtube 、disney+、netflix 字幕即時翻譯，支援中英文字幕同時出現，讓你邊看影片邊學英文\n先追蹤我，兩天後正式在 GitHub 開源釋出載點。\n想第一時間使用的在底下留言「+1」，讓app 上線時自動通知你+發送安裝教學 1/2\n一天解鎖一個AI提示詞\n這個 prompt 的審美太赞了吧 1/2\n2.6 萬\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-31T04:15:44.000Z",
+    "collectedAt": "2026-09-14T18:41:52.545Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dcs6FiCHCn3",
+    "postUrl": "https://www.threads.com/@prompt_case/post/Dcs6FiCHCn3",
+    "authorHandle": "@prompt_case",
+    "authorName": "",
+    "contentText": "同時收到 OpenAI 和 Anthropic 面試的大廠設計師分享了她的 Design Skills，就是這麼有含金量！\nMono-color Skill 是一個收到 OpenAI 和 Anthropic 面試的大廠設計師分享出來的，它把一整套編輯設計語言、復古印刷質感，以及克制的視覺規則，封裝成一個可以重複調用的漂亮藝術風格。\n比起提示詞，我覺得這種在 skills 裏面的視覺系統、字體和色彩卡片的參考文件方法，很值得學習，啟發良多。\n連結： 1/2",
+    "publishedTime": "2026-08-31T10:47:53.000Z",
+    "collectedAt": "2026-09-14T18:41:54.015Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dcr6ZbJAtfy",
+    "postUrl": "https://www.threads.com/@sw_ai_life/post/Dcr6ZbJAtfy",
+    "authorHandle": "@sw_ai_life",
+    "authorName": "",
+    "contentText": "留我自己未來做app的時候使用\n很久以前做了一個app 但沒有上架\n卡在商業版面不知道怎麼設計比較好\n現在這個工具好好用啊 1/2",
+    "publishedTime": "2026-08-31T01:33:15.000Z",
+    "collectedAt": "2026-09-14T18:41:55.641Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcsKXq5E_Sv",
+    "postUrl": "https://www.threads.com/@iextrastu/post/DcsKXq5E_Sv",
+    "authorHandle": "@iextrastu",
+    "authorName": "",
+    "contentText": "最近 Vibe Coding 越来越明显一个问题：\nAI 已经很会写代码了，但还是不太会「做得好看」。\n同样一句：\n「帮我做一个现代 SaaS Landing Page」\n最后很容易变成：\n渐变标题 + Bento + 大圆角 + 紫色按钮。\n整理 10 个我最近觉得很适合给 Vibe Coding「补审美」的网站 / 工具 ↓ 1/12",
+    "publishedTime": "2026-08-31T03:50:56.000Z",
+    "collectedAt": "2026-09-14T18:41:55.641Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dcpau1IAQJy",
+    "postUrl": "https://www.threads.com/@minh100110111/post/Dcpau1IAQJy",
+    "authorHandle": "@minh100110111",
+    "authorName": "",
+    "contentText": "❌請停止叫 ChatGPT 「幫我檢查文法和寫作」！\n爛 Prompt = 爛結果。\n以下是 7 個真正有效的 Prompt 1/7",
+    "publishedTime": "2026-08-30T02:16:11.000Z",
+    "collectedAt": "2026-09-14T18:41:55.641Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dcoce6hk8vU",
+    "postUrl": "https://www.threads.com/@chiaotaiyi/post/Dcoce6hk8vU",
+    "authorHandle": "@chiaotaiyi",
+    "authorName": "",
+    "contentText": "chiaotaiyiChatgpt2026-8-29",
+    "publishedTime": "2026-08-29T17:12:14.000Z",
+    "collectedAt": "2026-09-14T18:41:55.641Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcqsdTyGflv",
+    "postUrl": "https://www.threads.com/@bing_sunzhi/post/DcqsdTyGflv",
+    "authorHandle": "@bing_sunzhi",
+    "authorName": "",
+    "contentText": "同時收到 OpenAI 和 Anthropic 面試的大廠設計師分享了她的 Design Skills，就是這麼有含金量！\nMono-color Skill 是一個收到 OpenAI 和 Anthropic 面試的大廠設計師分享出來的，它把一整套編輯設計語言、復古印刷質感，以及克制的視覺規則，封裝成一個可以重複調用的漂亮藝術風格。\n比起提示詞，我覺得這種在 skills 裏面的視覺系統、字體和色彩卡片的參考文件方法，很值得學習，啟發良多。\n連結： 1/2\n留我自己未來做app的時候使用\n很久以前做了一個app 但沒有上架\n卡在商業版面不知道怎麼設計比較好\n現在這個工具好好用啊 1/2\n最近 Vibe Coding 越来越明显一个问题：\nAI 已经很会写代码了，但还是不太会「做得好看」。\n同样一句：\n「帮我做一个现代 SaaS Landing Page」\n最后很容易变成：\n渐变标题 + Bento + 大圆角 + 紫色按钮。\n整理 10 个我最近觉得很适合给 Vibe Coding「补审美」的网站 / 工具 ↓ 1/12\n❌請停止叫 ChatGPT 「幫我檢查文法和寫作」！\n爛 Prompt = 爛結果。\n以下是 7 個真正有效的 Prompt 1/7\n這組AI提示詞好讚 1/6\n之前做了一個 Threads 下載工具，老實說我自己也不知道為什麼現在累積到 217 個使用者了 XD\nThreadsSaver 的功能很單純：看到想留的 Threads，可以直接下載文字、圖片、影片，也支援 Markdown、JSON、HTML、CSV，甚至可以批次抓整頁內容。\n當初就是覺得「每次想整理 Threads 內容都很麻煩」，所以乾脆自己做一個。\n結果這種沒特別宣傳的小工具，反而慢慢有人在用。\n有時候產品真的不用一開始就很大，先把一個很小但很煩的問題解掉，就可能有人需要。 1/2\n這個 Skill 可以把你的程式碼架構做成可以互動的 Html\nStar 數有 31k\n偶爾需要確認架構但是懶得看程式碼可以用這個\ngithub.com/tt-a1…\nGitHub 上星標最高的爬蟲工具，沒有之一。據說是作者之前被一個月 16 美元的付費爬蟲搞煩了，一氣之下花幾天時間自己手搓了一個。\n純粹免費、沒有套路，不用註冊、不需要 API Key，也沒有按頁扣費，開箱即用。專為 AI 打造，能把任意複雜網頁一鍵提純成極簡、規範的 Markdown 格式，直接餵給 LLM 跑資料流水線。\n性能強又穩定，跑得比多數付費服務還快，最新版也優化了記憶體調度跟 GPU 容器部署，支援高併發穩定抓取。對常做內容的人來說，這種能自動化抓取的工具其實蠻值得研究。\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-30T14:10:19.000Z",
+    "collectedAt": "2026-09-14T18:41:57.290Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcqBBpvoCAk",
+    "postUrl": "https://www.threads.com/@oneday0013/post/DcqBBpvoCAk",
+    "authorHandle": "@oneday0013",
+    "authorName": "",
+    "contentText": "同時收到 OpenAI 和 Anthropic 面試的大廠設計師分享了她的 Design Skills，就是這麼有含金量！\nMono-color Skill 是一個收到 OpenAI 和 Anthropic 面試的大廠設計師分享出來的，它把一整套編輯設計語言、復古印刷質感，以及克制的視覺規則，封裝成一個可以重複調用的漂亮藝術風格。\n比起提示詞，我覺得這種在 skills 裏面的視覺系統、字體和色彩卡片的參考文件方法，很值得學習，啟發良多。\n連結： 1/2\n留我自己未來做app的時候使用\n很久以前做了一個app 但沒有上架\n卡在商業版面不知道怎麼設計比較好\n現在這個工具好好用啊 1/2\n最近 Vibe Coding 越来越明显一个问题：\nAI 已经很会写代码了，但还是不太会「做得好看」。\n同样一句：\n「帮我做一个现代 SaaS Landing Page」\n最后很容易变成：\n渐变标题 + Bento + 大圆角 + 紫色按钮。\n整理 10 个我最近觉得很适合给 Vibe Coding「补审美」的网站 / 工具 ↓ 1/12\n❌請停止叫 ChatGPT 「幫我檢查文法和寫作」！\n爛 Prompt = 爛結果。\n以下是 7 個真正有效的 Prompt 1/7\n這組AI提示詞好讚 1/6\n之前做了一個 Threads 下載工具，老實說我自己也不知道為什麼現在累積到 217 個使用者了 XD\nThreadsSaver 的功能很單純：看到想留的 Threads，可以直接下載文字、圖片、影片，也支援 Markdown、JSON、HTML、CSV，甚至可以批次抓整頁內容。\n當初就是覺得「每次想整理 Threads 內容都很麻煩」，所以乾脆自己做一個。\n結果這種沒特別宣傳的小工具，反而慢慢有人在用。\n有時候產品真的不用一開始就很大，先把一個很小但很煩的問題解掉，就可能有人需要。 1/2\n這個 Skill 可以把你的程式碼架構做成可以互動的 Html\nStar 數有 31k\n偶爾需要確認架構但是懶得看程式碼可以用這個\ngithub.com/tt-a1…\nGitHub 上星標最高的爬蟲工具，沒有之一。據說是作者之前被一個月 16 美元的付費爬蟲搞煩了，一氣之下花幾天時間自己手搓了一個。\n純粹免費、沒有套路，不用註冊、不需要 API Key，也沒有按頁扣費，開箱即用。專為 AI 打造，能把任意複雜網頁一鍵提純成極簡、規範的 Markdown 格式，直接餵給 LLM 跑資料流水線。\n性能強又穩定，跑得比多數付費服務還快，最新版也優化了記憶體調度跟 GPU 容器部署，支援高併發穩定抓取。對常做內容的人來說，這種能自動化抓取的工具其實蠻值得研究。\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-30T07:50:48.000Z",
+    "collectedAt": "2026-09-14T18:41:57.303Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcnT8gcmGtF",
+    "postUrl": "https://www.threads.com/@ai_triallab/post/DcnT8gcmGtF",
+    "authorHandle": "@ai_triallab",
+    "authorName": "",
+    "contentText": "同時收到 OpenAI 和 Anthropic 面試的大廠設計師分享了她的 Design Skills，就是這麼有含金量！\nMono-color Skill 是一個收到 OpenAI 和 Anthropic 面試的大廠設計師分享出來的，它把一整套編輯設計語言、復古印刷質感，以及克制的視覺規則，封裝成一個可以重複調用的漂亮藝術風格。\n比起提示詞，我覺得這種在 skills 裏面的視覺系統、字體和色彩卡片的參考文件方法，很值得學習，啟發良多。\n連結： 1/2\n留我自己未來做app的時候使用\n很久以前做了一個app 但沒有上架\n卡在商業版面不知道怎麼設計比較好\n現在這個工具好好用啊 1/2\n最近 Vibe Coding 越来越明显一个问题：\nAI 已经很会写代码了，但还是不太会「做得好看」。\n同样一句：\n「帮我做一个现代 SaaS Landing Page」\n最后很容易变成：\n渐变标题 + Bento + 大圆角 + 紫色按钮。\n整理 10 个我最近觉得很适合给 Vibe Coding「补审美」的网站 / 工具 ↓ 1/12\n❌請停止叫 ChatGPT 「幫我檢查文法和寫作」！\n爛 Prompt = 爛結果。\n以下是 7 個真正有效的 Prompt 1/7\n這組AI提示詞好讚 1/6\n之前做了一個 Threads 下載工具，老實說我自己也不知道為什麼現在累積到 217 個使用者了 XD\nThreadsSaver 的功能很單純：看到想留的 Threads，可以直接下載文字、圖片、影片，也支援 Markdown、JSON、HTML、CSV，甚至可以批次抓整頁內容。\n當初就是覺得「每次想整理 Threads 內容都很麻煩」，所以乾脆自己做一個。\n結果這種沒特別宣傳的小工具，反而慢慢有人在用。\n有時候產品真的不用一開始就很大，先把一個很小但很煩的問題解掉，就可能有人需要。 1/2\n這個 Skill 可以把你的程式碼架構做成可以互動的 Html\nStar 數有 31k\n偶爾需要確認架構但是懶得看程式碼可以用這個\ngithub.com/tt-a1…\nGitHub 上星標最高的爬蟲工具，沒有之一。據說是作者之前被一個月 16 美元的付費爬蟲搞煩了，一氣之下花幾天時間自己手搓了一個。\n純粹免費、沒有套路，不用註冊、不需要 API Key，也沒有按頁扣費，開箱即用。專為 AI 打造，能把任意複雜網頁一鍵提純成極簡、規範的 Markdown 格式，直接餵給 LLM 跑資料流水線。\n性能強又穩定，跑得比多數付費服務還快，最新版也優化了記憶體調度跟 GPU 容器部署，支援高併發穩定抓取。對常做內容的人來說，這種能自動化抓取的工具其實蠻值得研究。\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-29T06:38:31.000Z",
+    "collectedAt": "2026-09-14T18:41:57.317Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dcl39O5ilCj",
+    "postUrl": "https://www.threads.com/@vein_0o/post/Dcl39O5ilCj",
+    "authorHandle": "@vein_0o",
+    "authorName": "",
+    "contentText": "\"當N'Orm不知道該怎麼辦的時候就...\"\n\"暗地裡....有點...可愛...\"\n\"就是....很好玩( ´▽` ･)\"",
+    "publishedTime": "2026-08-28T17:19:15.000Z",
+    "collectedAt": "2026-09-14T18:41:58.995Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DckbURvGtAI",
+    "postUrl": "https://www.threads.com/@lisalin.chun/post/DckbURvGtAI",
+    "authorHandle": "@lisalin.chun",
+    "authorName": "",
+    "contentText": "如果你剛好買到蜜桃\n又剛好路過咖樂迪買生火腿\n一定要試試這道 味蕾爆擊 層次超豐富 1/2",
+    "publishedTime": "2026-08-28T03:45:05.000Z",
+    "collectedAt": "2026-09-14T18:41:58.995Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcjAG0Vk64P",
+    "postUrl": "https://www.threads.com/@sam_wang_000/post/DcjAG0Vk64P",
+    "authorHandle": "@sam_wang_000",
+    "authorName": "",
+    "contentText": "最近嘗試用Claude code+github(career-ops)把個人履歷、職涯特長打造一套求職篩選系統的ai agent🤣🤣\n整個過程不到5分鐘，這套ai就可以自動做到🥰\n1.每日固定掃描目標公司、特定求職網站爬網最新職缺\n2.讀取完整JD，過濾掉不匹配職缺及重覆資料\n3.進行career Fit、Culture、薪資、CV mathch等不同維度分析\n4.最後把職缺做權重評分及推薦度排序\n5.量身定制各職缺的cv\n6.決策權還是回歸到使用者，而且個資也都存在地端",
+    "publishedTime": "2026-08-27T14:28:05.000Z",
+    "collectedAt": "2026-09-14T18:41:58.995Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcjLh7hm0C7",
+    "postUrl": "https://www.threads.com/@futuredragonnn/post/DcjLh7hm0C7",
+    "authorHandle": "@futuredragonnn",
+    "authorName": "",
+    "contentText": "\"當N'Orm不知道該怎麼辦的時候就...\"\n\"暗地裡....有點...可愛...\"\n\"就是....很好玩( ´▽` ･)\"\n如果你剛好買到蜜桃\n又剛好路過咖樂迪買生火腿\n一定要試試這道 味蕾爆擊 層次超豐富 1/2\n最近嘗試用Claude code+github(career-ops)把個人履歷、職涯特長打造一套求職篩選系統的ai agent🤣🤣\n整個過程不到5分鐘，這套ai就可以自動做到🥰\n1.每日固定掃描目標公司、特定求職網站爬網最新職缺\n2.讀取完整JD，過濾掉不匹配職缺及重覆資料\n3.進行career Fit、Culture、薪資、CV mathch等不同維度分析\n4.最後把職缺做權重評分及推薦度排序\n5.量身定制各職缺的cv\n6.決策權還是回歸到使用者，而且個資也都存在地端\ncrawl4ai：視覺 browser agent 是 token 陷阱，DOM-first 才是工業解\n現在很多瀏覽器 agent 都靠截圖看螢幕，但這做法極度吃 token。GitHub 79.5k 星的 crawl4ai 直接放棄視覺辨識，改在毫秒內把動態網頁轉成乾淨的 Markdown 跟 JSON，專門餵給 LLM 或 agent。 1/4\n「海外面試講 Cross-cultural Collaboration，別只說：『我常跟海外同事開會』」\n最近陪跑同學準備新加坡職缺模擬面試。\n聊到 Cross-cultural Collaboration 時，我發現很多人明明有不少海外合作經驗，最後卻只講成：\n「我常跟美國 HQ 開會。」\n「我負責跟東南亞 Partner 溝通。」\n「我的工作語言是英文。」\n這些當然都算 Global Exposure。\n但站在面試官角度，他更想知道的是：\n換了一群做事方式、文化背景，甚至利益不同的人，你還能不能把事情推動下去？\n我通常會建議往三層去想： 1/5\n昨天發現的韓國AI指令！\n出處在哪已經找不到了\n我把copy的指令貼留言了\n大家趕快試試！ 1/2\n大推archify 這個skill\n可以把repo架構畫成可互動式的html\n跟老闆介紹系統架構的時候輕鬆多了… 1/2\n柏林快要選舉了\nWahl-O-Mat-選舉指南\n它比較像一個德國政治立場測量比對工具，男人昨晚睡前給我做一些像在職訓練🙄\nWahl-O-Mat（選舉指南）系統，「設計」其實很有意思，核心不是告訴你「應該投誰」，而是把你的政治立場與各政黨的立場做系統化比對，題數有38題個政治議題，男人在每一題跟我做討論，前題是打開政治時事/國際新聞一邊念一邊討論📊（雖然已經找一篇我會有興趣的）：美國CIA到蘇聯拜訪新聞，然後Sachsen-Anhalt最新選舉結果讓人憂心，再進入我們的選舉議題，然後進行討論。最後，我在28時候就昏睡無法回答了，後面10題是男人作答的！ （測試的結果如圖）\n當他停下來時候也醒來🫣\n好啦！這系統真的蠻有趣，上面其實就是把黨派提出的政見拿出來做題分析，以同意（stimme zu）、👎 不同意（stimme nicht zu）、🤷 中立／不知道（neutral）來作答。真的覺得這很適合拿來團體討論，裡面涵蓋範圍有：（字數太多於留言） 1/2\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-27T16:07:54.000Z",
+    "collectedAt": "2026-09-14T18:41:59.012Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dch3HnBkbOk",
+    "postUrl": "https://www.threads.com/@explorer_andrew/post/Dch3HnBkbOk",
+    "authorHandle": "@explorer_andrew",
+    "authorName": "",
+    "contentText": "「海外面試講 Cross-cultural Collaboration，別只說：『我常跟海外同事開會』」\n最近陪跑同學準備新加坡職缺模擬面試。\n聊到 Cross-cultural Collaboration 時，我發現很多人明明有不少海外合作經驗，最後卻只講成：\n「我常跟美國 HQ 開會。」\n「我負責跟東南亞 Partner 溝通。」\n「我的工作語言是英文。」\n這些當然都算 Global Exposure。\n但站在面試官角度，他更想知道的是：\n換了一群做事方式、文化背景，甚至利益不同的人，你還能不能把事情推動下去？\n我通常會建議往三層去想： 1/5",
+    "publishedTime": "2026-08-27T03:50:18.000Z",
+    "collectedAt": "2026-09-14T18:41:59.012Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dchp6jLk_7a",
+    "postUrl": "https://www.threads.com/@missk___daily/post/Dchp6jLk_7a",
+    "authorHandle": "@missk___daily",
+    "authorName": "",
+    "contentText": "\"當N'Orm不知道該怎麼辦的時候就...\"\n\"暗地裡....有點...可愛...\"\n\"就是....很好玩( ´▽` ･)\"\n如果你剛好買到蜜桃\n又剛好路過咖樂迪買生火腿\n一定要試試這道 味蕾爆擊 層次超豐富 1/2\n最近嘗試用Claude code+github(career-ops)把個人履歷、職涯特長打造一套求職篩選系統的ai agent🤣🤣\n整個過程不到5分鐘，這套ai就可以自動做到🥰\n1.每日固定掃描目標公司、特定求職網站爬網最新職缺\n2.讀取完整JD，過濾掉不匹配職缺及重覆資料\n3.進行career Fit、Culture、薪資、CV mathch等不同維度分析\n4.最後把職缺做權重評分及推薦度排序\n5.量身定制各職缺的cv\n6.決策權還是回歸到使用者，而且個資也都存在地端\ncrawl4ai：視覺 browser agent 是 token 陷阱，DOM-first 才是工業解\n現在很多瀏覽器 agent 都靠截圖看螢幕，但這做法極度吃 token。GitHub 79.5k 星的 crawl4ai 直接放棄視覺辨識，改在毫秒內把動態網頁轉成乾淨的 Markdown 跟 JSON，專門餵給 LLM 或 agent。 1/4\n「海外面試講 Cross-cultural Collaboration，別只說：『我常跟海外同事開會』」\n最近陪跑同學準備新加坡職缺模擬面試。\n聊到 Cross-cultural Collaboration 時，我發現很多人明明有不少海外合作經驗，最後卻只講成：\n「我常跟美國 HQ 開會。」\n「我負責跟東南亞 Partner 溝通。」\n「我的工作語言是英文。」\n這些當然都算 Global Exposure。\n但站在面試官角度，他更想知道的是：\n換了一群做事方式、文化背景，甚至利益不同的人，你還能不能把事情推動下去？\n我通常會建議往三層去想： 1/5\n昨天發現的韓國AI指令！\n出處在哪已經找不到了\n我把copy的指令貼留言了\n大家趕快試試！ 1/2\n大推archify 這個skill\n可以把repo架構畫成可互動式的html\n跟老闆介紹系統架構的時候輕鬆多了… 1/2\n柏林快要選舉了\nWahl-O-Mat-選舉指南\n它比較像一個德國政治立場測量比對工具，男人昨晚睡前給我做一些像在職訓練🙄\nWahl-O-Mat（選舉指南）系統，「設計」其實很有意思，核心不是告訴你「應該投誰」，而是把你的政治立場與各政黨的立場做系統化比對，題數有38題個政治議題，男人在每一題跟我做討論，前題是打開政治時事/國際新聞一邊念一邊討論📊（雖然已經找一篇我會有興趣的）：美國CIA到蘇聯拜訪新聞，然後Sachsen-Anhalt最新選舉結果讓人憂心，再進入我們的選舉議題，然後進行討論。最後，我在28時候就昏睡無法回答了，後面10題是男人作答的！ （測試的結果如圖）\n當他停下來時候也醒來🫣\n好啦！這系統真的蠻有趣，上面其實就是把黨派提出的政見拿出來做題分析，以同意（stimme zu）、👎 不同意（stimme nicht zu）、🤷 中立／不知道（neutral）來作答。真的覺得這很適合拿來團體討論，裡面涵蓋範圍有：（字數太多於留言） 1/2\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-27T01:54:56.000Z",
+    "collectedAt": "2026-09-14T18:41:59.029Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dcde5Csicr3",
+    "postUrl": "https://www.threads.com/@yukilifestyle9/post/Dcde5Csicr3",
+    "authorHandle": "@yukilifestyle9",
+    "authorName": "",
+    "contentText": "\"當N'Orm不知道該怎麼辦的時候就...\"\n\"暗地裡....有點...可愛...\"\n\"就是....很好玩( ´▽` ･)\"\n如果你剛好買到蜜桃\n又剛好路過咖樂迪買生火腿\n一定要試試這道 味蕾爆擊 層次超豐富 1/2\n最近嘗試用Claude code+github(career-ops)把個人履歷、職涯特長打造一套求職篩選系統的ai agent🤣🤣\n整個過程不到5分鐘，這套ai就可以自動做到🥰\n1.每日固定掃描目標公司、特定求職網站爬網最新職缺\n2.讀取完整JD，過濾掉不匹配職缺及重覆資料\n3.進行career Fit、Culture、薪資、CV mathch等不同維度分析\n4.最後把職缺做權重評分及推薦度排序\n5.量身定制各職缺的cv\n6.決策權還是回歸到使用者，而且個資也都存在地端\ncrawl4ai：視覺 browser agent 是 token 陷阱，DOM-first 才是工業解\n現在很多瀏覽器 agent 都靠截圖看螢幕，但這做法極度吃 token。GitHub 79.5k 星的 crawl4ai 直接放棄視覺辨識，改在毫秒內把動態網頁轉成乾淨的 Markdown 跟 JSON，專門餵給 LLM 或 agent。 1/4\n「海外面試講 Cross-cultural Collaboration，別只說：『我常跟海外同事開會』」\n最近陪跑同學準備新加坡職缺模擬面試。\n聊到 Cross-cultural Collaboration 時，我發現很多人明明有不少海外合作經驗，最後卻只講成：\n「我常跟美國 HQ 開會。」\n「我負責跟東南亞 Partner 溝通。」\n「我的工作語言是英文。」\n這些當然都算 Global Exposure。\n但站在面試官角度，他更想知道的是：\n換了一群做事方式、文化背景，甚至利益不同的人，你還能不能把事情推動下去？\n我通常會建議往三層去想： 1/5\n昨天發現的韓國AI指令！\n出處在哪已經找不到了\n我把copy的指令貼留言了\n大家趕快試試！ 1/2\n大推archify 這個skill\n可以把repo架構畫成可互動式的html\n跟老闆介紹系統架構的時候輕鬆多了… 1/2\n柏林快要選舉了\nWahl-O-Mat-選舉指南\n它比較像一個德國政治立場測量比對工具，男人昨晚睡前給我做一些像在職訓練🙄\nWahl-O-Mat（選舉指南）系統，「設計」其實很有意思，核心不是告訴你「應該投誰」，而是把你的政治立場與各政黨的立場做系統化比對，題數有38題個政治議題，男人在每一題跟我做討論，前題是打開政治時事/國際新聞一邊念一邊討論📊（雖然已經找一篇我會有興趣的）：美國CIA到蘇聯拜訪新聞，然後Sachsen-Anhalt最新選舉結果讓人憂心，再進入我們的選舉議題，然後進行討論。最後，我在28時候就昏睡無法回答了，後面10題是男人作答的！ （測試的結果如圖）\n當他停下來時候也醒來🫣\n好啦！這系統真的蠻有趣，上面其實就是把黨派提出的政見拿出來做題分析，以同意（stimme zu）、👎 不同意（stimme nicht zu）、🤷 中立／不知道（neutral）來作答。真的覺得這很適合拿來團體討論，裡面涵蓋範圍有：（字數太多於留言） 1/2\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-25T11:01:38.000Z",
+    "collectedAt": "2026-09-14T18:41:59.048Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DciI3olj_Vv",
+    "postUrl": "https://www.threads.com/@warren_0303/post/DciI3olj_Vv",
+    "authorHandle": "@warren_0303",
+    "authorName": "",
+    "contentText": "大推archify 這個skill\n可以把repo架構畫成可互動式的html\n跟老闆介紹系統架構的時候輕鬆多了… 1/2",
+    "publishedTime": "2026-08-27T06:25:25.000Z",
+    "collectedAt": "2026-09-14T18:41:59.048Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DciLQnvDcvL",
+    "postUrl": "https://www.threads.com/@miki.de_/post/DciLQnvDcvL",
+    "authorHandle": "@miki.de_",
+    "authorName": "",
+    "contentText": "柏林快要選舉了\nWahl-O-Mat-選舉指南\n它比較像一個德國政治立場測量比對工具，男人昨晚睡前給我做一些像在職訓練🙄\nWahl-O-Mat（選舉指南）系統，「設計」其實很有意思，核心不是告訴你「應該投誰」，而是把你的政治立場與各政黨的立場做系統化比對，題數有38題個政治議題，男人在每一題跟我做討論，前題是打開政治時事/國際新聞一邊念一邊討論📊（雖然已經找一篇我會有興趣的）：美國CIA到蘇聯拜訪新聞，然後Sachsen-Anhalt最新選舉結果讓人憂心，再進入我們的選舉議題，然後進行討論。最後，我在28時候就昏睡無法回答了，後面10題是男人作答的！ （測試的結果如圖）\n當他停下來時候也醒來🫣\n好啦！這系統真的蠻有趣，上面其實就是把黨派提出的政見拿出來做題分析，以同意（stimme zu）、👎 不同意（stimme nicht zu）、🤷 中立／不知道（neutral）來作答。真的覺得這很適合拿來團體討論，裡面涵蓋範圍有：（字數太多於留言） 1/2",
+    "publishedTime": "2026-08-27T06:46:18.000Z",
+    "collectedAt": "2026-09-14T18:41:59.048Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcgjEV0lE3W",
+    "postUrl": "https://www.threads.com/@zhong_yi_1120/post/DcgjEV0lE3W",
+    "authorHandle": "@zhong_yi_1120",
+    "authorName": "",
+    "contentText": "最近把工作流換成了 DeepSeek Harness，真的有種相見恨晚的感覺。\n簡單說，它就是個「插件化」的 Agent。我把 Codex、Claude Code、Copilot 全串在一起，需要誰就派誰上。比起那種把所有模型混在一起的大雜燴，這種架構才是我要的：Harness 當大腦負責派活，各個模型當手腳各司其職。\n最誇張的還是價格。8 月中漲過一次價，改峰谷計費（9–12、14–18 點高峰，其餘半價）。離峰時段 V4 Flash 輸入約 NT$7、輸出約 NT$21（每百萬 token），V4 Pro 輸入約 NT$21、輸出約 NT$64。對比同級旗艦（GPT-5.4 輸入 NT$80、GPT-5.5 輸出 NT$960）仍便宜好幾倍。省下的錢買咖啡不香嗎？\n現在有了 Harness，寫程式時它會自動分派任務——重度開發直接丟給 Codex或claude code，我只要下指令、看結果，剩下的它都會處理好。\n省錢、省心，也不會浪費 token。這套效率工具確實好用，推薦大家可以試試。",
+    "publishedTime": "2026-08-26T15:35:51.000Z",
+    "collectedAt": "2026-09-14T18:42:00.637Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dcfw5cXE3mi",
+    "postUrl": "https://www.threads.com/@charles__tseng/post/Dcfw5cXE3mi",
+    "authorHandle": "@charles__tseng",
+    "authorName": "",
+    "contentText": "正在回覆@with._.kiri\n送審前可以再用這個 skill 跑跑看\ngithub.com/truon…",
+    "publishedTime": "2026-08-26T08:17:28.000Z",
+    "collectedAt": "2026-09-14T18:42:00.637Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcfT-qAkpqF",
+    "postUrl": "https://www.threads.com/@paulyao825/post/DcfT-qAkpqF",
+    "authorHandle": "@paulyao825",
+    "authorName": "",
+    "contentText": "正在回覆@paulyao825\n還有一個方法讓各位求職者在網路上的能見度大幅提高，可以試用看看這個工具，上傳履歷2分鐘內搞定，被招募方的AI Agent看到的機率大幅提升：humetric.net 2/2",
+    "publishedTime": "2026-08-26T04:04:46.000Z",
+    "collectedAt": "2026-09-14T18:42:00.637Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcdPvzNGyFn",
+    "postUrl": "https://www.threads.com/@maylogger_designer/post/DcdPvzNGyFn",
+    "authorHandle": "@maylogger_designer",
+    "authorName": "",
+    "contentText": "Balsa UI 是一套同時讓人與 AI Agent 都看得懂的 Design System 產生器。\n過去的做法通常是「文件寫給開發者看」，你讀完文件、理解規則，再自己安裝、設定、自己設定讓 AI 使用。但 Balsa UI 從一開始就假設：\n「這些事情是 AI Agent 要做的。」\n你在 balsa-ui.com/tools… 裡把 Design System 設定好，它連安裝步驟都是直接幫你產生 Prompt，預設就是叫你丟給 AI Agent 去處理。重點是從這邊開始，你的 AI 之後都不會歪掉。\n比 Shadcn UI 更激進。 balsa-ui.com",
+    "publishedTime": "2026-08-25T08:49:18.000Z",
+    "collectedAt": "2026-09-14T18:42:02.116Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcdNpOFEZ1i",
+    "postUrl": "https://www.threads.com/@jaung_andy/post/DcdNpOFEZ1i",
+    "authorHandle": "@jaung_andy",
+    "authorName": "",
+    "contentText": "這臺灣的梅酒超扯\n怎麼是會是這樣的味道\n超奇怪的。\n記憶中喝過的梅酒，\n許多都是常溫就非常的\n甜膩、酸、膩口、嘴巴都會充滿著糖份感，\n但它們，真的不會。\n聽說，\n還在世界比賽中得過金牌，\n台灣之光的梅酒喝過嗎，\n用臺灣的碧螺春、凍頂烏龍茶，\n加上信義鄉的梅子。\n真的試過一次就回不去了，\n以後要喝梅酒\n真的非臺灣梅酒不行了。 1/2\n1.0 萬",
+    "publishedTime": "2026-08-25T08:30:56.000Z",
+    "collectedAt": "2026-09-14T18:42:05.339Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbhKWtIGSXI",
+    "postUrl": "https://www.threads.com/@ec.wife/post/DbhKWtIGSXI",
+    "authorHandle": "@ec.wife",
+    "authorName": "",
+    "contentText": "我的人生從去年底有很重大的變化，算起來感覺去湯倉神社打破厄割是一個很重要的關鍵（第二頁的影片可以看）。\n我身邊的小人幾乎都不見了，真的突然有人瞬間消失（沒有死），也突然有很多很厲害的機會，外交部的非洲演講、去美國演講、幸運解鎖世界盃！整個人還瘦了 20 幾公斤。\n真的覺得厄割之玉非常強，分享給感覺總是被陰霾纏身的人。 1/2\n3.7 萬",
+    "publishedTime": "2026-08-02T00:47:45.000Z",
+    "collectedAt": "2026-09-14T18:42:05.339Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dcca-h1kkI4",
+    "postUrl": "https://www.threads.com/@im_lou_liya/post/Dcca-h1kkI4",
+    "authorHandle": "@im_lou_liya",
+    "authorName": "",
+    "contentText": "正在回覆@nemos_vintage\n新宿二丁目的Queendom很不錯喔！今年新開的工作人員都很讚🥰印象中外國客人居多，然後它就在Gold Finger 旁邊！不喜歡的話也可以換邊🤣 這兩間平日有可能是Mix 男女都可以的，為了要生存🙃但是大部分時間都很讚 maps.app.goo.gl/dHs7c…",
+    "publishedTime": "2026-08-25T01:08:12.000Z",
+    "collectedAt": "2026-09-14T18:42:05.339Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcYvdcJgX0e",
+    "postUrl": "https://www.threads.com/@hunter.lu1118/post/DcYvdcJgX0e",
+    "authorHandle": "@hunter.lu1118",
+    "authorName": "",
+    "contentText": "發瘋可愛的指令😍 1/2\n1.3 萬",
+    "publishedTime": "2026-08-23T14:50:13.000Z",
+    "collectedAt": "2026-09-14T18:42:05.339Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcaoHCKiQCi",
+    "postUrl": "https://www.threads.com/@shanroo112/post/DcaoHCKiQCi",
+    "authorHandle": "@shanroo112",
+    "authorName": "",
+    "contentText": "很臨時地決定——下下週想衝仙台玩了✈️🤣\n第一次去仙台，大家有沒有什麼很推的神社、景點或一定要去的地方？\n冷門景點如果大眾交通運輸工具能到也超歡迎！拜託推坑我🥹💖\n目前放進清單的：\n🏐 仙台車站\n《排球少年!!》聖地巡禮！\n🐍 金蛇水神社\n聽說是很有名的能量景點＋招財神社💰✨\n光是「財運滿滿」四個字我就非去不可🤣\n還有哪裡是「都到仙台了怎麼可以不去」的嗎！",
+    "publishedTime": "2026-08-24T08:24:28.000Z",
+    "collectedAt": "2026-09-14T18:42:05.339Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcaMHdUmHnN",
+    "postUrl": "https://www.threads.com/@ai_triallab/post/DcaMHdUmHnN",
+    "authorHandle": "@ai_triallab",
+    "authorName": "",
+    "contentText": "這臺灣的梅酒超扯\n怎麼是會是這樣的味道\n超奇怪的。\n記憶中喝過的梅酒，\n許多都是常溫就非常的\n甜膩、酸、膩口、嘴巴都會充滿著糖份感，\n但它們，真的不會。\n聽說，\n還在世界比賽中得過金牌，\n台灣之光的梅酒喝過嗎，\n用臺灣的碧螺春、凍頂烏龍茶，\n加上信義鄉的梅子。\n真的試過一次就回不去了，\n以後要喝梅酒\n真的非臺灣梅酒不行了。 1/2\n1.0 萬\n我的人生從去年底有很重大的變化，算起來感覺去湯倉神社打破厄割是一個很重要的關鍵（第二頁的影片可以看）。\n我身邊的小人幾乎都不見了，真的突然有人瞬間消失（沒有死），也突然有很多很厲害的機會，外交部的非洲演講、去美國演講、幸運解鎖世界盃！整個人還瘦了 20 幾公斤。\n真的覺得厄割之玉非常強，分享給感覺總是被陰霾纏身的人。 1/2\nec.wife\n3.7 萬\n正在回覆@nemos_vintage\n新宿二丁目的Queendom很不錯喔！今年新開的工作人員都很讚🥰印象中外國客人居多，然後它就在Gold Finger 旁邊！不喜歡的話也可以換邊🤣 這兩間平日有可能是Mix 男女都可以的，為了要生存🙃但是大部分時間都很讚 maps.app.goo.gl/dHs7c…\n發瘋可愛的指令😍 1/2\n1.3 萬\n很臨時地決定——下下週想衝仙台玩了✈️🤣\n第一次去仙台，大家有沒有什麼很推的神社、景點或一定要去的地方？\n冷門景點如果大眾交通運輸工具能到也超歡迎！拜託推坑我🥹💖\n目前放進清單的：\n🏐 仙台車站\n《排球少年!!》聖地巡禮！\n🐍 金蛇水神社\n聽說是很有名的能量景點＋招財神社💰✨\n光是「財運滿滿」四個字我就非去不可🤣\n還有哪裡是「都到仙台了怎麼可以不去」的嗎！\n逆向這玩意兒，最近也開始被打包成「外掛」了。我挖到一個專案，叫 reverse-skill。\n丟進 Codex、Cursor、Claude Code 之後，遇到 APK、前端程式碼、韌體，它會自己判斷要從哪裡下手。它還會自己決定要調什麼工具，後面要怎麼拆解。\n說穿了，最狠的不是它會跑指令。而是它把很多逆向老手靠好幾年踩坑累積出來的「路徑感」，直接塞進了一個 Skill 裡。\n我自己看完第一反應蠻複雜的。以後很多安全入門的活，可能不是學不會，而是沒必要照老路學了。\n門檻不是降低了。是門口警衛都下班了。\n個人覺得，對想入門逆向、或想省重複操作的人來說，這個方向蠻值得觀察。\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-24T04:19:58.000Z",
+    "collectedAt": "2026-09-14T18:42:05.354Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dcag59XGuHQ",
+    "postUrl": "https://www.threads.com/@jyu.work/post/Dcag59XGuHQ",
+    "authorHandle": "@jyu.work",
+    "authorName": "",
+    "contentText": "- 我覺得很多人開始 Vibe Coding 是非常好的\n- 大家願意自己弄髒手，把想法變成實際可運行的系統，解決人們遇到的問題，我覺得非常值得鼓勵\n- 而且我也確實看到一些十分不錯的作品，儘管我已經是一位工程師，還是有很多值得學習和觀摩的地方\n- 不過，如果要從工具變成「產品」（收費服務），我認為以下是比較負責任的表現： 1/3",
+    "publishedTime": "2026-08-24T07:21:31.000Z",
+    "collectedAt": "2026-09-14T18:42:06.926Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcaJkppCYRB",
+    "postUrl": "https://www.threads.com/@michaelscchen/post/DcaJkppCYRB",
+    "authorHandle": "@michaelscchen",
+    "authorName": "",
+    "contentText": "想請問大家，你們是怎麼讓 AI 在自己睡覺或離開電腦時，還能持續自動執行任務的？\n我目前主要用 Codex，但實際跑工作流程時，常常每完成一個階段，就需要我回來確認、下指令，才能繼續下一步。\n我想做到的是：先設定好目標、規則和權限後，讓 AI 可以自己判斷下一步、持續執行，只有遇到例外狀況或真的需要人類決策時才停下來找我。\n想請教有在做這類 workflow 的人，你們通常是用 Agent framework、排程、自動化工具，還是其他架構來做到的？ 1/2",
+    "publishedTime": "2026-08-24T03:57:38.000Z",
+    "collectedAt": "2026-09-14T18:42:06.926Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcYrngmDtSd",
+    "postUrl": "https://www.threads.com/@aidamingbai/post/DcYrngmDtSd",
+    "authorHandle": "@aidamingbai",
+    "authorName": "",
+    "contentText": "大多數人把 ChatGPT 拿來改履歷。\n但我最近看到一個更聰明的用法：\n把你的薪資、工作經歷和技能丟給 AI，讓它找出你自己都沒發現的賺錢機會。\n很多人不是沒有能力，而是做久了以後，會把自己的能力當成「這不是大家都會嗎？」\n其實，你習以為常的經驗，可能正是別人願意付費解決的問題。\n你可以把履歷貼給 ChatGPT，再依序問它這 7 個問題：\n1. 根據我的職涯經歷，找出 10 個被我低估的能力。為什麼有價值？誰願意付費？AI 可以怎麼協助我放大它？\n2. 以我現在的經驗，列出 10 種現實可行的額外收入方式，並分析啟動成本、投入時間、難度與收入潛力。\n3. 我現有的能力，可以發展成哪些服務、顧問方案、數位產品或自由接案項目？\n4. 如果只能選一件事，想用我目前的能力最快增加收入，你會建議我先做什麼？為什麼？\n5. 依照我的經驗，哪些職位、產業或機會，可能比我現在更有價值？我具備哪些條件？\n6. 設計 5 個可以用 AI 輔助、每週投入不到 5 小時就能開始的服務。\n7. 如果我要在未來 90 天增加職涯安全感與額外收入，請幫我排出具體的行動計畫。 1/2",
+    "publishedTime": "2026-08-23T14:16:38.000Z",
+    "collectedAt": "2026-09-14T18:42:06.926Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcYsqJNDcSY",
+    "postUrl": "https://www.threads.com/@allen.wang_618/post/DcYsqJNDcSY",
+    "authorHandle": "@allen.wang_618",
+    "authorName": "",
+    "contentText": "看過這影片的人\n不知道現在都在做什麼呢🤣\n4.3 萬",
+    "publishedTime": "2026-08-23T14:27:00.000Z",
+    "collectedAt": "2026-09-14T18:42:06.926Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcXncd3iWPH",
+    "postUrl": "https://www.threads.com/@wadidi_hu.wassup/post/DcXncd3iWPH",
+    "authorHandle": "@wadidi_hu.wassup",
+    "authorName": "",
+    "contentText": "wadidi_hu.wassup2026-8-23",
+    "publishedTime": "2026-08-23T04:20:56.000Z",
+    "collectedAt": "2026-09-14T18:42:08.485Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcYg3abEs_K",
+    "postUrl": "https://www.threads.com/@mudskipper_0_/post/DcYg3abEs_K",
+    "authorHandle": "@mudskipper_0_",
+    "authorName": "",
+    "contentText": "以前不懂為什麼總有人故意要把另一個人弄哭\n直到我看到這個影片...",
+    "publishedTime": "2026-08-23T12:55:45.000Z",
+    "collectedAt": "2026-09-14T18:42:08.485Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcFh1mrk3Ik",
+    "postUrl": "https://www.threads.com/@nellehellen/post/DcFh1mrk3Ik",
+    "authorHandle": "@nellehellen",
+    "authorName": "",
+    "contentText": "剛剛開了很大罐的鮪魚罐頭做三明治\n覺得鮪魚罐頭的油倒掉太浪費了\n想說來做一個魚味很重的美乃滋配著吃\n結果完全打不起來超失敗\n看著很稀的魚油+蛋\n秉持著絕對不能浪費食物的精神\n加了麵粉煎成餅\n結果吃起來有甜不辣的味道\n比我在亞超買的甜不辣還甜不辣\n吃到差點哭出來 有夠好吃",
+    "publishedTime": "2026-08-16T03:45:37.000Z",
+    "collectedAt": "2026-09-14T18:42:08.485Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcXuHKrERfV",
+    "postUrl": "https://www.threads.com/@nyanako0129/post/DcXuHKrERfV",
+    "authorHandle": "@nyanako0129",
+    "authorName": "",
+    "contentText": "分享，留友看\nClaude Code 環境變數設定大全（含隱藏未公開變數）\n且內付逆向方法論\n這個比我寫的更詳細\n感謝 @charliie.dev",
+    "publishedTime": "2026-08-23T05:19:12.000Z",
+    "collectedAt": "2026-09-14T18:42:08.485Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcYOgb3E8ct",
+    "postUrl": "https://www.threads.com/@yu_jent/post/DcYOgb3E8ct",
+    "authorHandle": "@yu_jent",
+    "authorName": "",
+    "contentText": "🍮：剛才超可愛啊～看到臉了嗎 超可愛~回放\n🫑：🫪🙀",
+    "publishedTime": "2026-08-23T10:02:31.000Z",
+    "collectedAt": "2026-09-14T18:42:10.034Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcXP5pDjY7c",
+    "postUrl": "https://www.threads.com/@zzwave_1114/post/DcXP5pDjY7c",
+    "authorHandle": "@zzwave_1114",
+    "authorName": "",
+    "contentText": "Anthropic 裡面很多人在用一個叫 ELI5 的 Skill。\n用法：\n/eli5 <你想搞懂的東西>\n它會直接做一個 HTML 頁面，用大圖和少量文字，把一件事講到完全沒背景的人也看得懂。\n它跟 Matt Pocock 的 /wait-what 有什麼差別？ 1/4",
+    "publishedTime": "2026-08-23T00:55:12.000Z",
+    "collectedAt": "2026-09-14T18:42:10.034Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcWLbMSGK3z",
+    "postUrl": "https://www.threads.com/@jacobtechart/post/DcWLbMSGK3z",
+    "authorHandle": "@jacobtechart",
+    "authorName": "",
+    "contentText": "正在回覆@tinaluo0318\nmotionsites.ai\n這個有免費模板，可以直接套用",
+    "publishedTime": "2026-08-22T14:56:51.000Z",
+    "collectedAt": "2026-09-14T18:42:10.035Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcVdu5LkaU7",
+    "postUrl": "https://www.threads.com/@threadthreadneen/post/DcVdu5LkaU7",
+    "authorHandle": "@threadthreadneen",
+    "authorName": "",
+    "contentText": "正在回覆@yongansins\n如果你習慣 windows 的檔案管理方式, 那可以用用 Path Finder",
+    "publishedTime": "2026-08-22T08:17:35.000Z",
+    "collectedAt": "2026-09-14T18:42:11.684Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcU8dmWE8oG",
+    "postUrl": "https://www.threads.com/@holdingspace.here/post/DcU8dmWE8oG",
+    "authorHandle": "@holdingspace.here",
+    "authorName": "",
+    "contentText": "一篇發表於 2026 年的質性研究，訪談了 15 位被診斷為自閉症類群障礙（ASD）的成人。\n研究中，參與者反覆提到：\n「被理解」是關係中一個非常重要的需求。\n對他們而言，什麼才算是「被理解」？而在一次次「不被理解」的經驗背後，又可能累積了哪些更深層的關係傷害？\n而無論我們或所愛的人是否為神經多元者，這些經驗又能帶給我們哪些提醒，幫助我們更好地理解彼此，也建立更好的關係？\n以下是我讀完這篇研究後的整理： 1/9",
+    "publishedTime": "2026-08-22T03:26:52.000Z",
+    "collectedAt": "2026-09-14T18:42:11.684Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcVd97sAZu7",
+    "postUrl": "https://www.threads.com/@aiposthub/post/DcVd97sAZu7",
+    "authorHandle": "@aiposthub",
+    "authorName": "",
+    "contentText": "Anthropic 團隊最近有個 /eli5 Skill，我覺得超適合 PM、教學、簡報的人。\n它做的事情很簡單：\n你丟一個複雜主題給 Claude，\n它會直接幫你做成「大圖＋少量文字」的 HTML 圖解。 1/5",
+    "publishedTime": "2026-08-22T08:19:39.000Z",
+    "collectedAt": "2026-09-14T18:42:11.684Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcSv_wWmDTS",
+    "postUrl": "https://www.threads.com/@dustin_gmat/post/DcSv_wWmDTS",
+    "authorHandle": "@dustin_gmat",
+    "authorName": "",
+    "contentText": "我不知道大家有沒有發現，Opus除了愛說外星話之外，還有一個讓人覺得非常躁的點：雞婆。\n什麼意思呢？比如我說「把這份報價單的付款條件改成分兩期，簽約先付一半，驗收後再付一半」\n啊這不就是改而已，有什麼好爭的？但是Opus會來給我這樣說話：\n「已經改好了。不過有一點我想溫和地提出：你可能會覺得分期付款一定對現金流比較友善，但實際上分期會延後你的入帳時間，而且增加了對方賴帳的風險窗口。值得你再想想。」\n馬的咧，我什麼時候說過分期一定對現金流比較好？\n我超討厭這種為說而說，為了營造「回答結尾有獨立判斷力」而硬塞進去的東西！！最重要的是，我最討厭有人來自以為聰明假裝猜我的心然後再反駁我根本沒說過的東西，這種人如果是我的朋友早就反手封鎖。\n所以我後來設計了一個SKILL專門治他的語病。 1/2",
+    "publishedTime": "2026-08-21T06:59:27.000Z",
+    "collectedAt": "2026-09-14T18:42:11.685Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcSjltBmKA1",
+    "postUrl": "https://www.threads.com/@s.cat.n_jkr_my/post/DcSjltBmKA1",
+    "authorHandle": "@s.cat.n_jkr_my",
+    "authorName": "",
+    "contentText": "在這裡蓋一幢P'Korn 樓吧！\n歡迎留下你最喜愛的P'korn 照！！ 1/2\n正在回覆@yongansins\n如果你習慣 windows 的檔案管理方式, 那可以用用 Path Finder\n已關閉julian77882266的貼文通知。你可以在設定管理關閉通知的對象。\n一篇發表於 2026 年的質性研究，訪談了 15 位被診斷為自閉症類群障礙（ASD）的成人。\n研究中，參與者反覆提到：\n「被理解」是關係中一個非常重要的需求。\n對他們而言，什麼才算是「被理解」？而在一次次「不被理解」的經驗背後，又可能累積了哪些更深層的關係傷害？\n而無論我們或所愛的人是否為神經多元者，這些經驗又能帶給我們哪些提醒，幫助我們更好地理解彼此，也建立更好的關係？\n以下是我讀完這篇研究後的整理： 1/9\nAnthropic 團隊最近有個 /eli5 Skill，我覺得超適合 PM、教學、簡報的人。\n它做的事情很簡單：\n你丟一個複雜主題給 Claude，\n它會直接幫你做成「大圖＋少量文字」的 HTML 圖解。 1/5\n我不知道大家有沒有發現，Opus除了愛說外星話之外，還有一個讓人覺得非常躁的點：雞婆。\n什麼意思呢？比如我說「把這份報價單的付款條件改成分兩期，簽約先付一半，驗收後再付一半」\n啊這不就是改而已，有什麼好爭的？但是Opus會來給我這樣說話：\n「已經改好了。不過有一點我想溫和地提出：你可能會覺得分期付款一定對現金流比較友善，但實際上分期會延後你的入帳時間，而且增加了對方賴帳的風險窗口。值得你再想想。」\n馬的咧，我什麼時候說過分期一定對現金流比較好？\n我超討厭這種為說而說，為了營造「回答結尾有獨立判斷力」而硬塞進去的東西！！最重要的是，我最討厭有人來自以為聰明假裝猜我的心然後再反駁我根本沒說過的東西，這種人如果是我的朋友早就反手封鎖。\n所以我後來設計了一個SKILL專門治他的語病。 1/2\n「當你的眼睛 瞇著笑☺️🤏🏻」\n一些4條眉毛的合集☺️\n🍮 : ☺️😁 1/3\n日本🇯🇵超爆紅的睡前療癒\n睡前做這組伸展，讓身體好好放鬆一下\n這三組每次睡前做10次\n小腹縮小之外順便放鬆一整天疲累 1/2\n9.1 萬\n1.6 萬\n⚠️上次提到的濾水器來了⚠️現在最便宜的一檔👇👇\nkuma-academy.com/9h5h7…\n[徐小花X黑熊學院-限量特價MIT濾水器軟水壺組］團購\n💚made in Taiwan最安心的「水」防災方案！\n💚台灣製造、又輕又小的隨身淨水濾芯，日常攜帶、防災包必備\n💚不用再比CP值，這就是同公升數最小的淨水濾芯囉～節省防災包的重量與空間～\n🩷記得輸入折扣碼👉hana2758👈再折100元～\n🩷記得輸入折扣碼👉hana2758👈再折100元～\n🩷記得輸入折扣碼👉hana2758👈再折100元～才能打到骨折唷！\n-\n稍微簡介一下這次團購，精挑細選一人用及兩人用的水防災方案：\n1️⃣1L水壺組（軟水壺*1+3000L濾芯*1）折扣後1580元，可以濾三千公升的水～\n以一位成年人的每日建議飲水量來計算，可連續使用至少2年。\n2️⃣1L水壺組+1顆abs寶特瓶濾水器（軟水壺*1+3000L濾芯*1+1000L寶特瓶濾水器*1）折扣後1799元，總共可以濾四千公升的水，足夠讓小家庭（2-3人）使用至少1年。\n✅需要備足「水」防災方案的朋友一定要盡快下單，數量好像不多的樣子～ 1/2\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-21T05:11:03.000Z",
+    "collectedAt": "2026-09-14T18:42:13.430Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcQ9fBkj7_1",
+    "postUrl": "https://www.threads.com/@chtyc0127/post/DcQ9fBkj7_1",
+    "authorHandle": "@chtyc0127",
+    "authorName": "",
+    "contentText": "日本🇯🇵超爆紅的睡前療癒\n睡前做這組伸展，讓身體好好放鬆一下\n這三組每次睡前做10次\n小腹縮小之外順便放鬆一整天疲累 1/2\n9.1 萬\n1.6 萬",
+    "publishedTime": "2026-08-20T14:18:50.000Z",
+    "collectedAt": "2026-09-14T18:42:13.431Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcRF0-UEzgK",
+    "postUrl": "https://www.threads.com/@hellohanahsu/post/DcRF0-UEzgK",
+    "authorHandle": "@hellohanahsu",
+    "authorName": "",
+    "contentText": "⚠️上次提到的濾水器來了⚠️現在最便宜的一檔👇👇\nkuma-academy.com/9h5h7…\n[徐小花X黑熊學院-限量特價MIT濾水器軟水壺組］團購\n💚made in Taiwan最安心的「水」防災方案！\n💚台灣製造、又輕又小的隨身淨水濾芯，日常攜帶、防災包必備\n💚不用再比CP值，這就是同公升數最小的淨水濾芯囉～節省防災包的重量與空間～\n🩷記得輸入折扣碼👉hana2758👈再折100元～\n🩷記得輸入折扣碼👉hana2758👈再折100元～\n🩷記得輸入折扣碼👉hana2758👈再折100元～才能打到骨折唷！\n-\n稍微簡介一下這次團購，精挑細選一人用及兩人用的水防災方案：\n1️⃣1L水壺組（軟水壺*1+3000L濾芯*1）折扣後1580元，可以濾三千公升的水～\n以一位成年人的每日建議飲水量來計算，可連續使用至少2年。\n2️⃣1L水壺組+1顆abs寶特瓶濾水器（軟水壺*1+3000L濾芯*1+1000L寶特瓶濾水器*1）折扣後1799元，總共可以濾四千公升的水，足夠讓小家庭（2-3人）使用至少1年。\n✅需要備足「水」防災方案的朋友一定要盡快下單，數量好像不多的樣子～ 1/2",
+    "publishedTime": "2026-08-20T15:31:45.000Z",
+    "collectedAt": "2026-09-14T18:42:13.431Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcQ-s2pE6O9",
+    "postUrl": "https://www.threads.com/@ormk0.0/post/DcQ-s2pE6O9",
+    "authorHandle": "@ormk0.0",
+    "authorName": "",
+    "contentText": "Orm這一招激將法很猛啊🤫🤫\n故意把留言遞給00讀出來\n明擺著就是想看她吃醋的反應!!!!\n結果00也完全沒在躲\n還立刻在現場搜查Ocean 到底在哪裡🤣\nOrm：來，這個給妳讀。\nLing：致 Lingling Kwong，「P’Orm是我的」——來自 Ocean。Ocean 在哪裡啊？沒舉手，是Ocean 嗎？\n很抱歉，播放此影片時發生問題。\n瞭解詳情",
+    "publishedTime": "2026-08-20T14:34:55.000Z",
+    "collectedAt": "2026-09-14T18:42:15.001Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcQdezkkkCe",
+    "postUrl": "https://www.threads.com/@missnatsuho/post/DcQdezkkkCe",
+    "authorHandle": "@missnatsuho",
+    "authorName": "",
+    "contentText": "日本🇯🇵超爆紅的睡前療癒\n睡前做這組伸展，讓身體好好放鬆一下\n這三組每次睡前做10次\n小腹縮小之外順便放鬆一整天疲累 1/2\n9.1 萬\n1.6 萬\n⚠️上次提到的濾水器來了⚠️現在最便宜的一檔👇👇\nkuma-academy.com/9h5h7…\n[徐小花X黑熊學院-限量特價MIT濾水器軟水壺組］團購\n💚made in Taiwan最安心的「水」防災方案！\n💚台灣製造、又輕又小的隨身淨水濾芯，日常攜帶、防災包必備\n💚不用再比CP值，這就是同公升數最小的淨水濾芯囉～節省防災包的重量與空間～\n🩷記得輸入折扣碼👉hana2758👈再折100元～\n🩷記得輸入折扣碼👉hana2758👈再折100元～\n🩷記得輸入折扣碼👉hana2758👈再折100元～才能打到骨折唷！\n-\n稍微簡介一下這次團購，精挑細選一人用及兩人用的水防災方案：\n1️⃣1L水壺組（軟水壺*1+3000L濾芯*1）折扣後1580元，可以濾三千公升的水～\n以一位成年人的每日建議飲水量來計算，可連續使用至少2年。\n2️⃣1L水壺組+1顆abs寶特瓶濾水器（軟水壺*1+3000L濾芯*1+1000L寶特瓶濾水器*1）折扣後1799元，總共可以濾四千公升的水，足夠讓小家庭（2-3人）使用至少1年。\n✅需要備足「水」防災方案的朋友一定要盡快下單，數量好像不多的樣子～ 1/2\nOrm這一招激將法很猛啊🤫🤫\n故意把留言遞給00讀出來\n明擺著就是想看她吃醋的反應!!!!\n結果00也完全沒在躲\n還立刻在現場搜查Ocean 到底在哪裡🤣\nOrm：來，這個給妳讀。\nLing：致 Lingling Kwong，「P’Orm是我的」——來自 Ocean。Ocean 在哪裡啊？沒舉手，是Ocean 嗎？\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n八月針對Obsidian做了一次大整頓也增加了新功能：\n- 把 Claude 搬進 Obsidian\n- +Inbox 歸檔規則\n- plugin 大清理\n- 外觀收斂\n- Heptabase 接進來\n- 語意搜尋\n- 接上GitHub Remote\n日本這個無線分享器真的優秀\n以後公司會議 在家追劇 外出旅行\n一台搞定 太方便了啦 😍😍😍 1/2\nWhat’Sub 的資安漏洞最近在社群很紅\n所以我整理了 5個可以做AI 資安審查的 Agent Skills，各位Vibe Coder 可以取用\n1.\tCloudflare Security Audit Skill\n完整資安稽核：Recon → 找漏洞 → 驗證 → 分級 → 報告\ngithub.com/cloud…\n2.\tGitHub Security Review\n適合 PR Code Review，會檢查 Injection、Secrets、Auth、Dependency、Crypto 等問題。\ngithub.com/githu…\n3.\tTrail of Bits Skills\n一整套資安 Skills，包含漏洞偵測、Static Analysis、Audit Workflow。\ngithub.com/trail… 1/2\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-20T09:39:11.000Z",
+    "collectedAt": "2026-09-14T18:42:15.018Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcP_kAggSyb",
+    "postUrl": "https://www.threads.com/@shaopon/post/DcP_kAggSyb",
+    "authorHandle": "@shaopon",
+    "authorName": "",
+    "contentText": "日本這個無線分享器真的優秀\n以後公司會議 在家追劇 外出旅行\n一台搞定 太方便了啦 😍😍😍 1/2",
+    "publishedTime": "2026-08-20T05:17:45.000Z",
+    "collectedAt": "2026-09-14T18:42:15.018Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcPlKceGRME",
+    "postUrl": "https://www.threads.com/@sw_ai_life/post/DcPlKceGRME",
+    "authorHandle": "@sw_ai_life",
+    "authorName": "",
+    "contentText": "What’Sub 的資安漏洞最近在社群很紅\n所以我整理了 5個可以做AI 資安審查的 Agent Skills，各位Vibe Coder 可以取用\n1.\tCloudflare Security Audit Skill\n完整資安稽核：Recon → 找漏洞 → 驗證 → 分級 → 報告\ngithub.com/cloud…\n2.\tGitHub Security Review\n適合 PR Code Review，會檢查 Injection、Secrets、Auth、Dependency、Crypto 等問題。\ngithub.com/githu…\n3.\tTrail of Bits Skills\n一整套資安 Skills，包含漏洞偵測、Static Analysis、Audit Workflow。\ngithub.com/trail… 1/2",
+    "publishedTime": "2026-08-20T01:27:05.000Z",
+    "collectedAt": "2026-09-14T18:42:15.018Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcQZCtiFFx8",
+    "postUrl": "https://www.threads.com/@fraulinden/post/DcQZCtiFFx8",
+    "authorHandle": "@fraulinden",
+    "authorName": "",
+    "contentText": "回覆已無法顯示的貼文\n如果百靈油只是要自用，去dm買日本油（Japanisches Heilpflanzenöl）效用一樣但便宜非常多，德國人自己通常也只會買日本油。",
+    "publishedTime": "2026-08-20T09:00:24.000Z",
+    "collectedAt": "2026-09-14T18:42:16.627Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcOOjorldul",
+    "postUrl": "https://www.threads.com/@heywhiteran/post/DcOOjorldul",
+    "authorHandle": "@heywhiteran",
+    "authorName": "",
+    "contentText": "《當超人拔掉插頭：拆解 Autistic Burnout、職涯頂峰的「不想努力」，與另一半的陪伴指南》\n在現代神經多樣性（Neurodiversity）的研究與臨床討論中，Autistic Burnout（自閉症耗竭 / 孤獨症倦怠） 是一個越來越受重視的概念。它不是單純的「工作累了」或「一時心情不好」，而是一場大腦與神經系統的全面崩潰與斷電。\n一、 Autistic Burnout 是一種什麼感覺？\n如果說一般的職業倦怠（Job Burnout）是「電池電量低於 10%」，那麼 Autistic Burnout 就是**「電池健康度永久性下降，且系統強制進入保護性關機」**。\n它的核心感覺可以概括為以下三個面向：\n1. 技能退化（Skill Regression）：原本輕而易舉就能做到的事，突然做不到了。例如突然無法口語表達（Selective Mutism）、無法做簡單的決策（連今天吃什麼都想不出來）、甚至失去自理生活的能力。\n2. 1/5",
+    "publishedTime": "2026-08-19T12:50:18.000Z",
+    "collectedAt": "2026-09-14T18:42:16.627Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcOOjDgARwF",
+    "postUrl": "https://www.threads.com/@danieltien__/post/DcOOjDgARwF",
+    "authorHandle": "@danieltien__",
+    "authorName": "",
+    "contentText": "八月針對Obsidian做了一次大整頓也增加了新功能：\n- 把 Claude 搬進 Obsidian\n- +Inbox 歸檔規則\n- plugin 大清理\n- 外觀收斂\n- Heptabase 接進來\n- 語意搜尋\n- 接上GitHub Remote\n日本這個無線分享器真的優秀\n以後公司會議 在家追劇 外出旅行\n一台搞定 太方便了啦 😍😍😍 1/2\nWhat’Sub 的資安漏洞最近在社群很紅\n所以我整理了 5個可以做AI 資安審查的 Agent Skills，各位Vibe Coder 可以取用\n1.\tCloudflare Security Audit Skill\n完整資安稽核：Recon → 找漏洞 → 驗證 → 分級 → 報告\ngithub.com/cloud…\n2.\tGitHub Security Review\n適合 PR Code Review，會檢查 Injection、Secrets、Auth、Dependency、Crypto 等問題。\ngithub.com/githu…\n3.\tTrail of Bits Skills\n一整套資安 Skills，包含漏洞偵測、Static Analysis、Audit Workflow。\ngithub.com/trail… 1/2\n回覆已無法顯示的貼文\n如果百靈油只是要自用，去dm買日本油（Japanisches Heilpflanzenöl）效用一樣但便宜非常多，德國人自己通常也只會買日本油。\n《當超人拔掉插頭：拆解 Autistic Burnout、職涯頂峰的「不想努力」，與另一半的陪伴指南》\n在現代神經多樣性（Neurodiversity）的研究與臨床討論中，Autistic Burnout（自閉症耗竭 / 孤獨症倦怠） 是一個越來越受重視的概念。它不是單純的「工作累了」或「一時心情不好」，而是一場大腦與神經系統的全面崩潰與斷電。\n一、 Autistic Burnout 是一種什麼感覺？\n如果說一般的職業倦怠（Job Burnout）是「電池電量低於 10%」，那麼 Autistic Burnout 就是**「電池健康度永久性下降，且系統強制進入保護性關機」**。\n它的核心感覺可以概括為以下三個面向：\n1. 技能退化（Skill Regression）：原本輕而易舉就能做到的事，突然做不到了。例如突然無法口語表達（Selective Mutism）、無法做簡單的決策（連今天吃什麼都想不出來）、甚至失去自理生活的能力。\n2. 1/5\n弄了一個 mac app 用來切換 app 的聲音要輸出到哪裡 1/2\n這個工具真的很棒\n拿它來搭配tailscale用，就可以實現在手機上看家裡電腦上的任何檔案\nMarkdown直接內建渲染預覽、HTML也是直接網頁版檢視\n300多頁的電子書PDF秒速開啟、1GB多的影片也是沒有延遲\n拿它來搭配 remote control Claude Code or Codex\n簡直是一絕 1/2\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-19T12:50:13.000Z",
+    "collectedAt": "2026-09-14T18:42:16.637Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcM6S4cDySH",
+    "postUrl": "https://www.threads.com/@dustin_gmat/post/DcM6S4cDySH",
+    "authorHandle": "@dustin_gmat",
+    "authorName": "",
+    "contentText": "八月針對Obsidian做了一次大整頓也增加了新功能：\n- 把 Claude 搬進 Obsidian\n- +Inbox 歸檔規則\n- plugin 大清理\n- 外觀收斂\n- Heptabase 接進來\n- 語意搜尋\n- 接上GitHub Remote\n日本這個無線分享器真的優秀\n以後公司會議 在家追劇 外出旅行\n一台搞定 太方便了啦 😍😍😍 1/2\nWhat’Sub 的資安漏洞最近在社群很紅\n所以我整理了 5個可以做AI 資安審查的 Agent Skills，各位Vibe Coder 可以取用\n1.\tCloudflare Security Audit Skill\n完整資安稽核：Recon → 找漏洞 → 驗證 → 分級 → 報告\ngithub.com/cloud…\n2.\tGitHub Security Review\n適合 PR Code Review，會檢查 Injection、Secrets、Auth、Dependency、Crypto 等問題。\ngithub.com/githu…\n3.\tTrail of Bits Skills\n一整套資安 Skills，包含漏洞偵測、Static Analysis、Audit Workflow。\ngithub.com/trail… 1/2\n回覆已無法顯示的貼文\n如果百靈油只是要自用，去dm買日本油（Japanisches Heilpflanzenöl）效用一樣但便宜非常多，德國人自己通常也只會買日本油。\n《當超人拔掉插頭：拆解 Autistic Burnout、職涯頂峰的「不想努力」，與另一半的陪伴指南》\n在現代神經多樣性（Neurodiversity）的研究與臨床討論中，Autistic Burnout（自閉症耗竭 / 孤獨症倦怠） 是一個越來越受重視的概念。它不是單純的「工作累了」或「一時心情不好」，而是一場大腦與神經系統的全面崩潰與斷電。\n一、 Autistic Burnout 是一種什麼感覺？\n如果說一般的職業倦怠（Job Burnout）是「電池電量低於 10%」，那麼 Autistic Burnout 就是**「電池健康度永久性下降，且系統強制進入保護性關機」**。\n它的核心感覺可以概括為以下三個面向：\n1. 技能退化（Skill Regression）：原本輕而易舉就能做到的事，突然做不到了。例如突然無法口語表達（Selective Mutism）、無法做簡單的決策（連今天吃什麼都想不出來）、甚至失去自理生活的能力。\n2. 1/5\n弄了一個 mac app 用來切換 app 的聲音要輸出到哪裡 1/2\n這個工具真的很棒\n拿它來搭配tailscale用，就可以實現在手機上看家裡電腦上的任何檔案\nMarkdown直接內建渲染預覽、HTML也是直接網頁版檢視\n300多頁的電子書PDF秒速開啟、1GB多的影片也是沒有延遲\n拿它來搭配 remote control Claude Code or Codex\n簡直是一絕 1/2\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-19T00:34:00.000Z",
+    "collectedAt": "2026-09-14T18:42:16.648Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcKX-Fgk8Uq",
+    "postUrl": "https://www.threads.com/@should_wecould_igone/post/DcKX-Fgk8Uq",
+    "authorHandle": "@should_wecould_igone",
+    "authorName": "",
+    "contentText": "should_wecould_igone2026-8-18",
+    "publishedTime": "2026-08-18T00:55:35.000Z",
+    "collectedAt": "2026-09-14T18:42:18.312Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcKNbAvmcBH",
+    "postUrl": "https://www.threads.com/@katelunggg/post/DcKNbAvmcBH",
+    "authorHandle": "@katelunggg",
+    "authorName": "",
+    "contentText": "LOLO最後手手垂下來怎麼可以這麼可憐🥺\n我要哭了，來跟阿嬤回家\n很抱歉，播放此影片時發生問題。\n瞭解詳情",
+    "publishedTime": "",
+    "collectedAt": "2026-09-14T18:42:18.312Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcKR1JLj2CP",
+    "postUrl": "https://www.threads.com/@helloivan.tech/post/DcKR1JLj2CP",
+    "authorHandle": "@helloivan.tech",
+    "authorName": "",
+    "contentText": "又看到有人把 Agent Teams 當成比較貴的 subagent 在用，忍不住想講一下。\nsubagent 是幫手：活在你的 session 裡，查完回報給你，幫手之間不會講話。\nAgent Teams 是同事：每個隊友一個完整 session、自己的腦，靠共享任務清單分工，做完自己領下一個，還會互傳訊息吵架。\n差最多的是除錯的時候。派三個 subagent 是各查各的、你自己彙整；開一隊是三個人查完互相打臉「你那個假說不對，我這邊證據長這樣」。\n我自己的儀表板後端就是一隊 Claude 蓋的。隊伍狀態全寫在 ~/.claude/teams 的檔案裡，我的看板直接讀，誰在跑誰卡住都看得到。\n代價也講白：每個隊友都是完整 session，token 不便宜。排隊型的工作組隊純浪費，一起改同一批檔案還會互相蓋掉。\n幫手便宜聽話，同事貴但會吵出東西。哪些事該給誰，我還在慢慢摸⋯",
+    "publishedTime": "2026-08-18T00:02:01.000Z",
+    "collectedAt": "2026-09-14T18:42:18.312Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcJDk38oM3G",
+    "postUrl": "https://www.threads.com/@mngo_tw/post/DcJDk38oM3G",
+    "authorHandle": "@mngo_tw",
+    "authorName": "",
+    "contentText": "昨天蠻多人討論的Cloudflare  workers免費層級可以放靜態網頁，這篇先介紹最簡單的pages用後台拖拉上傳方式部署，全程不用指令。\n前置：準備好網頁檔案資料夾（index.html 那一包）就好，連 GitHub 都不用。\n1. 登入 Cloudflare 後台，左側進 Workers & Pages\n2. 建立專案，切到 Pages 分頁，選「直接上傳」\n3. 取個專案名，把整個資料夾拖進去，按部署\n4. 完成，拿到一個產生的網址，開起來就是你的網站\n之後要更新內容，進專案按「建立新部署」，再拖一次新檔案就行。\n免費層的額度對個人網站、作品集、活動頁都綽綽有餘，想綁自己的網域也只要在專案裡加 Custom Domain，憑證自動處理。\n想再進一步加上程式邏輯（API、轉址、金鑰保護），完整教學寫成一篇文章，介紹連結放到留言。 1/2",
+    "publishedTime": "2026-08-17T12:38:09.000Z",
+    "collectedAt": "2026-09-14T18:42:18.312Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcIDiEViZYJ",
+    "postUrl": "https://www.threads.com/@fattsai/post/DcIDiEViZYJ",
+    "authorHandle": "@fattsai",
+    "authorName": "",
+    "contentText": "🇯🇵 2026 MADE IN JAPAN 20\n去日本，真正值得帶回家的日本製。\n很多人去日本會買日本品牌，\n但有一件事情一定要先搞清楚：\n「日本品牌」≠「日本製」！\n有些大家熟悉的日本品牌，依商品、系列、型號不同，實際生產國也可能不同。\n所以這次不只是整理「日本品牌」，而是從日本各地的製造產地、傳統工藝、職人技術與現在依然買得到的日本製商品出發，整理出我認為 2026 去日本很值得認識、也值得帶回家的 MADE IN JAPAN 20。\n從刀具、毛巾、眼鏡、金屬餐具，到陶瓷、江戶切子、襪子、牛仔褲與家電，日本真正厲害的地方，很多都藏在這些每天會使用的東西裡。\n━━━━━━━━━━━━━━\n01｜日本製包丁 🇯🇵\nJAPANESE KNIFE\n📍代表產地：大阪・堺／岐阜・關／福井・越前／新潟・燕三條\n日本最值得帶回家的工藝品之一。\n日本各地發展出不同的刃物產業，其中大阪堺、岐阜關、福井越前等都是非常具代表性的刀具產地。\n料理刀不只是紀念品，而是真正可以使用很多年的日本製工具。\n🔎 可以找：\n・堺打刃物\n・越前打刃物\n・關市製刀具\n・燕三條相關刀具品牌 1/11",
+    "publishedTime": "2026-08-17T03:18:31.000Z",
+    "collectedAt": "2026-09-14T18:42:18.312Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcFuoXlCcTA",
+    "postUrl": "https://www.threads.com/@darkwander8/post/DcFuoXlCcTA",
+    "authorHandle": "@darkwander8",
+    "authorName": "",
+    "contentText": "《【防災開箱】7天7步驟，從零打造極簡救命避難包》\nDay 2.5｜進階版：比較不常見的長期保存食物\n這系列原本是設計給初學者與中學教師，所以前段都以超商或量販店買得到的物資為主。但如果你有預算與時間上網選購，我也整理了自己目前採買的進階版食物供參考：\n1.無印良品乾燥蔬菜湯包：約2年效期，好吃又能補充纖維質。\n2.日本無印防災巧克力羊羹：雖然我不太愛羊羹，但效期長達將近5年。\n3.德國 NRG-5 緊急壓縮口糧：軍用20年效期，裡面有小包裝方便分包。\n4.尾西乾燥飯：雖然稱不上美味，但5年效期非常優秀。\n5.電解質錠：迪卡儂或部分超商都有售，品牌不限，有小包裝更好。\n如果是中學老師出作業，還是建議以隨手可得的物資為主，否則學生買不到會立刻放棄。\n水的部分，有預算者可考慮生命吸管或登山濾水壺，但那也得在有自來水或雨水時才管用，因此還是建議以即飲瓶裝水為主喔！",
+    "publishedTime": "2026-08-16T05:37:24.000Z",
+    "collectedAt": "2026-09-14T18:42:19.886Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcFYNF-GjXV",
+    "postUrl": "https://www.threads.com/@safetaiwan/post/DcFYNF-GjXV",
+    "authorHandle": "@safetaiwan",
+    "authorName": "",
+    "contentText": "大家久等了🫡\n小編跟夥伴們花了一個晚上重新補貨\n希望可以幫大家盡快取得商品！\n這邊用手機幫大家快速整理圖片\n有興趣脆友們可以參考唷！\n網址幫大家放留言區置頂\n小編先去睡了👋 1/2",
+    "publishedTime": "2026-08-16T02:21:26.000Z",
+    "collectedAt": "2026-09-14T18:42:19.887Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcF8KSSkQhP",
+    "postUrl": "https://www.threads.com/@evelyn_cake/post/DcF8KSSkQhP",
+    "authorHandle": "@evelyn_cake",
+    "authorName": "",
+    "contentText": "我們在六月就大致上已經成功開發了這款\n緊急避難包 Go Bag  的存糧首選。\n雖然是防災戰備糧食\n但我使用台南十一號米\n期間拜訪芳榮米廠\n我們台南後壁崑濱伯冠軍米的故鄉\n也得到芳榮米廠的支持。\n防災戰備糧食只能是硬硬的乾糧或是保存期限非常長的麵包餅乾嗎？\n我在想的是：能不能有更貼近我們日常飲食的呢？\n創業以來不知道為什麼我就是很執著在防災食品的推廣和開發\n好像這是我要做的事情。\n從曼妮ê灶咖 常溫粥品出來，我就一直講一直講一直講\n你必須把防災存糧準備好。\n（常溫粥品真的不能忽略，家裡有老人小孩幼兒的～腸胃消化系統比較沒那麼好的，防災糧食的準備不要忘記他們）\nGo Bag 緊急避難包的每一樣東西，請半年檢查一次\n不是準備好了就放著。\n我們都知道，放著沒有使用的東西就是容易壞\n相對的，即使準備了效期五年七年的食品\n我也建議還是每半年就拿出來吃掉補新的。\n曼妮ê灶咖常溫雞肉飯/滷肉飯 開發過程漫長又折磨。\n大家吃的每一口，都是我們在廠區汗流浹背做出來的\n這還不包括，沒有成功之前絞盡腦汁承受失敗的淚水。\n我介紹給大家看的高溫高壓殺菌釜，操作過程溫度是很高的 1/5",
+    "publishedTime": "2026-08-16T07:35:38.000Z",
+    "collectedAt": "2026-09-14T18:42:19.887Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DIOR4hNTMfs",
+    "postUrl": "https://www.threads.com/@kuma.academy/post/DIOR4hNTMfs/media",
+    "authorHandle": "@kuma.academy",
+    "authorName": "",
+    "contentText": "避難包原來分很多種？\n​\n能討論的物資很多，包括家裡的人數與組成都會影響整個家庭的準備，而避難包其實就可簡單分三種：\n​\n👋EDC (Every Day Carry)\n​\n要隨身攜帶，以應付各種急迫情況，跟你的手機錢包一樣重要，去巷口便利商店時也能帶的程度，因此要方便小巧。\n​\n常見內容物如多功能工具鉗、防身噴霧、急救用品與止血帶、呼救用口哨與手套、證件與行動電源。\n​\n👋GHB (Get Home Bag)\n​\n若發生災難時不在家，交通停擺且局勢混亂，它能支撐你回到家中，可在常出沒的地方準備一個，如公司、車上，以防要徒步回家。\n​\n若公司與你家離四十公里，就需要準備好徒步整天的物資：好走的鞋子、飲食、盥洗衣物、簡易睡眠系統（急救毯、充氣枕頭、睡墊等）。\n​\n👋BOB (Bug Out Bag)\n​\n里長、警察或政府示警要求撤離，你家不再安全。\n​\n內容包括上述兩種包的物資，加上更充足的飲食、保暖、睡眠與通訊，甚至可以準備娛樂或情緒支持的物品，如撲克牌與小被被。\n​\n-\n​\n避難清單沒有標準答案，你的需求就是正解；開始動手，才真正知道自己的需求。\n​\n（避難指南免費下載見留言） 1/2",
+    "publishedTime": "",
+    "collectedAt": "2026-09-14T18:42:21.446Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcD_ucLEuI7",
+    "postUrl": "https://www.threads.com/@lingyun_0702/post/DcD_ucLEuI7",
+    "authorHandle": "@lingyun_0702",
+    "authorName": "",
+    "contentText": "放一個避難準備筆記樓\n方便迅速找到連結廣傳給周遭親友\n平平安安，我愛的人都要平平安安 1/2",
+    "publishedTime": "2026-08-15T13:28:18.000Z",
+    "collectedAt": "2026-09-14T18:42:21.446Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcFYJM5gfFo",
+    "postUrl": "https://www.threads.com/@jojo880714/post/DcFYJM5gfFo",
+    "authorHandle": "@jojo880714",
+    "authorName": "",
+    "contentText": "最近在製作的AI專案，我現在不會一開始就直接叫 Claude Code 寫正式系統\n反而會先叫 AI 做一個假的demo給我看\n也就是：\n→ 先把需求拆清楚\n→ 用單一 HTML + CSS + JS 做 Prototype\n→ 所有資料先用 Mock Data\n→ 先確認流程、頁面、狀態是不是我要的\n→ 確認完再交給 Claude Code 正式開發\n這個做法意外省掉很多「AI 寫了一堆，但根本不是我要的」的落差\n最近婚禮系統、旅行小管家、健身教練學生管理工具，我幾乎都用這個方式做\n如果你也常常有一個產品想法\n但不知道怎麼把它變成可以看的東西\n這 3 個 Prompt 可以直接拿去試試看👇 1/5",
+    "publishedTime": "2026-08-16T02:20:54.000Z",
+    "collectedAt": "2026-09-14T18:42:21.446Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcFI48aIIMh",
+    "postUrl": "https://www.threads.com/@heywhiteran/post/DcFI48aIIMh",
+    "authorHandle": "@heywhiteran",
+    "authorName": "",
+    "contentText": "當我們談神經多樣性時，大眾在談什麼：為什麼家長看懂了診斷，卻看不懂大腦？\n「我小孩已經確診 ADHD 了啊，但他就是不認真、脾氣壞！」在推廣神經多樣性（Neurodiversity）的過程中，最令人困頓的現實莫過於此：即便診斷證明書已經拿到手，許多家長與大眾對神經特質的理解，依然深深卡在「病理標籤」與「傳統道德審判」的斷層裡。\n這種認知落差，讓無數未確診或已確診的神經多樣性（ND）族群，在成長、工作甚至走入婚姻後，持續承受著巨大的誤解與生存代價。\n大眾認知的特徵：停留在「行為矯正」與「道德審判」\n大眾（包括許多家長）對確診的理解，往往是單向且外在的：\n將神經特質簡化為道德瑕疵：注意力不集中被歸類為「偷懶」，情緒調節障礙（Emotional Dysregulation）被貼上「脾氣暴躁、沒教養」的標籤，感官過載（Sensory Overload）引發的生理熔斷（Meltdown）則被視為「無理取鬧」。 1/3",
+    "publishedTime": "2026-08-16T00:07:37.000Z",
+    "collectedAt": "2026-09-14T18:42:21.446Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcELwU_gVUX",
+    "postUrl": "https://www.threads.com/@lawyer_hsinchu/post/DcELwU_gVUX",
+    "authorHandle": "@lawyer_hsinchu",
+    "authorName": "",
+    "contentText": "凡事問Threads\n因為法律類工作真的需要坐在椅子上一整天\n漸漸幫事務所全體同仁都更換人體工學椅\n160cm以上 170cm以上身高的人體工學椅好找\n但現在碰到一個問題\n身高148-158cm的女生 人體工學椅非常難找\n在新竹應該也有很多工程師久坐成良醫\n請Threads友\n推薦我小個子女生好坐的人體工學椅 1/2",
+    "publishedTime": "2026-08-15T15:13:25.000Z",
+    "collectedAt": "2026-09-14T18:42:21.446Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcCrPwdGOWg",
+    "postUrl": "https://www.threads.com/@solarwann/post/DcCrPwdGOWg",
+    "authorHandle": "@solarwann",
+    "authorName": "",
+    "contentText": "好想買喔！我最近又再補防災食品，看到這串討論真的好心動！\n請問國軍的戰備食品或類似的東西是有地方可以買的嗎？（當然不是買軍用品，是指這種軍備食品規格，一般民間有沒有在賣） 1/2\n正在回覆 @judycheng0926",
+    "publishedTime": "2026-08-15T01:10:06.000Z",
+    "collectedAt": "2026-09-14T18:42:23.144Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcBT3hymVTR",
+    "postUrl": "https://www.threads.com/@zyc.__.622/post/DcBT3hymVTR",
+    "authorHandle": "@zyc.__.622",
+    "authorName": "",
+    "contentText": "避難包原來分很多種？\n​\n能討論的物資很多，包括家裡的人數與組成都會影響整個家庭的準備，而避難包其實就可簡單分三種：\n​\n👋EDC (Every Day Carry)\n​\n要隨身攜帶，以應付各種急迫情況，跟你的手機錢包一樣重要，去巷口便利商店時也能帶的程度，因此要方便小巧。\n​\n常見內容物如多功能工具鉗、防身噴霧、急救用品與止血帶、呼救用口哨與手套、證件與行動電源。\n​\n👋GHB (Get Home Bag)\n​\n若發生災難時不在家，交通停擺且局勢混亂，它能支撐你回到家中，可在常出沒的地方準備一個，如公司、車上，以防要徒步回家。\n​\n若公司與你家離四十公里，就需要準備好徒步整天的物資：好走的鞋子、飲食、盥洗衣物、簡易睡眠系統（急救毯、充氣枕頭、睡墊等）。\n​\n👋BOB (Bug Out Bag)\n​\n里長、警察或政府示警要求撤離，你家不再安全。\n​\n內容包括上述兩種包的物資，加上更充足的飲食、保暖、睡眠與通訊，甚至可以準備娛樂或情緒支持的物品，如撲克牌與小被被。\n​\n-\n​\n避難清單沒有標準答案，你的需求就是正解；開始動手，才真正知道自己的需求。\n​\n（避難指南免費下載見留言） 1/2\n放一個避難準備筆記樓\n方便迅速找到連結廣傳給周遭親友\n平平安安，我愛的人都要平平安安 1/2\n最近在製作的AI專案，我現在不會一開始就直接叫 Claude Code 寫正式系統\n反而會先叫 AI 做一個假的demo給我看\n也就是：\n→ 先把需求拆清楚\n→ 用單一 HTML + CSS + JS 做 Prototype\n→ 所有資料先用 Mock Data\n→ 先確認流程、頁面、狀態是不是我要的\n→ 確認完再交給 Claude Code 正式開發\n這個做法意外省掉很多「AI 寫了一堆，但根本不是我要的」的落差\n最近婚禮系統、旅行小管家、健身教練學生管理工具，我幾乎都用這個方式做\n如果你也常常有一個產品想法\n但不知道怎麼把它變成可以看的東西\n這 3 個 Prompt 可以直接拿去試試看👇 1/5\n當我們談神經多樣性時，大眾在談什麼：為什麼家長看懂了診斷，卻看不懂大腦？\n「我小孩已經確診 ADHD 了啊，但他就是不認真、脾氣壞！」在推廣神經多樣性（Neurodiversity）的過程中，最令人困頓的現實莫過於此：即便診斷證明書已經拿到手，許多家長與大眾對神經特質的理解，依然深深卡在「病理標籤」與「傳統道德審判」的斷層裡。\n這種認知落差，讓無數未確診或已確診的神經多樣性（ND）族群，在成長、工作甚至走入婚姻後，持續承受著巨大的誤解與生存代價。\n大眾認知的特徵：停留在「行為矯正」與「道德審判」\n大眾（包括許多家長）對確診的理解，往往是單向且外在的：\n將神經特質簡化為道德瑕疵：注意力不集中被歸類為「偷懶」，情緒調節障礙（Emotional Dysregulation）被貼上「脾氣暴躁、沒教養」的標籤，感官過載（Sensory Overload）引發的生理熔斷（Meltdown）則被視為「無理取鬧」。 1/3\n凡事問Threads\n因為法律類工作真的需要坐在椅子上一整天\n漸漸幫事務所全體同仁都更換人體工學椅\n160cm以上 170cm以上身高的人體工學椅好找\n但現在碰到一個問題\n身高148-158cm的女生 人體工學椅非常難找\n在新竹應該也有很多工程師久坐成良醫\n請Threads友\n推薦我小個子女生好坐的人體工學椅 1/2\n好想買喔！我最近又再補防災食品，看到這串討論真的好心動！\n請問國軍的戰備食品或類似的東西是有地方可以買的嗎？（當然不是買軍用品，是指這種軍備食品規格，一般民間有沒有在賣） 1/2\n正在回覆 @judycheng0926\n正在回覆@sun4u_77\n迪卡儂找個便宜耐用的後背包，然後可以參考下面表格，挑選適合自己的做準備\n正在回覆@user_112161\n您可以參考一下我們的收音機，我們是全台唯一代理日本製防災收音機的代理商。您可以來看一下我們剛剛的文章，蠻多人來登記的！給您參考。\n果真只有P’Boom最懂Ormorm 😂😂😂\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-14T12:26:35.000Z",
+    "collectedAt": "2026-09-14T18:42:23.157Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcDWcjRkcW2",
+    "postUrl": "https://www.threads.com/@george.hsu.96/post/DcDWcjRkcW2",
+    "authorHandle": "@george.hsu.96",
+    "authorName": "",
+    "contentText": "正在回覆@sun4u_77\n迪卡儂找個便宜耐用的後背包，然後可以參考下面表格，挑選適合自己的做準備",
+    "publishedTime": "2026-08-15T07:27:35.000Z",
+    "collectedAt": "2026-09-14T18:42:23.157Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcC_i3GEfBZ",
+    "postUrl": "https://www.threads.com/@futuresafe_lab/post/DcC_i3GEfBZ",
+    "authorHandle": "@futuresafe_lab",
+    "authorName": "",
+    "contentText": "正在回覆@user_112161\n您可以參考一下我們的收音機，我們是全台唯一代理日本製防災收音機的代理商。您可以來看一下我們剛剛的文章，蠻多人來登記的！給您參考。",
+    "publishedTime": "2026-08-15T04:07:28.000Z",
+    "collectedAt": "2026-09-14T18:42:23.157Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcDtnJOkSFA",
+    "postUrl": "https://www.threads.com/@emilyting0623/post/DcDtnJOkSFA",
+    "authorHandle": "@emilyting0623",
+    "authorName": "",
+    "contentText": "果真只有P’Boom最懂Ormorm 😂😂😂",
+    "publishedTime": "2026-08-15T10:50:25.000Z",
+    "collectedAt": "2026-09-14T18:42:23.157Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcDtIwuoDB-",
+    "postUrl": "https://www.threads.com/@edmundwu86/post/DcDtIwuoDB-",
+    "authorHandle": "@edmundwu86",
+    "authorName": "",
+    "contentText": "首先你得意識到巴哈動畫瘋能被吹捧很大程度上是因為你可以月費看到飽，甚至只當個看廣告的免費仔\n然後我們就可以開始思考為什麼漫畫平台辦不到這種運營方式，又或者實際上有這樣的平台只是沒人在意\n又再或者，其實動畫瘋根本就虧成智障只是巴哈及代理商們願意硬扛，偉大無需多言 1/2\n1 萬",
+    "publishedTime": "2026-08-15T10:45:52.000Z",
+    "collectedAt": "2026-09-14T18:42:24.835Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcC7PgpgRtN",
+    "postUrl": "https://www.threads.com/@tziyeee/post/DcC7PgpgRtN",
+    "authorHandle": "@tziyeee",
+    "authorName": "",
+    "contentText": "github 這個skill 超好玩！！",
+    "publishedTime": "2026-08-15T03:29:53.000Z",
+    "collectedAt": "2026-09-14T18:42:24.835Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcD94Izk3fp",
+    "postUrl": "https://www.threads.com/@mudskipper_0_/post/DcD94Izk3fp",
+    "authorHandle": "@mudskipper_0_",
+    "authorName": "",
+    "contentText": "好想買喔！我最近又再補防災食品，看到這串討論真的好心動！\n請問國軍的戰備食品或類似的東西是有地方可以買的嗎？（當然不是買軍用品，是指這種軍備食品規格，一般民間有沒有在賣） 1/2\n正在回覆 @judycheng0926\n正在回覆@sun4u_77\n迪卡儂找個便宜耐用的後背包，然後可以參考下面表格，挑選適合自己的做準備\n正在回覆@user_112161\n您可以參考一下我們的收音機，我們是全台唯一代理日本製防災收音機的代理商。您可以來看一下我們剛剛的文章，蠻多人來登記的！給您參考。\n果真只有P’Boom最懂Ormorm 😂😂😂\n首先你得意識到巴哈動畫瘋能被吹捧很大程度上是因為你可以月費看到飽，甚至只當個看廣告的免費仔\n然後我們就可以開始思考為什麼漫畫平台辦不到這種運營方式，又或者實際上有這樣的平台只是沒人在意\n又再或者，其實動畫瘋根本就虧成智障只是巴哈及代理商們願意硬扛，偉大無需多言 1/2\n1 萬\ngithub 這個skill 超好玩！！\nP’Boom 就好像只有過年會回來的小阿姨一樣，瘋癲有趣有個性\n總是把小朋友推向另一個火坑\n等到小阿姨回去\n小朋友就知道真正的「1、2、3」是什麼了\n這戰力⋯\n好猛  💋\n如果沒有被拉開\n這攻勢\n直接Ormling🚩🚩🚩\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-15T13:12:09.000Z",
+    "collectedAt": "2026-09-14T18:42:24.852Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcD9B8mkqZl",
+    "postUrl": "https://www.threads.com/@this_is_my_yuniverse/post/DcD9B8mkqZl",
+    "authorHandle": "@this_is_my_yuniverse",
+    "authorName": "",
+    "contentText": "P’Boom 就好像只有過年會回來的小阿姨一樣，瘋癲有趣有個性\n總是把小朋友推向另一個火坑\n等到小阿姨回去\n小朋友就知道真正的「1、2、3」是什麼了",
+    "publishedTime": "",
+    "collectedAt": "2026-09-14T18:42:24.852Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcEDeaCErKX",
+    "postUrl": "https://www.threads.com/@sve2sgr_shh/post/DcEDeaCErKX",
+    "authorHandle": "@sve2sgr_shh",
+    "authorName": "",
+    "contentText": "這戰力⋯\n好猛  💋\n如果沒有被拉開\n這攻勢\n直接Ormling🚩🚩🚩",
+    "publishedTime": "2026-08-15T14:02:26.000Z",
+    "collectedAt": "2026-09-14T18:42:24.852Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcC5rZEEYyF",
+    "postUrl": "https://www.threads.com/@safetaiwan/post/DcC5rZEEYyF",
+    "authorHandle": "@safetaiwan",
+    "authorName": "",
+    "contentText": "正在回覆@jovince\n大家好我們是台灣防災包🫡\n其實台灣就算不考慮旁邊的鄰國，也算是蠻常遇到颱風、地震、淹水等天災狀況的國家，依照自身位置附近地理位置，準備對應的防災包，在緊急時刻不但可以保護自己讓基本自保更方便，有餘力還可以幫助身邊的朋友們！\n若有需要，都可以考量自身需求後，參考小橘書與我們官網內的物品做準備，當然也要保持著面的希望，希望未來每天平平安安都不需要用到最好了💪",
+    "publishedTime": "2026-08-15T03:16:13.000Z",
+    "collectedAt": "2026-09-14T18:42:26.593Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcDPYWZkzOd",
+    "postUrl": "https://www.threads.com/@foxglove1109/post/DcDPYWZkzOd",
+    "authorHandle": "@foxglove1109",
+    "authorName": "",
+    "contentText": "果真只有P’Boom最懂Ormorm 😂😂😂\n首先你得意識到巴哈動畫瘋能被吹捧很大程度上是因為你可以月費看到飽，甚至只當個看廣告的免費仔\n然後我們就可以開始思考為什麼漫畫平台辦不到這種運營方式，又或者實際上有這樣的平台只是沒人在意\n又再或者，其實動畫瘋根本就虧成智障只是巴哈及代理商們願意硬扛，偉大無需多言 1/2\n1 萬\ngithub 這個skill 超好玩！！\nP’Boom 就好像只有過年會回來的小阿姨一樣，瘋癲有趣有個性\n總是把小朋友推向另一個火坑\n等到小阿姨回去\n小朋友就知道真正的「1、2、3」是什麼了\n這戰力⋯\n好猛  💋\n如果沒有被拉開\n這攻勢\n直接Ormling🚩🚩🚩\n正在回覆@jovince\n大家好我們是台灣防災包🫡\n其實台灣就算不考慮旁邊的鄰國，也算是蠻常遇到颱風、地震、淹水等天災狀況的國家，依照自身位置附近地理位置，準備對應的防災包，在緊急時刻不但可以保護自己讓基本自保更方便，有餘力還可以幫助身邊的朋友們！\n若有需要，都可以考量自身需求後，參考小橘書與我們官網內的物品做準備，當然也要保持著面的希望，希望未來每天平平安安都不需要用到最好了💪\n振宇五金有「小橘書防災準備專區」\n大家防災包買起來！ 1/2\n1 萬\n寫得真的太好、太好了\n精彩至極 1/2\ncccc121413\n前陣子被Zara home磁吸板燒到但買不到\n在Ikea找到胡桃木色畫框\n乾脆自己DIY做了好大一塊\n成品超喜歡！ 1/2\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-15T06:25:51.000Z",
+    "collectedAt": "2026-09-14T18:42:26.623Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcAtYEyEUlC",
+    "postUrl": "https://www.threads.com/@amber008900/post/DcAtYEyEUlC",
+    "authorHandle": "@amber008900",
+    "authorName": "",
+    "contentText": "寫得真的太好、太好了\n精彩至極 1/2\ncccc121413",
+    "publishedTime": "2026-08-14T06:50:14.000Z",
+    "collectedAt": "2026-09-14T18:42:26.623Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db-_239FGrN",
+    "postUrl": "https://www.threads.com/@imyukac/post/Db-_239FGrN",
+    "authorHandle": "@imyukac",
+    "authorName": "",
+    "contentText": "前陣子被Zara home磁吸板燒到但買不到\n在Ikea找到胡桃木色畫框\n乾脆自己DIY做了好大一塊\n成品超喜歡！ 1/2",
+    "publishedTime": "2026-08-13T14:53:15.000Z",
+    "collectedAt": "2026-09-14T18:42:26.624Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcAv0Q-G7Zx",
+    "postUrl": "https://www.threads.com/@yao_0905/post/DcAv0Q-G7Zx",
+    "authorHandle": "@yao_0905",
+    "authorName": "",
+    "contentText": "熱知識：用VPN\n切換到捷克可以看《蜘蛛人：無家日》\n切換到法國可以看《星際效應》\n切換到義大利可以看《全面啟動》 1/2\n分享最近在推特上看到一個非常有趣的技能叫 show-me\n我自己很討厭看 AI 輸出一大堆文字，尤其是當我問為什麼需要改動幾千行來完成這個需求時，他會用小作文來跟我講解 🙂\n有很多方式可以讓 AI 的輸出更精簡，但我更喜歡透過圖解的方式，尤其是需要頻繁 Context switch 時，圖遠比文字好理解得多\n(我之前會在規則中加入「我有閱讀障礙」，但效果普普)\n除了圖以外，文件 diff 的瀏覽也是我 review 時重視的內容，而這個技能也能幫我快速了解這次修改的檔案樹結構\n圖片附上產出的效果，除了上面提及的以外，還有很多輸出的內容\n推薦給大家，這是少數我用幾次就愛上的技能 🤩\nnpx skills add humanlayer/skills --skill show-me\n我把文章放在留言處，有興趣可以看一下原文 1/2\n「那個誰在某次 meeting 提到一個概念，可以幫我找找嗎？」\n加入 Mixedbread 後最有趣的 project 終於出爐啦！\ndeep search 不是只能在網頁版裡轉圈圈幫你搜尋網頁訊息\ndeep search 不用找一個問題的答案在那邊等 300 秒\ndeep search 不必一個早上燒掉你 30% 的 token quota\n歡迎使用我們的 Toast 1 🍞\n10 倍速度提升\n1/10 的 token 價格\n你那雲深不知處的 pdf, eml, xls, doc, ppt, jpg, ...\n交給 Toast 1\n我們通通幫你找 1/2\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-14T07:11:33.000Z",
+    "collectedAt": "2026-09-14T18:42:28.083Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcAae74Hcvm",
+    "postUrl": "https://www.threads.com/@ilya.liao/post/DcAae74Hcvm",
+    "authorHandle": "@ilya.liao",
+    "authorName": "",
+    "contentText": "分享最近在推特上看到一個非常有趣的技能叫 show-me\n我自己很討厭看 AI 輸出一大堆文字，尤其是當我問為什麼需要改動幾千行來完成這個需求時，他會用小作文來跟我講解 🙂\n有很多方式可以讓 AI 的輸出更精簡，但我更喜歡透過圖解的方式，尤其是需要頻繁 Context switch 時，圖遠比文字好理解得多\n(我之前會在規則中加入「我有閱讀障礙」，但效果普普)\n除了圖以外，文件 diff 的瀏覽也是我 review 時重視的內容，而這個技能也能幫我快速了解這次修改的檔案樹結構\n圖片附上產出的效果，除了上面提及的以外，還有很多輸出的內容\n推薦給大家，這是少數我用幾次就愛上的技能 🤩\nnpx skills add humanlayer/skills --skill show-me\n我把文章放在留言處，有興趣可以看一下原文 1/2",
+    "publishedTime": "2026-08-14T04:05:09.000Z",
+    "collectedAt": "2026-09-14T18:42:28.083Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcAHiB8Cec2",
+    "postUrl": "https://www.threads.com/@ak__am.at.t/post/DcAHiB8Cec2",
+    "authorHandle": "@ak__am.at.t",
+    "authorName": "",
+    "contentText": "「那個誰在某次 meeting 提到一個概念，可以幫我找找嗎？」\n加入 Mixedbread 後最有趣的 project 終於出爐啦！\ndeep search 不是只能在網頁版裡轉圈圈幫你搜尋網頁訊息\ndeep search 不用找一個問題的答案在那邊等 300 秒\ndeep search 不必一個早上燒掉你 30% 的 token quota\n歡迎使用我們的 Toast 1 🍞\n10 倍速度提升\n1/10 的 token 價格\n你那雲深不知處的 pdf, eml, xls, doc, ppt, jpg, ...\n交給 Toast 1\n我們通通幫你找 1/2\n很抱歉，播放此影片時發生問題。\n瞭解詳情",
+    "publishedTime": "2026-08-14T01:21:40.000Z",
+    "collectedAt": "2026-09-14T18:42:28.083Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DcABJ5DDwHw",
+    "postUrl": "https://www.threads.com/@dustin_gmat/post/DcABJ5DDwHw",
+    "authorHandle": "@dustin_gmat",
+    "authorName": "",
+    "contentText": "github.com/danyu…\n再來一個我天天都在用的 SKILL： 讓你的 AI AGENT 對你說人話。\nISO 24495（正式名稱為 ISO 24495-1:2023）是全球第一部關於「淺白易懂語言」（Plain Language）的國際標準。它確立了清晰寫作的核心原則與指導方針，旨在幫助各機關與企業產出讓讀者能快速找到、理解並使用的文件，減少溝通誤解。\n跟 ASD 的區別： ASD 規範文法跟用字，ISO 規範邏輯跟結構",
+    "publishedTime": "2026-08-14T00:23:49.000Z",
+    "collectedAt": "2026-09-14T18:42:29.636Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db9wvXXD0DL",
+    "postUrl": "https://www.threads.com/@kime541200/post/Db9wvXXD0DL",
+    "authorHandle": "@kime541200",
+    "authorName": "",
+    "contentText": "忙了一段時間 終於也上岸心儀的知名外商了🥳\n分享一下自己在整個準備過程中逐步建立起的一套「面試Skills」\n包含 ATS 履歷、分析 JD、準備面試、模擬面試都有對應的 Skill\n把面試的過程\"狀態化\" 才能有效的在一場又一場的面試中持續優化\n有需要的話可以試試看！專案連結放在留言👇\n把 repo 抓下來後\n不知道該怎麼開始、在任何一個階段不知道接下來該用什麼 Skill 繼續下去\n都可以直接用 `/ask-how-to` 問問你的 Agent 喔！ 1/2",
+    "publishedTime": "2026-08-13T03:21:54.000Z",
+    "collectedAt": "2026-09-14T18:42:29.636Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db9r1WUIFis",
+    "postUrl": "https://www.threads.com/@weichih.ting/post/Db9r1WUIFis",
+    "authorHandle": "@weichih.ting",
+    "authorName": "",
+    "contentText": "熱知識：用VPN\n切換到捷克可以看《蜘蛛人：無家日》\n切換到法國可以看《星際效應》\n切換到義大利可以看《全面啟動》 1/2\n分享最近在推特上看到一個非常有趣的技能叫 show-me\n我自己很討厭看 AI 輸出一大堆文字，尤其是當我問為什麼需要改動幾千行來完成這個需求時，他會用小作文來跟我講解 🙂\n有很多方式可以讓 AI 的輸出更精簡，但我更喜歡透過圖解的方式，尤其是需要頻繁 Context switch 時，圖遠比文字好理解得多\n(我之前會在規則中加入「我有閱讀障礙」，但效果普普)\n除了圖以外，文件 diff 的瀏覽也是我 review 時重視的內容，而這個技能也能幫我快速了解這次修改的檔案樹結構\n圖片附上產出的效果，除了上面提及的以外，還有很多輸出的內容\n推薦給大家，這是少數我用幾次就愛上的技能 🤩\nnpx skills add humanlayer/skills --skill show-me\n我把文章放在留言處，有興趣可以看一下原文 1/2\n「那個誰在某次 meeting 提到一個概念，可以幫我找找嗎？」\n加入 Mixedbread 後最有趣的 project 終於出爐啦！\ndeep search 不是只能在網頁版裡轉圈圈幫你搜尋網頁訊息\ndeep search 不用找一個問題的答案在那邊等 300 秒\ndeep search 不必一個早上燒掉你 30% 的 token quota\n歡迎使用我們的 Toast 1 🍞\n10 倍速度提升\n1/10 的 token 價格\n你那雲深不知處的 pdf, eml, xls, doc, ppt, jpg, ...\n交給 Toast 1\n我們通通幫你找 1/2\n很抱歉，播放此影片時發生問題。\n瞭解詳情\ngithub.com/danyu…\n再來一個我天天都在用的 SKILL： 讓你的 AI AGENT 對你說人話。\nISO 24495（正式名稱為 ISO 24495-1:2023）是全球第一部關於「淺白易懂語言」（Plain Language）的國際標準。它確立了清晰寫作的核心原則與指導方針，旨在幫助各機關與企業產出讓讀者能快速找到、理解並使用的文件，減少溝通誤解。\n跟 ASD 的區別： ASD 規範文法跟用字，ISO 規範邏輯跟結構\n忙了一段時間 終於也上岸心儀的知名外商了🥳\n分享一下自己在整個準備過程中逐步建立起的一套「面試Skills」\n包含 ATS 履歷、分析 JD、準備面試、模擬面試都有對應的 Skill\n把面試的過程\"狀態化\" 才能有效的在一場又一場的面試中持續優化\n有需要的話可以試試看！專案連結放在留言👇\n把 repo 抓下來後\n不知道該怎麼開始、在任何一個階段不知道接下來該用什麼 Skill 繼續下去\n都可以直接用 `/ask-how-to` 問問你的 Agent 喔！ 1/2\n為什麼每次叫 agent 畫 flowchart, 最後還是自己開 Figma 重畫 ?\ndiagram-design 這包 skill 直接吐 self-contained HTML+SVG, 二十多種 editorial type, 還能從官網抓 brand token.\nClaude Code / Codex / Pi 都能裝. 不是又一個 Mermaid wrapper...\ngithub.com/cathr…\n? 1/2\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-13T02:39:07.000Z",
+    "collectedAt": "2026-09-14T18:42:29.648Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db-rYsHmMW3",
+    "postUrl": "https://www.threads.com/@ai_triallab/post/Db-rYsHmMW3",
+    "authorHandle": "@ai_triallab",
+    "authorName": "",
+    "contentText": "AI 生成的架構圖，終於可以不用再忍受「圓角方框＋Mermaid 味」了。發現一個很有意思的開源專案：diagram-design。\n它專門為 Claude Code、Codex、Pi 提供高品質的編輯級圖表生成能力，涵蓋架構圖、流程圖、時序圖、狀態機、ER 圖、象限圖、甘特圖、資料流等二十多種類型。最實用的是： 直接生成自包含的 HTML＋SVG。\n自動讀取你的網站，匹配品牌配色與字體。支援 Light／Dark／Editorial 三種風格。\n可以把 Mermaid、draw.io 的圖直接重新設計。支援匯出 SVG／PNG，方便用在部落格、PPT、Figma。\n如果你常請 AI 幫你畫技術架構圖，這個專案蠻值得裝進 Codex 或 Claude Code。",
+    "publishedTime": "2026-08-13T11:54:27.000Z",
+    "collectedAt": "2026-09-14T18:42:31.311Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db9LFzyE4NH",
+    "postUrl": "https://www.threads.com/@cheryl_cheliu/post/Db9LFzyE4NH",
+    "authorHandle": "@cheryl_cheliu",
+    "authorName": "",
+    "contentText": "各位脆友們，有沒有什麼辦法可以無痛清除macOS裏的system data？我到已經一直維持在120GB高居不下，嚴重影響我MacBook的正常運行。又不懂該如何清理才可以確保不會清理掉重要文件。而且似乎沒有第三方的軟件可以直接解決？我是MacBook Air M1",
+    "publishedTime": "2026-08-12T21:52:55.000Z",
+    "collectedAt": "2026-09-14T18:42:31.311Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db9yK-pm0Vi",
+    "postUrl": "https://www.threads.com/@lumincy815/post/Db9yK-pm0Vi",
+    "authorHandle": "@lumincy815",
+    "authorName": "",
+    "contentText": "為啥獨立開發者開發的大多是鬧鐘類、記錄類、計畫類 App，不能開發些別的嗎？ 1/2",
+    "publishedTime": "2026-08-13T03:34:25.000Z",
+    "collectedAt": "2026-09-14T18:42:31.311Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db93_ezmS-Q",
+    "postUrl": "https://www.threads.com/@alien_b72026/post/Db93_ezmS-Q",
+    "authorHandle": "@alien_b72026",
+    "authorName": "",
+    "contentText": "（這是4）\n那晚我回寢室洗完澡躺上床，覺得很累但心很亂難以入睡。我對那個剛拒絕的學長不是完全沒感覺，但我真的無法想像真的答應和他交往後會和這個人牽手、接吻，甚至是發生其他的事。我這樣算是玩弄了他的感情嗎？還是我這輩子沒辦法跟任何人在一起？\n當時還不太能想清楚我和B發生了什麼事。其實在學長告白前，那陣子我都會跟B討論這個男人，她覺得我可以試試，但她也說：「我覺得他可能不會很懂你，但他會對你好。」有陣子我跟學長走得很近，會約出去吃飯。他不難聊天，也很照顧我，但也許因為他是學長、或者因為他是男的，對話時會有一種「你是一種可愛呆萌的小寵物般存在」的感覺，明明我並沒有想表現得可愛。我多年後才知道那種一廂情願的讓人不太舒服的疼愛，其實是因為他無法打從心裡平等的看待我也是一個會獨立思考的個體。\n但那時只覺得我人很差，玩弄了別人的感情。我躺在床上傳訊給B，她也還沒睡，我說：「我是個不值得被愛的破碎的存在。」\nB：「你值得完整的愛。」\n我：「……」\nB：「怎樣的你我都愛。」\n因為我們平常本來就會說愛對方，當時我就回了愛心貼圖去睡了。 1/2",
+    "publishedTime": "2026-08-13T04:25:16.000Z",
+    "collectedAt": "2026-09-14T18:42:31.311Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db98y1SG8qs",
+    "postUrl": "https://www.threads.com/@haru3613/post/Db98y1SG8qs",
+    "authorHandle": "@haru3613",
+    "authorName": "",
+    "contentText": "oh my pi真的超級好用，用了一陣子了，推薦給大家",
+    "publishedTime": "2026-08-13T05:07:14.000Z",
+    "collectedAt": "2026-09-14T18:42:31.311Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db8KGchAWz0",
+    "postUrl": "https://www.threads.com/@storycat_515/post/Db8KGchAWz0",
+    "authorHandle": "@storycat_515",
+    "authorName": "",
+    "contentText": "我最近做了一個案件，做到一半真的越查越毛。\n1970年，挪威發現一具無名女屍。\n沒有身分證。\n衣服上的標籤全部被剪掉。\n化妝品上的品牌也被刮掉。\n警方後來追查她生前的行蹤，才發現——\n她至少用過8個不同的身分。\n不同的名字、生日、職業，甚至國籍。\n她住過十幾間旅館，帶著假髮、不同的衣服和多國貨幣，在歐洲各地移動。\n最詭異的是，她死前幾天，還有人看到她和兩名神秘男子一起出現。\n50多年後，警方重新檢驗她留下的牙齒、骨骼與DNA。\n結果沒有讓她的身分變得更清楚。\n反而讓這個案件變得更加奇怪。\n我把這個案件完整整理成了一支影片。\n她到底是誰？又為什麼要如此徹底地抹掉自己的身分？ 1/2",
+    "publishedTime": "2026-08-12T12:25:02.000Z",
+    "collectedAt": "2026-09-14T18:42:32.972Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db7Y6xBkePR",
+    "postUrl": "https://www.threads.com/@yooak47/post/Db7Y6xBkePR",
+    "authorHandle": "@yooak47",
+    "authorName": "",
+    "contentText": "正在回覆@jonnu167\n那些說沒有蔣介石台灣就沒人接收的，是不是忘了，國軍當初是拿著美國麥克阿瑟的第一號命令代表盟軍來受降的，那是盟軍委託管轄，不是個人私產。沒有中華民國一樣會有其他盟軍管轄，日本韓國德國都被美國接管過。\n那些說靠蔣介石才能保衛台灣的，是不是忘了，當時國軍連渡海接收台灣都是靠美軍船艦運送，連台灣海峽都是靠美軍第七艦隊守住的。共軍當年連渡海來台的能力都沒有，你以為國民黨會有？\n一個二戰靠美國打贏，中國內戰都能打輸的敗逃政權，逃到台灣來才得以倖存，狗熊卻把自己當英雄。\n1946年《華盛頓每日新聞》頭版：\n中國人剝削台灣，比日本人更惡劣",
+    "publishedTime": "2026-08-12T05:15:16.000Z",
+    "collectedAt": "2026-09-14T18:42:32.972Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db8VKJSk6MQ",
+    "postUrl": "https://www.threads.com/@web3_tommy/post/Db8VKJSk6MQ",
+    "authorHandle": "@web3_tommy",
+    "authorName": "",
+    "contentText": "最近在脆上面晃一晃其實都會看到大家都遇到類似的問題，就是「Debug 花超多時間」，尤其是對於非 coding 專業的人一定更累\n剛發有發現這陣子一個蠻紅的 skills：reverse-skill 推薦給大家\n他是今年 7 月 18 日發布，才推出短短兩週，就在 7 月底直接衝上 GitHub 全球趨勢榜第一名，簡單來說他就是把 AI 變成了「白帽駭客」讓 Claude Code 或 Cursor 這類 Coding Agent 獲得了「資安滲透測試」的能力\n你只要給它一個專案或系統目標，它會自動跑漏洞掃描、情境攻擊測試，最後直接生出一份完整的資安審計報告。以前做一次滲透測試要花幾十萬請資安團隊，現在掛上這個 Skill，AI 就能自動幫你的系統做資安體檢 🤩\n資安一直都是最重要的課題，雖然產品能用，但不代表資料也安全，如果讓個資裸奔外流，那大概率也準備進苦窯進修了，所以分享給大家，可以使用玩玩看～ 1/2",
+    "publishedTime": "2026-08-12T14:01:39.000Z",
+    "collectedAt": "2026-09-14T18:42:34.552Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db8vSlMoMBx",
+    "postUrl": "https://www.threads.com/@heywhiteran/post/Db8vSlMoMBx",
+    "authorHandle": "@heywhiteran",
+    "authorName": "",
+    "contentText": "當超限專注撞上學業：為什麼「成績優異」的 ADHDer 依然可能需要藥物？\n在關於 ADHD（注意力不足過動症）的傳統認知中，人們總是將其與「成績差、坐不住、不愛學習」劃上等號。然而，現實中存在著這樣一群特殊的 ADHDer：他們從小成績優異、考試名列前茅，甚至可以在書桌前對著喜歡的學科連續「超限專注（Hyperfocus）」好幾個小時。\n這種現象往往會引發強烈的困惑與質疑：\n「他都能專心讀書讀到忘我、考第一名了，怎麼可能是 ADHD？」\n「既然他的 Hyperfocus 領域就是學習，那他是不是完全不需要藥物干預了？」\n從神經多樣性（Neurodiversity）與神經生物學的視角來看，這種「高成就 ADHDer」的存在不僅完全合理，更揭示了這個社會對 ADHD 最大的誤解——ADHD 從來不是「缺乏注意力」，而是「無法自主控制注意力的分配」。\n一、 為什麼有些 ADHDer 能對「學習」產生 Hyperfocus？\n要解釋這個現象，我們必須打破「學習是件枯燥的事」這種單一假設，深入大腦的多巴胺獎勵機制：\n1. 學習本身提供了強烈的「多巴胺刺激」 1/5",
+    "publishedTime": "2026-08-12T17:50:00.000Z",
+    "collectedAt": "2026-09-14T18:42:34.552Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db8oof9iapL",
+    "postUrl": "https://www.threads.com/@qws4862/post/Db8oof9iapL",
+    "authorHandle": "@qws4862",
+    "authorName": "",
+    "contentText": "我最近做了一個案件，做到一半真的越查越毛。\n1970年，挪威發現一具無名女屍。\n沒有身分證。\n衣服上的標籤全部被剪掉。\n化妝品上的品牌也被刮掉。\n警方後來追查她生前的行蹤，才發現——\n她至少用過8個不同的身分。\n不同的名字、生日、職業，甚至國籍。\n她住過十幾間旅館，帶著假髮、不同的衣服和多國貨幣，在歐洲各地移動。\n最詭異的是，她死前幾天，還有人看到她和兩名神秘男子一起出現。\n50多年後，警方重新檢驗她留下的牙齒、骨骼與DNA。\n結果沒有讓她的身分變得更清楚。\n反而讓這個案件變得更加奇怪。\n我把這個案件完整整理成了一支影片。\n她到底是誰？又為什麼要如此徹底地抹掉自己的身分？ 1/2\n正在回覆@jonnu167\n那些說沒有蔣介石台灣就沒人接收的，是不是忘了，國軍當初是拿著美國麥克阿瑟的第一號命令代表盟軍來受降的，那是盟軍委託管轄，不是個人私產。沒有中華民國一樣會有其他盟軍管轄，日本韓國德國都被美國接管過。\n那些說靠蔣介石才能保衛台灣的，是不是忘了，當時國軍連渡海接收台灣都是靠美軍船艦運送，連台灣海峽都是靠美軍第七艦隊守住的。共軍當年連渡海來台的能力都沒有，你以為國民黨會有？\n一個二戰靠美國打贏，中國內戰都能打輸的敗逃政權，逃到台灣來才得以倖存，狗熊卻把自己當英雄。\n1946年《華盛頓每日新聞》頭版：\n中國人剝削台灣，比日本人更惡劣\n最近在脆上面晃一晃其實都會看到大家都遇到類似的問題，就是「Debug 花超多時間」，尤其是對於非 coding 專業的人一定更累\n剛發有發現這陣子一個蠻紅的 skills：reverse-skill 推薦給大家\n他是今年 7 月 18 日發布，才推出短短兩週，就在 7 月底直接衝上 GitHub 全球趨勢榜第一名，簡單來說他就是把 AI 變成了「白帽駭客」讓 Claude Code 或 Cursor 這類 Coding Agent 獲得了「資安滲透測試」的能力\n你只要給它一個專案或系統目標，它會自動跑漏洞掃描、情境攻擊測試，最後直接生出一份完整的資安審計報告。以前做一次滲透測試要花幾十萬請資安團隊，現在掛上這個 Skill，AI 就能自動幫你的系統做資安體檢 🤩\n資安一直都是最重要的課題，雖然產品能用，但不代表資料也安全，如果讓個資裸奔外流，那大概率也準備進苦窯進修了，所以分享給大家，可以使用玩玩看～ 1/2\n當超限專注撞上學業：為什麼「成績優異」的 ADHDer 依然可能需要藥物？\n在關於 ADHD（注意力不足過動症）的傳統認知中，人們總是將其與「成績差、坐不住、不愛學習」劃上等號。然而，現實中存在著這樣一群特殊的 ADHDer：他們從小成績優異、考試名列前茅，甚至可以在書桌前對著喜歡的學科連續「超限專注（Hyperfocus）」好幾個小時。\n這種現象往往會引發強烈的困惑與質疑：\n「他都能專心讀書讀到忘我、考第一名了，怎麼可能是 ADHD？」\n「既然他的 Hyperfocus 領域就是學習，那他是不是完全不需要藥物干預了？」\n從神經多樣性（Neurodiversity）與神經生物學的視角來看，這種「高成就 ADHDer」的存在不僅完全合理，更揭示了這個社會對 ADHD 最大的誤解——ADHD 從來不是「缺乏注意力」，而是「無法自主控制注意力的分配」。\n一、 為什麼有些 ADHDer 能對「學習」產生 Hyperfocus？\n要解釋這個現象，我們必須打破「學習是件枯燥的事」這種單一假設，深入大腦的多巴胺獎勵機制：\n1. 學習本身提供了強烈的「多巴胺刺激」 1/5\n一生推經前症候群的女生可入手的德國DM保健食品。\n生理期來前我真的是拉肚子頭暈想吐昏昏沈沈肚子悶痛食慾不振情緒不穩，看完醫生後，照陰超也沒有問題，他也無解，就是開個症狀治療的藥給我。\n其實我一直對保健食品抱著半信半疑的態度🤣但每個月生理期前真的太困擾我了，後來男友幫我帶了這盒來台灣。\n吃了第一個月，每天一顆，那個月我連生理期快要來都沒感覺，差點忘記要帶衛生棉出門。\n第二個月沒吃果然又牙起來。\n第三個月斷斷續續吃，還是有改善，但沒有固定吃效果那麼好😻\n而且一盒超便宜，台幣才100多塊！！！\n如果你正在使用 Claude Code、Codex 這類 AI Agent\n這 3 個 Mac 選單列小工具，會讓工作流更加順手 👍\n​\n1. Ports\n​\n一次列出電腦上所有正在跑的網頁測試。\n​\nAgent 一路開了 3000、5173、8000，\n介面會告訴你開了多久、吃多少電腦資源，還能一鍵關掉所有 Ports。\n​\n2. OpenUsage\n​\n選單列直接看 AI 訂閱燒了多少？\n​\nClaude、Codex、Cursor、Grok、Antigravity 都支援，\n這週剩多少？花多少錢？不用等到跳出額度用完的提示才發現。\n​\n3. Hold My Lid\n​\n就算闔上筆電，Agent 也會繼續執行任務！\n​\n它會盯著 Claude Code / Codex 有沒有真的在工作？\n有任務就不休眠，還能設定電量剩多少就停下來。\n​\n三個都是 macOS 專用，連結在下方 🔗 1/2\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-12T16:51:49.000Z",
+    "collectedAt": "2026-09-14T18:42:34.564Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db8e5GKgJdK",
+    "postUrl": "https://www.threads.com/@raymond0917/post/Db8e5GKgJdK",
+    "authorHandle": "@raymond0917",
+    "authorName": "",
+    "contentText": "如果你正在使用 Claude Code、Codex 這類 AI Agent\n這 3 個 Mac 選單列小工具，會讓工作流更加順手 👍\n​\n1. Ports\n​\n一次列出電腦上所有正在跑的網頁測試。\n​\nAgent 一路開了 3000、5173、8000，\n介面會告訴你開了多久、吃多少電腦資源，還能一鍵關掉所有 Ports。\n​\n2. OpenUsage\n​\n選單列直接看 AI 訂閱燒了多少？\n​\nClaude、Codex、Cursor、Grok、Antigravity 都支援，\n這週剩多少？花多少錢？不用等到跳出額度用完的提示才發現。\n​\n3. Hold My Lid\n​\n就算闔上筆電，Agent 也會繼續執行任務！\n​\n它會盯著 Claude Code / Codex 有沒有真的在工作？\n有任務就不休眠，還能設定電量剩多少就停下來。\n​\n三個都是 macOS 專用，連結在下方 🔗 1/2",
+    "publishedTime": "2026-08-12T15:26:52.000Z",
+    "collectedAt": "2026-09-14T18:42:34.564Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db6wyPXEkng",
+    "postUrl": "https://www.threads.com/@guiguiggui/post/Db6wyPXEkng",
+    "authorHandle": "@guiguiggui",
+    "authorName": "",
+    "contentText": "正在回覆@_61.1\n如果確定不會回台灣退休 就不繳\n因為繳了會影響到海外的稅務\n國外的稅已經很恐怖了\n多繳國民年金的話在海外退休的時候你在國外的退休金會變少很多⋯⋯\n尤其已經是國外公民的 建議不繳\n我有家人也在國外\n我家人有繳 但我沒繳\n如果已經確定退休金都在國外 還是建議不繳",
+    "publishedTime": "2026-08-11T23:24:35.000Z",
+    "collectedAt": "2026-09-14T18:42:36.109Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db7PRA6jxWY",
+    "postUrl": "https://www.threads.com/@unayung/post/Db7PRA6jxWY",
+    "authorHandle": "@unayung",
+    "authorName": "",
+    "contentText": "如果你正在使用 Claude Code、Codex 這類 AI Agent\n這 3 個 Mac 選單列小工具，會讓工作流更加順手 👍\n​\n1. Ports\n​\n一次列出電腦上所有正在跑的網頁測試。\n​\nAgent 一路開了 3000、5173、8000，\n介面會告訴你開了多久、吃多少電腦資源，還能一鍵關掉所有 Ports。\n​\n2. OpenUsage\n​\n選單列直接看 AI 訂閱燒了多少？\n​\nClaude、Codex、Cursor、Grok、Antigravity 都支援，\n這週剩多少？花多少錢？不用等到跳出額度用完的提示才發現。\n​\n3. Hold My Lid\n​\n就算闔上筆電，Agent 也會繼續執行任務！\n​\n它會盯著 Claude Code / Codex 有沒有真的在工作？\n有任務就不休眠，還能設定電量剩多少就停下來。\n​\n三個都是 macOS 專用，連結在下方 🔗 1/2\n正在回覆@_61.1\n如果確定不會回台灣退休 就不繳\n因為繳了會影響到海外的稅務\n國外的稅已經很恐怖了\n多繳國民年金的話在海外退休的時候你在國外的退休金會變少很多⋯⋯\n尤其已經是國外公民的 建議不繳\n我有家人也在國外\n我家人有繳 但我沒繳\n如果已經確定退休金都在國外 還是建議不繳\n同時開十個 AI agent 在跑，最麻煩的不是它們做不好\n是它們會停下來問你問題，而你剛好去倒咖啡。\n於是有了 herdr-watch\n哪個卡住了、哪個跑完了，手錶震一下，通知上直接寫它問了什麼，抬手看完就知道要不要走回電腦。\n同意或不同意，在手腕上按。\n想給新指令，對著手錶講話就行。\n還有一件小事我蠻喜歡的：不管你是在電腦上回答還是在手錶上回答，另一邊的按鈕會自己消失。不會有「我剛剛是不是已經按過了」那種困惑。 1/2\n選 Hermes 的 memory extension，我選了 Hindsight。\n有人問：為什麼不用 Obsidian？LLM Wiki 不是更好？\n我不是這兩套的重度使用者。當時是在 Hermes 記憶後端裡做選擇，不是拿第二大腦產品互打。\n我在意的是關聯會不會自己長出來：\n- 講水果 → 想到果汁機 → 能做什麼果汁\n- 難過時 → 想到必要時可用的藥、這時段藥吃了沒、要不要整理回診要講的事\n- 想買咖啡豆 → 常買的店與風味 → 對上當下收支能買的價位\nObsidian 是人讀人寫的筆記 IDE。LLM Wiki 是 LLM 編譯、人還是主要讀者的知識頁。Hindsight 比較像 agent 的記憶 runtime：事實會被串成圖，下次對話能多跳聯想，不是只撈一篇筆記原文。\n沒有說哪一個比較好。要寫作、養研究庫，前兩者很合理。我要的是助手記得「事情彼此怎麼連」。\nhackmd.io/@Nyan…\n有人開源了一個 AI Logo 生成器，叫 Logocreator。\n外面設計公司開價幾千塊的 Logo，這個工具免費跑。\nVercel 工程師 Nutlope 打造，跑在 FLUX 模型上，GitHub 已經 7.6k+ Star，MIT 授權。\n不用付設計費，不用等報價，自己改到滿意為止。 1/2\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-12T03:50:55.000Z",
+    "collectedAt": "2026-09-14T18:42:36.120Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db70-XHkWkW",
+    "postUrl": "https://www.threads.com/@nyanako0129/post/Db70-XHkWkW",
+    "authorHandle": "@nyanako0129",
+    "authorName": "",
+    "contentText": "選 Hermes 的 memory extension，我選了 Hindsight。\n有人問：為什麼不用 Obsidian？LLM Wiki 不是更好？\n我不是這兩套的重度使用者。當時是在 Hermes 記憶後端裡做選擇，不是拿第二大腦產品互打。\n我在意的是關聯會不會自己長出來：\n- 講水果 → 想到果汁機 → 能做什麼果汁\n- 難過時 → 想到必要時可用的藥、這時段藥吃了沒、要不要整理回診要講的事\n- 想買咖啡豆 → 常買的店與風味 → 對上當下收支能買的價位\nObsidian 是人讀人寫的筆記 IDE。LLM Wiki 是 LLM 編譯、人還是主要讀者的知識頁。Hindsight 比較像 agent 的記憶 runtime：事實會被串成圖，下次對話能多跳聯想，不是只撈一篇筆記原文。\n沒有說哪一個比較好。要寫作、養研究庫，前兩者很合理。我要的是助手記得「事情彼此怎麼連」。\nhackmd.io/@Nyan…",
+    "publishedTime": "2026-08-12T09:20:25.000Z",
+    "collectedAt": "2026-09-14T18:42:36.120Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db7r2akGzvx",
+    "postUrl": "https://www.threads.com/@krumjahn/post/Db7r2akGzvx",
+    "authorHandle": "@krumjahn",
+    "authorName": "",
+    "contentText": "有人開源了一個 AI Logo 生成器，叫 Logocreator。\n外面設計公司開價幾千塊的 Logo，這個工具免費跑。\nVercel 工程師 Nutlope 打造，跑在 FLUX 模型上，GitHub 已經 7.6k+ Star，MIT 授權。\n不用付設計費，不用等報價，自己改到滿意為止。 1/2",
+    "publishedTime": "2026-08-12T08:01:06.000Z",
+    "collectedAt": "2026-09-14T18:42:36.120Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db6zMaAFfRT",
+    "postUrl": "https://www.threads.com/@kikitataysi/post/Db6zMaAFfRT",
+    "authorHandle": "@kikitataysi",
+    "authorName": "",
+    "contentText": "用 AI 做網站卻卡在不知道怎麼描述 UI 嗎？？\n這本 UI 設計辭典能幫你，裡面整理了 108 種模式，像是漢堡選單、巨型選單、看板、OTP 輸入、底部工作表、命令面板或是骨架螢幕等等。\n它依照導航、表單、資料顯示、入門引導、電子商務跟認證等功能分類。\n只要先看懂名稱，再用那個名字去要求 AI，就能精準產出你要的畫面，而不是只拿到模糊的參考圖。\nKAWAI APP 一覽可以去我個人檔案的網站，點進「APP」頁面就能看。",
+    "publishedTime": "2026-08-11T23:46:05.000Z",
+    "collectedAt": "2026-09-14T18:42:37.672Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db5xexkE-ZZ",
+    "postUrl": "https://www.threads.com/@hkwwtai/post/Db5xexkE-ZZ",
+    "authorHandle": "@hkwwtai",
+    "authorName": "",
+    "contentText": "價值1200$的ChatGPT Pro套餐，分享網上其他人的經驗：\n打開OpenAI官方申請地址，申請建議用英文地址和英文填寫，但是官方有一個中文地址，應該也可以用中文申請。\nopenai.com/form…\nopenai.com/zh-Ha… 1/3",
+    "publishedTime": "2026-08-11T14:11:25.000Z",
+    "collectedAt": "2026-09-14T18:42:37.672Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db6N7wVkmv_",
+    "postUrl": "https://www.threads.com/@adersaytech/post/Db6N7wVkmv_",
+    "authorHandle": "@adersaytech",
+    "authorName": "",
+    "contentText": "你明明看得到線索，卻不能替朋友按。只能把那個難以命名的符號，講到他真的找對。\n《Inkwellers》把這種溝通災難做成整款遊戲：兩人被拉進魔法日記，有些謎題會把你們分開，一邊觀察光線、圖案與順序，另一邊操作機關。少一個人就玩不了；兩人都要有麥克風和穩定網路。\n5 月 28 日上市後，Steam 評價摘要目前是「極度好評」。正式版約 4～6 小時，Windows 限定、尚無中文；台灣價 NT$216，也有免費 Demo。\n真正考驗的不是誰比較聰明，而是你能不能把「左邊那個像倒過來的叉叉」講成人話。 1/3",
+    "publishedTime": "2026-08-11T18:20:44.000Z",
+    "collectedAt": "2026-09-14T18:42:37.672Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db4NNWHk1FU",
+    "postUrl": "https://www.threads.com/@malilion.dev/post/Db4NNWHk1FU",
+    "authorHandle": "@malilion.dev",
+    "authorName": "",
+    "contentText": "最近逛到一個滿適合做網頁設計與儀表板開發的開源圖示庫：Tabler Icons (by tabler)。\n簡單說，它是一個「擁有超過五千款高質感 SVG 的客製化圖示庫」，幫你把原本需要到處尋找風格一致、支援動態調整的圖示煩惱，轉化為一套只要引入套件就能隨插即用的超大型開源設計資源。\n－海量且免費的開源圖庫：內建超過 5,000 個精心設計的向量圖示，採用寬鬆的 MIT 授權，無論個人專案或商業產品都能免費使用。\n－極致的彈性客製化：支援即時動態調整尺寸、顏色與線條粗細，能輕鬆適應各種深淺色主題與介面排版需求。\n－多框架無縫整合：除了原始 SVG 與 Web Font，還原生提供 React、Vue、Svelte 等主流前端框架的專屬套件，大幅降低開發組件的成本。\n－風格統一的精緻網格：所有圖示皆基於 24x24 網格繪製，提供極度一致的現代化線條風格，並涵蓋外框與填色等多種版本。 1/2",
+    "publishedTime": "2026-08-10T23:35:13.000Z",
+    "collectedAt": "2026-09-14T18:42:37.672Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db2sUq1D1Y7",
+    "postUrl": "https://www.threads.com/@nikki_potato/post/Db2sUq1D1Y7",
+    "authorHandle": "@nikki_potato",
+    "authorName": "",
+    "contentText": "Google到的一串內容農場媒體肉粽，建議替家中長輩檢封。\n***\n美商全通媒體集團（AAMS）（在台灣以「績碩科技」、「波仕特科技行銷」等名義營運）本質上是一家大型數位行銷公司。\n在學界與事實查核單位中，該集團被歸類為經營「內容農場型轉型媒體」的代表之一。\n他們在社群上的核心操作手法是：\n透過旗下龐大的「子粉專矩陣（俗稱粽子串粉專）」，大量複製、AI 生成、或轉載特定新聞（如常與中天/中時聯播），並下廣告來洗腦使用者、賺取流量與引導輿論風向。\n如果你想要徹底封鎖該集團，以下為全通媒體旗下的主要核心網頁、市調工具，以及在 Facebook / Threads 上被揭露的龐大「我是OO人」、「ENews」、「生活與養生」系列矩陣帳號。 1/6",
+    "publishedTime": "2026-08-10T09:28:37.000Z",
+    "collectedAt": "2026-09-14T18:42:37.672Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db4yBpdHyXk",
+    "postUrl": "https://www.threads.com/@boodsugarhigh/post/Db4yBpdHyXk",
+    "authorHandle": "@boodsugarhigh",
+    "authorName": "",
+    "contentText": "先講身為一個對資安有點要求的台灣人\n旅日次數也是棒棒的\n是踩了很多雷才得出和YT頻道「VS MEDIA Taiwan」 差不多的結論\n（YT 找 先講重點）\n主旨「讓大家避雷流量被送中國，不肖電商」\n1. hofly 是披著外商殼的中資(歐洲多國移動好用但是是不得已）\n2. Saily eSIM （有用，副作用大，影片有講）\n持有但沒有真正常用（當作備用）：樂天迴線SIM卡（帶日本門號，辦ANA pay 信用卡充值時使用）\n推薦（短期使用）\n1. KDDI 原生吃到飽（有eSIM 是真的日本原生）\n2. POVO吃到飽 ( kddi 子公司，吃到飽是真的）\n3. SOFTBANK （沒有吃到飽！說有吃到飽的都是詐騙！） （請直接和億點通訊/東信和平 買，其他都是分銷）\n普通：\nDocomo, 台灣大哥大/中華電信…etc\n（我會開一個能打電話的方案）\n不推薦：\n1. 被揭露是中國移動or香港漫遊（特徵就是可以任切兩家以上日本電信公司，大機率是中了中國移動）\n2. DJB 「Ultra 能買，有10MB 說是吃到飽（令和卡）自駕滑雪不行，會變成需要兩台手機不同張eSIM 交換使用」",
+    "publishedTime": "2026-08-11T04:56:56.000Z",
+    "collectedAt": "2026-09-14T18:42:37.673Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db3NbuUCaDn",
+    "postUrl": "https://www.threads.com/@swe_miki/post/Db3NbuUCaDn",
+    "authorHandle": "@swe_miki",
+    "authorName": "",
+    "contentText": "文博會看到的保冰杯\n本來以為是燕三条的廠商\n跟老闆聊過後台灣的品牌！！\n每一個杯子都獨一無二且不沾飲料的味道\n夏天好適合買來送朋友跟喝梅酒🤍🤍",
+    "publishedTime": "2026-08-10T14:17:57.000Z",
+    "collectedAt": "2026-09-14T18:42:39.304Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db0XjO9DyDQ",
+    "postUrl": "https://www.threads.com/@lu_homestyle/post/Db0XjO9DyDQ",
+    "authorHandle": "@lu_homestyle",
+    "authorName": "",
+    "contentText": "這個好厲害！！！\n給需要自己裝修的屋主參考😍\n玩玩也很好玩😆 1/2\ndinye.c",
+    "publishedTime": "2026-08-09T11:48:38.000Z",
+    "collectedAt": "2026-09-14T18:42:39.304Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db2AeaUgeWu",
+    "postUrl": "https://www.threads.com/@who_has_a_dream/post/Db2AeaUgeWu",
+    "authorHandle": "@who_has_a_dream",
+    "authorName": "",
+    "contentText": "這個概念在國外 AI 圈直接爆火！🔥\n大家有沒有發現，現在要讓 AI 學會新招，都得靠工程師手動去找 Code、讀文檔、慢慢把它改成 AI 聽得懂的 Skill？這種做法根本慢到爆，完全沒辦法 Scalable！\n國外有大神直接丟出一套 「讓 AI 永遠不停學習、技能自己打複利」 的終極系統架構圖！直接用 8 個 AI Agent 組成一個全自動學習閉環 🔄⚡ 1/3",
+    "publishedTime": "2026-08-10T03:05:29.000Z",
+    "collectedAt": "2026-09-14T18:42:39.304Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db00_L-gXvZ",
+    "postUrl": "https://www.threads.com/@pan_0709/post/Db00_L-gXvZ",
+    "authorHandle": "@pan_0709",
+    "authorName": "",
+    "contentText": "正在回覆@bebeamau\n你問到重點了\ngithub.com/madeb…",
+    "publishedTime": "2026-08-09T16:05:51.000Z",
+    "collectedAt": "2026-09-14T18:42:39.304Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db0yk3dk_2G",
+    "postUrl": "https://www.threads.com/@chierasoo1/post/Db0yk3dk_2G",
+    "authorHandle": "@chierasoo1",
+    "authorName": "",
+    "contentText": "Los年度代表人物：Mae Koy😁",
+    "publishedTime": "2026-08-09T15:44:47.000Z",
+    "collectedAt": "2026-09-14T18:42:39.304Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Db0h_YQmViG",
+    "postUrl": "https://www.threads.com/@ailazytech/post/Db0h_YQmViG",
+    "authorHandle": "@ailazytech",
+    "authorName": "",
+    "contentText": "codex cloud 已知用火 😂\n可以 codex cloud 授權 git repo，接著就能開一個虛擬環境。\n設定好環境以後，就能透過開 issue 的方式派任務讓 codex cloud 自動起環境跑任務，好了以後在該任務頁面右上手動送 PR，然後就能請 codex 審單、合併。\n這邊就不用留本地，或是可以本地、codex cloud 開不同單去執行。\n目前應該是不吃額度，然後模型是 Sol/Medium。\n未來吃額度我覺得也很香，基本不用開著電腦，在 app 就能請 ChatGPT 出單，然後就會開始跑任務了。\n哎～真香\n詳細步驟留在底下 1/3",
+    "publishedTime": "2026-08-09T13:19:51.000Z",
+    "collectedAt": "2026-09-14T18:42:40.865Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbxeeIjIAiF",
+    "postUrl": "https://www.threads.com/@magicpeter.mp/post/DbxeeIjIAiF",
+    "authorHandle": "@magicpeter.mp",
+    "authorName": "",
+    "contentText": "一個 2022 年的收納盒，到今天還被下載 16 萬次、被改出 1,019 個版本。\n它叫 Rugged Box (Parametric)，作者 Whity。重點藏在說明頁最不起眼的那段：下載區的 STL 全是 V1 舊版，作者要你去拿 Fusion 360 原始檔自己調——因為可調參數多到不改可惜。\n他發佈的不是一個盒子，是一台生盒子的機器。所以同一個設計被改成 GoPro 盒、18650 電池盒 50 顆裝、萬用電表盒、熱像儀盒。\n兩個細節我很喜歡：V2 讓你單獨設每個倒角偏移，調小卡扣好開、調大不容易誤開，你自己選；鉸鏈能加粗，但作者主動標「我不建議，那比較像 hack」。\n還有他用連續三行大寫寫著：不可能拿到商業授權，永遠只給非商業使用，請不要再問。看得出被問到煩。\n模型連結放 2 樓。\n3D列印 #3DPrinting #Printables 1/2",
+    "publishedTime": "2026-08-08T08:51:30.000Z",
+    "collectedAt": "2026-09-14T18:42:40.865Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbu7x0Qm4dW",
+    "postUrl": "https://www.threads.com/@yuqi._.0313/post/Dbu7x0Qm4dW",
+    "authorHandle": "@yuqi._.0313",
+    "authorName": "",
+    "contentText": "最適合做明信片的 skill 出現了！！！\n丟進一張旅行照片、街景或建築照，它會重新轉譯成一張極簡、留白多、像展覽圖錄般的編輯插畫\nGitHub： github.com/Yu-03…\n圖片：菜鴨傳奇d & me 1/2",
+    "publishedTime": "2026-08-07T09:09:45.000Z",
+    "collectedAt": "2026-09-14T18:42:42.367Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbs8bKoFVJq",
+    "postUrl": "https://www.threads.com/@heywhiteran/post/Dbs8bKoFVJq",
+    "authorHandle": "@heywhiteran",
+    "authorName": "",
+    "contentText": "歲月偏愛的神經謎題：為什麼 ADHD 族群常常「看起來比實際年齡小」？\n在神經多樣性（Neurodivergent）社群中，有一個廣為流傳且令人津津樂道的現象：許多 ADHD（注意力不足過動症）患者，無論是童年還是成年後，外表與精神狀態看起來都比同齡人「顯年輕」，甚至被戲稱為擁有「凍齡」或「童顏」的神經特徵。\n這不單純是主觀的美學錯覺，也不是隨機的個體幸運。從神經發育學、心理學以及生活行為學的交叉領域來看，ADHD 族群這種「看起來比實際年齡小」的現象，背後確實存在著相當明確的科學依據與生理/心理機制。\n一、 神經發育的「延遲軌跡」：大腦皮質發育比同齡人慢 3~5 年\n最直接的科學依據來自於神經影像學（Neuroimaging）對大腦結構的研究。\n美國國家衛生研究院（NIH）與知名神經科學家 Philip Shaw 博士主持的長期大腦追蹤研究發現：\n皮質發育延遲（Cortical Delay）：ADHD 兒童與青少年的大腦皮質（特別是負責高級認知、自我控制與風險評估的前額葉皮質）達到最高厚度的時間，比神經典型（NT）同齡人平均晚了 3 到 5 年。 1/4",
+    "publishedTime": "2026-08-06T14:36:55.000Z",
+    "collectedAt": "2026-09-14T18:42:42.367Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbt-yIzExUd",
+    "postUrl": "https://www.threads.com/@knowledge_share_hub/post/Dbt-yIzExUd",
+    "authorHandle": "@knowledge_share_hub",
+    "authorName": "",
+    "contentText": "不知道你有沒有發現，最近很多 AI 做出來的網站，第一眼幾乎都長一樣。\n紫藍漸層、玻璃擬態、超大的圓角卡片，再配一顆發光按鈕，十個網站有八個長這樣。\n我自己的習慣是，絕對不讓 AI 直接用它的預設樣式去發揮。每次做 Side Project，我都直接拿這些私藏的元件庫 Code 或是網址丟給它，叫它給我照著這個質感改：\n1.Magic UI\n這是我做 Hero Section 的首選。它的動畫很順，看起來舒服很多。\n2.React Bits\nAI 最喜歡畫死板的單色背景，我都直接去這裡搬粒子背景跟光暈組件，畫面層次感秒出來。\n3.SmoothUI\n如果你跟我一樣對「滑動與點擊的手感」有強迫症，這個一定要收。它把轉場細節處理得極好，能把 Vibe Coding 的整體完成度提高很多。\n4.RetroUI\n這個完全是我的私心偏好！Pixel、CRT、90 年代復古風都有。想做有個人風格的獨立專案，選它一眼就能讓人記住。\n別再讓你的產品長得像 AI 隨機生成的練習作了。我自己這四個幾乎每次開專案都會翻一次，反正先收藏，說不定哪天你就會用到💡 1/2",
+    "publishedTime": "2026-08-07T00:16:46.000Z",
+    "collectedAt": "2026-09-14T18:42:43.987Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbr9-GlkjbV",
+    "postUrl": "https://www.threads.com/@anniehan0221/post/Dbr9-GlkjbV",
+    "authorHandle": "@anniehan0221",
+    "authorName": "",
+    "contentText": "我：請問這個真的有人買嗎？\n店員：有啊而且是買原價，用現金喔。\n貧窮限制了我的想像。\n@national_palace_museum\n1.2 萬",
+    "publishedTime": "2026-08-06T05:31:11.000Z",
+    "collectedAt": "2026-09-14T18:42:43.987Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbtU5unCB8w",
+    "postUrl": "https://www.threads.com/@hxxsxxmxx/post/DbtU5unCB8w",
+    "authorHandle": "@hxxsxxmxx",
+    "authorName": "",
+    "contentText": "粉絲跟偶像都好可愛55555\n我就不笑他了\n如果我是他\n恐怕我已經暈倒了😂",
+    "publishedTime": "2026-08-06T18:10:48.000Z",
+    "collectedAt": "2026-09-14T18:42:43.988Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbtS-tDANHD",
+    "postUrl": "https://www.threads.com/@kamantsoi_/post/DbtS-tDANHD",
+    "authorHandle": "@kamantsoi_",
+    "authorName": "",
+    "contentText": "粉絲跟偶像都好可愛55555\n我就不笑他了\n如果我是他\n恐怕我已經暈倒了😂",
+    "publishedTime": "",
+    "collectedAt": "2026-09-14T18:42:43.988Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbtHlm5gZR1",
+    "postUrl": "https://www.threads.com/@yuehang_/post/DbtHlm5gZR1",
+    "authorHandle": "@yuehang_",
+    "authorName": "",
+    "contentText": "MANGA MILLION 正式上線📖✨\n集英社為慶祝 100 週年推出的漫畫平台\n收錄 400 多部漫畫，重點是全部免費！！\n-\n官方目標是在 2027年底前，陸續將平台所有作品推出多語言翻譯版本（當然也包含中英文），並從本月開始持續更新\n-\n如果真的順利完成，相信會有更多人開始試著透過正版途徑閱讀漫畫，偉大的企劃⋯ 1/2",
+    "publishedTime": "2026-08-06T16:14:28.000Z",
+    "collectedAt": "2026-09-14T18:42:45.598Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbs4cPGkxAd",
+    "postUrl": "https://www.threads.com/@aya.sky.ws/post/Dbs4cPGkxAd",
+    "authorHandle": "@aya.sky.ws",
+    "authorName": "",
+    "contentText": "想要再來宣傳一下這篇Ormling 😭😭😭\n剛剛作者說她衝上postype GL熱門系列第一名了，真的為她感到開心😭😭😭\n沒看過的可以給這篇Ormling 一個機會嗎😭😭😭\n85章簡直封神了我超喜歡😭😭😭\n（第一季總共好像12X章，目前作者翻譯到94章，我已經看完了是因為後面我是自己按著韓語翻譯看完的😭）\n雖然作者自翻是簡中但希望大家不會錯過這個作品😭😭😭",
+    "publishedTime": "2026-08-06T14:02:07.000Z",
+    "collectedAt": "2026-09-14T18:42:45.598Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbr09dNE6xI",
+    "postUrl": "https://www.threads.com/@wu.sirius/post/Dbr09dNE6xI",
+    "authorHandle": "@wu.sirius",
+    "authorName": "",
+    "contentText": "我對 Matt Pocock Skills 從未掩飾排斥之情。我常笑為什麼不是 grill-you，而是 grill-me。但是嘲笑之餘，有比 grill-me 更好的 skills 嗎?\n有的。那就是 Addy Osmani 的 interview-me 和 idea-refine 。\n為什麼好? 效率。雙向的溝通而非單向的詰問。",
+    "publishedTime": "2026-08-06T04:12:27.000Z",
+    "collectedAt": "2026-09-14T18:42:45.598Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbshuL6jnLl",
+    "postUrl": "https://www.threads.com/@s_h_u_ooo/post/DbshuL6jnLl",
+    "authorHandle": "@s_h_u_ooo",
+    "authorName": "",
+    "contentText": "每日分享實用工具直到去當兵 Day 92\n想讓 Mac 和 Windows\n共用同一個工作資料夾\n試試Syncthing\nMac 這邊放進一個檔案\nWindows 幾秒內就收到了\n不用登入帳號\n也不用先傳到雲端硬碟\n影片就是在兩台電腦間完成的 1/3",
+    "publishedTime": "2026-08-06T10:48:34.000Z",
+    "collectedAt": "2026-09-14T18:42:47.240Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbsMsejkU12",
+    "postUrl": "https://www.threads.com/@ben.intern/post/DbsMsejkU12",
+    "authorHandle": "@ben.intern",
+    "authorName": "",
+    "contentText": "用這個 skill 幫 macOS 清出了 100 多 GB 的容量，舒服～\n收藏起來，有一天總會用到😎 1/2",
+    "publishedTime": "2026-08-06T07:39:51.000Z",
+    "collectedAt": "2026-09-14T18:42:47.240Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbrTGhfE_Or",
+    "postUrl": "https://www.threads.com/@malilion.dev/post/DbrTGhfE_Or",
+    "authorHandle": "@malilion.dev",
+    "authorName": "",
+    "contentText": "最近逛到一個滿適合做健身 App 與運動類產品開發的開源資料集：exercises-dataset。\n簡單說，它是一個由開源社群維護的超完整「健身動作資料庫」，幫你把那些「需要自己去各處搜集、整理分類與尋找示範影片」的龐大健身數據，整理成可以直接匯入專案的 JSON 格式。\n－包含上千種常見的健身與重訓動作，資料結構乾淨且標準化，非常適合直接用來建立資料庫或做前端介面展示\n－每個動作都具備詳細的屬性標籤，精準分類了目標肌群、訓練部位、所需器材以及動作名稱\n－最棒的是資料內附帶了動態示範圖的連結，讓你的應用程式不只有純文字，還能直接為使用者展示正確的動作軌跡\n－完全開源且免費，省去開發初期為了尋找版權安全且專業的運動圖文素材所耗費的大量時間與金錢成本\n我覺得它適合做專屬的個人化健身排課 App、重訓紀錄系統、健身教練的輔助工具，或是任何需要提供運動指引的健康類專案。很多時候開發一款健身應用最難的不是寫出排程邏輯或 UI 介面，而是少了一套「數量足夠、分類清晰且帶有視覺示範」的高品質基礎數據。 1/2",
+    "publishedTime": "2026-08-05T23:16:36.000Z",
+    "collectedAt": "2026-09-14T18:42:47.240Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbsbI-YmXIZ",
+    "postUrl": "https://www.threads.com/@jc_0924_/post/DbsbI-YmXIZ",
+    "authorHandle": "@jc_0924_",
+    "authorName": "",
+    "contentText": "jc_0924_AI Threads2026-8-6",
+    "publishedTime": "2026-08-06T09:46:04.000Z",
+    "collectedAt": "2026-09-14T18:42:47.240Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbsVRTdkaqR",
+    "postUrl": "https://www.threads.com/@miyago1124/post/DbsVRTdkaqR",
+    "authorHandle": "@miyago1124",
+    "authorName": "",
+    "contentText": "Pilotfish-Codex v1.6.0 發布！\n本次重評了Role的分配，Luna負責大部分執行與驗證，Sol留給計畫、驗證和覆盤，Terra則是被蛋雕（bruh，Luna上限、Sol下限都覆蓋這模型，有夠雞肋\n策略如下\n- 主腦Luna，遇到安全風險或意見分歧使用Sol\n- 主腦Sol，機械工作也能多利用Luna。\n那為什麼要裝這個？Codex不是有codex-auto-review模式嗎？\n嘿你問得很好\n其一是auto-review超他媽貴，做點驗證就把我5x usage燒完了，不符pilotfish想省成本的初衷\n其二是使用者毋需手切模型。現有實驗裡，主腦用Sol時，Pilotfish和純Sol的品質相同，但在近百個情境測試中，降低了8.34%的token，20筆live slice測驗中減少16.80%；而主腦在Luna時，則能有效利用Sol解決分歧和多抓到關鍵風險，同時保留速度、成本及品質\n目前我無法證明「Pilotfish和純Sol孰強孰弱」，但能確定Pilotfish能把模型調度、成本、品質的平衡，達成90分以上水準了，希望各方可以一起加入測試共通改進 1/2",
+    "publishedTime": "2026-08-06T08:54:47.000Z",
+    "collectedAt": "2026-09-14T18:42:47.240Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbroRGKE11H",
+    "postUrl": "https://www.threads.com/@l.i.dog/post/DbroRGKE11H",
+    "authorHandle": "@l.i.dog",
+    "authorName": "",
+    "contentText": "@ All 不管了不管了不管了不管了 不管了 不管了不管了不管了不管了不管了 不管了 不管了不管了不管了不管了不管了 不管了 不管了不管了不管了不管了不管了 不管了 不管了不管了不管了不管了不管了 不管了 不管了不管了不管了不管了不管了 不管了 不管了不管了不管了不管了不管了 不管了 不管了不管了不管了不管了不管了 不管了 不管了\n來看來看來看來看來看來看來看來看來看來看來看來看來看來看來看來看來看來看來看來看來看來看Ormlingggggggggggggggggggggggggggggggghggggggghhhhgghggggggggghhgggggggggggggggggggggggggggghhgggggggg 99999999999999999999999989999999啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊結婚結婚結婚結婚結婚結婚喔喔喔喔喔阿薩颯颯颯颯阿薩薩斯阿薩薩斯呼呼呼呼呼呼呼呼啊啊啊啊啊啊我跪浪漫死那個鄺玲玲不用看臉都笑得像是新婚吧 是新婚吧\n而且毛領舞我的天我不行了 1/2",
+    "publishedTime": "2026-08-06T02:21:32.000Z",
+    "collectedAt": "2026-09-14T18:42:48.802Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DblT8nhkyD6",
+    "postUrl": "https://www.threads.com/@rinrinchanyo/post/DblT8nhkyD6",
+    "authorHandle": "@rinrinchanyo",
+    "authorName": "",
+    "contentText": "意識到自己是個貧瘠的人。\n與物質無關，是深處沒辦法掩蓋的荒蕪。有時心底泛起一陣模糊的漣漪，搜腸刮肚卻找不出半句話去形容。心緒堵在胸腔，化不開也說不出，只能化作漫長的沉默。\n以前覺得，敏感就代表靈魂能夠豐盈。但後來殘酷地察覺，我僅僅擅長感知空虛。能夠清晰捕捉到離別的悵然、人與人之間疏遠的距離、陌生人眼神裡短暫的溫柔，卻沒有足夠厚重的積澱承載這些感受。所有起伏的情緒都是短暫的浪花，風一停，海面依舊一片死寂。\n我的精神疆域遼闊卻寸草不生。沒有源源不斷湧出的思緒，沒有屬於自己穩固的見解，大多時候只能隨著外界的聲音飄蕩。和人深入交談時最為惶恐，害怕話題往深處延伸，害怕彼此袒露內心。我應該是能輕易讀出他人靈魂裡層次繁雜的風景，那些經歷鑄造的觀念，細緻綿密的感知，縱橫交錯的思緒。反觀自己，掀開表層淺薄的情緒，底下只有一望無際的蒼白。\n我不太想讓任何人走進我的內心深處。恐懼他人看穿這片曠野，沒有繁花，沒有溪流，只有乾裂的土地，零散的雜草。 1/2\n2.2 萬",
+    "publishedTime": "2026-08-03T15:28:32.000Z",
+    "collectedAt": "2026-09-14T18:42:48.802Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbqmnSGDYTc",
+    "postUrl": "https://www.threads.com/@cameljourney/post/DbqmnSGDYTc",
+    "authorHandle": "@cameljourney",
+    "authorName": "",
+    "contentText": "只有我不知道嗎？！去歐洲玩的時候看到別人都戴自己的耳機，好奇飄過去看才發現這個厲害 App！Rick Steves Audio Europe 內容豐富又免費，根本慈善事業\n✨它收錄了超過 60 個歐洲熱門城市的徒步路線與博物館語音導覽，從巴黎羅浮宮到羅馬競技場通通有，還有各個城市的散策與路線導覽。內容生動幽默、完全不枯燥，邊走邊深度體驗歐洲的歷史文化。\n🌟 四大必下載核心特色\n🎙️ 生動深度： 由美國知名旅遊教父 Rick Steves 親自編寫，比官方導覽機有趣太多！有時還會有當地特別來賓做訪談講故事，超喜歡這個細節。\n🆓 完全免費： 所有語音導覽與配套的 PDF 路線地圖全部免費，零隱藏費用。\n📶 支援離線： 在飯店先下載好檔案，旅途中就算沒網路或訊號不好也能順暢收聽。\n🚶 隨走隨停： 隨心調配時間，完全按照你自己的節奏探索城市。\n去歐洲玩的你，拜託下載起來！",
+    "publishedTime": "2026-08-05T16:47:51.000Z",
+    "collectedAt": "2026-09-14T18:42:48.802Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbqBZ-zicZS",
+    "postUrl": "https://www.threads.com/@nianyi1997/post/DbqBZ-zicZS",
+    "authorHandle": "@nianyi1997",
+    "authorName": "",
+    "contentText": "沒勇氣跟菜市場攤販問價的社恐人\n沒空在白天去逛市場的上班族們\n請直接把這5個賣場無腦存起來！\n真的可以閉眼入🙂‍↕️🙂‍↕️🙂‍↕️ 1/2",
+    "publishedTime": "2026-08-05T11:22:43.000Z",
+    "collectedAt": "2026-09-14T18:42:48.803Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbqBZ0gkzJ5",
+    "postUrl": "https://www.threads.com/@kellyyangdes/post/DbqBZ0gkzJ5",
+    "authorHandle": "@kellyyangdes",
+    "authorName": "",
+    "contentText": "他是不是從 2099 年穿越回來的 🤯\n#AI工具 #vibecoding #Capafy #AI應用 #YouTube自動化\n很抱歉，播放此影片時發生問題。\n瞭解詳情",
+    "publishedTime": "2026-08-05T11:22:45.000Z",
+    "collectedAt": "2026-09-14T18:42:50.349Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbqIZs-lF8E",
+    "postUrl": "https://www.threads.com/@new_lifen/post/DbqIZs-lF8E",
+    "authorHandle": "@new_lifen",
+    "authorName": "",
+    "contentText": "Vibe coding 小白先不要一直跑去要取代工程師了，來看漫畫學軟工名詞！\n在webtoon 海巡時，翻到一本漫畫叫「跳槽日記」，從台詞冒出「SQL」開始，愈看愈不對，買尬，作者居然認真描寫軟體公司的職場戀愛故事！\n舉例來說：\n男主、女主、女二，分別是後端工程師、前端工程師、UIUX設計師（三人都可以自己出走做軟體了）\n男主誇獎女二的方式是：會技術語言的設計師很少見，你很厲害欸（真會挑地方誇）\n每一個話次的劇情，都會跟軟體技術名詞互文，比如說「commit 」指的是修改完的程式碼要儲存為新的程式版本，但在話次裡面，確是男主角commit 對女主角的心動念頭（歐買尬）\n或者是cookie 指的是網站利用每個使用者的session 打造個人化的網站瀏覽體驗，對應到故事裡面，除了吃的是餅乾外，也暗指男主角為女主角細心的挑選她愛吃的品項….\n（如果有理解錯誤再麻煩指正） 1/2",
+    "publishedTime": "2026-08-05T12:23:51.000Z",
+    "collectedAt": "2026-09-14T18:42:50.350Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbqDKcmFLcF",
+    "postUrl": "https://www.threads.com/@sw_ai_life/post/DbqDKcmFLcF",
+    "authorHandle": "@sw_ai_life",
+    "authorName": "",
+    "contentText": "Firecrawl 團隊出了Rust 工具 - anydoc\n它可以將 Word、PPT、Excel、PDF、EPUB、CSV 等 14 種辦公室常見格式，統一轉換為結構清晰、樣式乾淨的 Markdown\ngithub.com/firec… 1/2",
+    "publishedTime": "2026-08-05T11:38:05.000Z",
+    "collectedAt": "2026-09-14T18:42:50.350Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbp9s9nGop2",
+    "postUrl": "https://www.threads.com/@ethansavemoneydairy/post/Dbp9s9nGop2",
+    "authorHandle": "@ethansavemoneydairy",
+    "authorName": "",
+    "contentText": "TinyFish 正式支援 Claude 了。\n我原本想他只是一個plugin而已\n直到我看完它提供的能力，才發現它的定位跟 Firecrawl 不太一樣。 1/11",
+    "publishedTime": "2026-08-05T10:50:22.000Z",
+    "collectedAt": "2026-09-14T18:42:50.350Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbp__p1GRL7",
+    "postUrl": "https://www.threads.com/@miyavilinn/post/Dbp__p1GRL7",
+    "authorHandle": "@miyavilinn",
+    "authorName": "",
+    "contentText": "Notion 官方用一篇架構圖寫完它的新定位\n轉過來給大家看，為什麼我們現在都說：\n❌ Notion 早就不是筆記軟體了 ❌\n​\n📁 Notion\n┃\n┣ 📁 記錄系統\n┃ ┣ 📁 資料庫\n┃ ┣ 📁 會議記錄\n┃ ┣ 📁 版本控制\n┃ ┣ 📁 Wiki\n┃ ┣ 📁 專案\n┃ ┣ 📁 文件\n┃ ┣ 📁 任務\n┃ ┣ 📁 表單\n┃ ┗ 📁 知識庫\n┃\n┣ 📁 Notion AI\n┃ ┣ 📁 自訂 Agent\n┃ ┣ 📁 外部 Agent\n┃ ┣ 📁 企業搜尋\n┃ ┣ 📁 AI 會議記錄\n┃ ┣ 📁 深度研究\n┃ ┣ 📁 自動填入\n┃ ┣ 📁 AI 連接器\n┃ ┗ 📁 行動裝置 Agent\n┃\n┣ 📁 開發者平台\n┃ ┣ 📁 MCP\n┃ ┣ 📁 Workers\n┃ ┣ 📁 API\n┃ ┣ 📁 ntn CLI\n┃ ┣ 📁 Webhooks\n┃ ┣ 📁 同步\n┃ ┣ 📁 Agent 工具\n┃ ┣ 📁 開發者入口\n┃ ┗ 📁 外部 Agent API 1/2",
+    "publishedTime": "2026-08-05T11:10:23.000Z",
+    "collectedAt": "2026-09-14T18:42:51.975Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbo_NU_AVAj",
+    "postUrl": "https://www.threads.com/@lin_100193/post/Dbo_NU_AVAj",
+    "authorHandle": "@lin_100193",
+    "authorName": "",
+    "contentText": "真的超扯 這個程式真的超級懶人包耶\n看指標判斷入場 運氣超好買在底部已站穩的價位😱😱\n作者還超佛心免費用",
+    "publishedTime": "2026-08-05T01:44:17.000Z",
+    "collectedAt": "2026-09-14T18:42:51.975Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbn5WewGkWa",
+    "postUrl": "https://www.threads.com/@ethansavemoneydairy/post/Dbn5WewGkWa",
+    "authorHandle": "@ethansavemoneydairy",
+    "authorName": "",
+    "contentText": "因為有幾個朋友私訊我，問我在 Codex 裡面的 Subagent 到底怎麼設定。延續我在前篇的luna worker的整理，我想整理一份完整三個設計架構給各位。\n我目前不是單純「多開幾個 Agent」，而是把它們分成三個清楚的角色：\n• luna_worker：高速執行小任務\n• terra_worker：功能開發與中型 Refactor\n• sol_architect：架構設計、Planning 與 Code Review\n這三個代理真正的差別，不只是模型名稱。\n而是它們各自能做什麼、不能做什麼，以及最後要怎麼向主代理回報。 1/9",
+    "publishedTime": "2026-08-04T15:33:52.000Z",
+    "collectedAt": "2026-09-14T18:42:51.975Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbn1UJyGUzj",
+    "postUrl": "https://www.threads.com/@ouuju613/post/Dbn1UJyGUzj",
+    "authorHandle": "@ouuju613",
+    "authorName": "",
+    "contentText": "1.有人在摸魚摸的正開心\n然後被發現了 那個表情好呆很驚恐哈哈哈\n2.被Orm比讚後非常開心 然後又很呆的被牽走",
+    "publishedTime": "2026-08-04T14:58:35.000Z",
+    "collectedAt": "2026-09-14T18:42:51.976Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbntAARIAvc",
+    "postUrl": "https://www.threads.com/@ming.nomadlife/post/DbntAARIAvc",
+    "authorHandle": "@ming.nomadlife",
+    "authorName": "",
+    "contentText": "厭倦了 Cursor、Claude Code 或 Windsurf 寫出來的網頁總是長得一副「AI 罐頭味（AI Slop）」嗎？🤖🎨\n其實你可以直接幫你的 AI Agent 注入 UI/UX 設計靈魂與品味！只要載入 Design Skill，AI 就會懂得版面節奏、配色與動效。\n精選 3 款超實用 AI UI/UX Skills（不需要全部安裝，選一個最符合你專案風格的「設計師靈魂」即可！）： 1/5",
+    "publishedTime": "2026-08-04T13:45:56.000Z",
+    "collectedAt": "2026-09-14T18:42:51.976Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbmO2UakuPH",
+    "postUrl": "https://www.threads.com/@sunglasses670/post/DbmO2UakuPH",
+    "authorHandle": "@sunglasses670",
+    "authorName": "",
+    "contentText": "正在回覆@www_dietloft\n用selenium套件去抓資料 輸出成csv 再讓ai直接整理出條件都符合的給你xd\n你去吃個飯的時間就抓完了\n現在gpt claude 可以直接幫你做",
+    "publishedTime": "2026-08-04T00:03:14.000Z",
+    "collectedAt": "2026-09-14T18:42:53.628Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbnZlQ5Efeg",
+    "postUrl": "https://www.threads.com/@johnoty/post/DbnZlQ5Efeg",
+    "authorHandle": "@johnoty",
+    "authorName": "",
+    "contentText": "中字來了 好好看😍\n真的不要亂告白有mia的人\n不然逼到她 急了會用中文跟你吵架\n吵完才發現直播中趕快回神🤣🤣",
+    "publishedTime": "2026-08-04T10:57:41.000Z",
+    "collectedAt": "2026-09-14T18:42:53.628Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DblP5qUEr_3",
+    "postUrl": "https://www.threads.com/@martingogo777/post/DblP5qUEr_3",
+    "authorHandle": "@martingogo777",
+    "authorName": "",
+    "contentText": "正在回覆@davidcwc\n讓 Google Chrome 不要吃太多記憶體（RAM），最直接的方法是開啟內建的記憶體節省模式、關閉背景執行以及清理擴充功能。\n1.內建省電與省記憶體設定開啟記憶體節省模式：點擊 Chrome 右上角三個點，進入「設定」>「效能」，將「記憶體節省模式」打開，閒置的分頁會自動釋放記憶體。\n2.關閉背景應用程式：在「設定」>「系統」中，關閉「Google Chrome 關閉時繼續執行背景應用程式」。\n第2項不曉得從第幾版開始的新功能, 之前沒看過\n~~試試",
+    "publishedTime": "2026-08-03T14:53:11.000Z",
+    "collectedAt": "2026-09-14T18:42:53.629Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbmjOvED7So",
+    "postUrl": "https://www.threads.com/@termcavetw/post/DbmjOvED7So",
+    "authorHandle": "@termcavetw",
+    "authorName": "",
+    "contentText": "個人資料和公司資料：你會為了轉個檔，把它傳到陌生的網站嗎？\n我做了一個「完全不用上傳」的。\n合併 PDF、拆成單頁、轉圖片、加浮水印、照片轉掃描檔，一共 18 個工具，全部在你的瀏覽器裡跑完，檔案絕對不會離開這台裝置。\n免費、免註冊，關掉網路照樣能用。\n🔗 markuptw.vercel.app",
+    "publishedTime": "2026-08-04T03:01:19.000Z",
+    "collectedAt": "2026-09-14T18:42:53.629Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbmg-dVCeOZ",
+    "postUrl": "https://www.threads.com/@little_m05/post/Dbmg-dVCeOZ",
+    "authorHandle": "@little_m05",
+    "authorName": "",
+    "contentText": "為什麼又ㄧ臉認真的胡說八道了😧",
+    "publishedTime": "2026-08-04T02:41:37.000Z",
+    "collectedAt": "2026-09-14T18:42:55.326Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DblbB8ICSuO",
+    "postUrl": "https://www.threads.com/@johnoty/post/DblbB8ICSuO",
+    "authorHandle": "@johnoty",
+    "authorName": "",
+    "contentText": "為什麼又ㄧ臉認真的胡說八道了😧",
+    "publishedTime": "",
+    "collectedAt": "2026-09-14T18:42:55.326Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbk15DuGoUA",
+    "postUrl": "https://www.threads.com/@renlinlinyo/post/Dbk15DuGoUA",
+    "authorHandle": "@renlinlinyo",
+    "authorName": "",
+    "contentText": "可否請問工程師們 普通人 + Vibe Coding\n要把AI工具用好\n你直覺需要學習的軟體的基本概念有哪些\n是git版本控制的使用、還是什麼基本概念呢",
+    "publishedTime": "2026-08-03T11:05:54.000Z",
+    "collectedAt": "2026-09-14T18:42:55.326Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbleTd_k0Aa",
+    "postUrl": "https://www.threads.com/@lo.cove/post/DbleTd_k0Aa",
+    "authorHandle": "@lo.cove",
+    "authorName": "",
+    "contentText": "厭倦了 Cursor、Claude Code 或 Windsurf 寫出來的網頁總是長得一副「AI 罐頭味（AI Slop）」嗎？🤖🎨\n其實你可以直接幫你的 AI Agent 注入 UI/UX 設計靈魂與品味！只要載入 Design Skill，AI 就會懂得版面節奏、配色與動效。\n精選 3 款超實用 AI UI/UX Skills（不需要全部安裝，選一個最符合你專案風格的「設計師靈魂」即可！）： 1/5\n正在回覆@www_dietloft\n用selenium套件去抓資料 輸出成csv 再讓ai直接整理出條件都符合的給你xd\n你去吃個飯的時間就抓完了\n現在gpt claude 可以直接幫你做\n中字來了 好好看😍\n真的不要亂告白有mia的人\n不然逼到她 急了會用中文跟你吵架\n吵完才發現直播中趕快回神🤣🤣\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n正在回覆@davidcwc\n讓 Google Chrome 不要吃太多記憶體（RAM），最直接的方法是開啟內建的記憶體節省模式、關閉背景執行以及清理擴充功能。\n1.內建省電與省記憶體設定開啟記憶體節省模式：點擊 Chrome 右上角三個點，進入「設定」>「效能」，將「記憶體節省模式」打開，閒置的分頁會自動釋放記憶體。\n2.關閉背景應用程式：在「設定」>「系統」中，關閉「Google Chrome 關閉時繼續執行背景應用程式」。\n第2項不曉得從第幾版開始的新功能, 之前沒看過\n~~試試\n個人資料和公司資料：你會為了轉個檔，把它傳到陌生的網站嗎？\n我做了一個「完全不用上傳」的。\n合併 PDF、拆成單頁、轉圖片、加浮水印、照片轉掃描檔，一共 18 個工具，全部在你的瀏覽器裡跑完，檔案絕對不會離開這台裝置。\n免費、免註冊，關掉網路照樣能用。\n🔗 markuptw.vercel.app\n為什麼又ㄧ臉認真的胡說八道了😧\n可否請問工程師們 普通人 + Vibe Coding\n要把AI工具用好\n你直覺需要學習的軟體的基本概念有哪些\n是git版本控制的使用、還是什麼基本概念呢\n今天活動的總結在此.\nLingOrm最近頻繁在「擦邊官宣」，\n可能是在給粉絲慢慢習慣，\n等官宣的時候就不會心臟病或血壓高暈過去\n最近看到有人分享這種 「主代理（Main Agent）＋子代理（Worker Agent）」 的 AI 工作流程，覺得概念很清楚。\n🧠 主代理（Sol）\n① 理解目標 → ② 拆解任務 → ③ 委派子任務 → ④ 檢查成果 → ⑤ 整合輸出\n🤖 子代理（Luna Worker）\n① 理解任務 → ② 規劃執行 → ③ 執行工作 → ④ 驗證測試 → ⑤ 整理回報\n這個提示詞節省token很有感耶！\nChat GPT Plus對我來說很夠用了耶！\n大家試試看\nPROMPT:\n建立一個名為 luna_worker 的自訂代理，檔案位置為 ~/.codex/agents/luna-worker.toml。\n使用以下設定：\nmodel = “gpt-5.6-luna”\nmodel_reasoning_effort = “max”\n為它加入適合執行有明確範圍之委派工作的描述與指示。保留我其餘的設定不變。請依照我目前安裝的 Codex 版本進行驗證、顯示差異內容，然後使用 luna_worker 執行子代理任務。\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-03T16:59:02.000Z",
+    "collectedAt": "2026-09-14T18:42:55.341Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DblKo73CTnk",
+    "postUrl": "https://www.threads.com/@solofun.log/post/DblKo73CTnk",
+    "authorHandle": "@solofun.log",
+    "authorName": "",
+    "contentText": "今天活動的總結在此.\nLingOrm最近頻繁在「擦邊官宣」，\n可能是在給粉絲慢慢習慣，\n等官宣的時候就不會心臟病或血壓高暈過去",
+    "publishedTime": "",
+    "collectedAt": "2026-09-14T18:42:55.341Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DblB9mKH2gV",
+    "postUrl": "https://www.threads.com/@dinghuanglin/post/DblB9mKH2gV",
+    "authorHandle": "@dinghuanglin",
+    "authorName": "",
+    "contentText": "最近看到有人分享這種 「主代理（Main Agent）＋子代理（Worker Agent）」 的 AI 工作流程，覺得概念很清楚。\n🧠 主代理（Sol）\n① 理解目標 → ② 拆解任務 → ③ 委派子任務 → ④ 檢查成果 → ⑤ 整合輸出\n🤖 子代理（Luna Worker）\n① 理解任務 → ② 規劃執行 → ③ 執行工作 → ④ 驗證測試 → ⑤ 整理回報\n這個提示詞節省token很有感耶！\nChat GPT Plus對我來說很夠用了耶！\n大家試試看\nPROMPT:\n建立一個名為 luna_worker 的自訂代理，檔案位置為 ~/.codex/agents/luna-worker.toml。\n使用以下設定：\nmodel = “gpt-5.6-luna”\nmodel_reasoning_effort = “max”\n為它加入適合執行有明確範圍之委派工作的描述與指示。保留我其餘的設定不變。請依照我目前安裝的 Codex 版本進行驗證、顯示差異內容，然後使用 luna_worker 執行子代理任務。",
+    "publishedTime": "2026-08-03T12:51:24.000Z",
+    "collectedAt": "2026-09-14T18:42:55.341Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DblUb36nyxR",
+    "postUrl": "https://www.threads.com/@dinghuanglin/post/DblUb36nyxR",
+    "authorHandle": "@dinghuanglin",
+    "authorName": "",
+    "contentText": "可否請問工程師們 普通人 + Vibe Coding\n要把AI工具用好\n你直覺需要學習的軟體的基本概念有哪些\n是git版本控制的使用、還是什麼基本概念呢\n今天活動的總結在此.\nLingOrm最近頻繁在「擦邊官宣」，\n可能是在給粉絲慢慢習慣，\n等官宣的時候就不會心臟病或血壓高暈過去\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n最近看到有人分享這種 「主代理（Main Agent）＋子代理（Worker Agent）」 的 AI 工作流程，覺得概念很清楚。\n🧠 主代理（Sol）\n① 理解目標 → ② 拆解任務 → ③ 委派子任務 → ④ 檢查成果 → ⑤ 整合輸出\n🤖 子代理（Luna Worker）\n① 理解任務 → ② 規劃執行 → ③ 執行工作 → ④ 驗證測試 → ⑤ 整理回報\n這個提示詞節省token很有感耶！\nChat GPT Plus對我來說很夠用了耶！\n大家試試看\nPROMPT:\n建立一個名為 luna_worker 的自訂代理，檔案位置為 ~/.codex/agents/luna-worker.toml。\n使用以下設定：\nmodel = “gpt-5.6-luna”\nmodel_reasoning_effort = “max”\n為它加入適合執行有明確範圍之委派工作的描述與指示。保留我其餘的設定不變。請依照我目前安裝的 Codex 版本進行驗證、顯示差異內容，然後使用 luna_worker 執行子代理任務。\n我自己搞 vibe coding 的時候，最常碰到的問題就是很難精準表達出想要的按鈕跟介面功能。\n後來看到國外網站分享相關概念，畢竟英文不是我熟悉的語言看得還是有點吃力，乾脆索性整理製作了一個中文版的 UI 字典網頁。\n把新手最容易卡關的用語都抓出來，用白話文翻成聽得懂的人話。\n連結我放在留言，給跟我一樣的新手參考！\n不過畢竟我不是專業前端設計師，GPT可能有錯誤我沒發現如果有錯誤再煩告知更正。 1/2\nGenOffice 開源了。\n號稱是全球首款完整開源的 AI Office，支援 Windows、Mac，而且完全免費、無廣告。\n但我覺得真正值得關注的，不只是它能編輯 Word、Excel、PowerPoint。 1/8\n8/6-14要去東京\n求推東京必吃美食（不要小紅書那種網紅店）\n還有必去的景點 小眾的city walk也可以！ 1/2\n有人可以跟我解釋一下一整個復仇者聯盟的故事嗎？感覺會很長 但我真的很喜歡這次蜘蛛人重生日的電影 很想要了解之前的一整篇故事 還有推薦的番外跟電影\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-03T15:32:49.000Z",
+    "collectedAt": "2026-09-14T18:42:56.993Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DblDxiEmvku",
+    "postUrl": "https://www.threads.com/@ethansavemoneydairy/post/DblDxiEmvku",
+    "authorHandle": "@ethansavemoneydairy",
+    "authorName": "",
+    "contentText": "GenOffice 開源了。\n號稱是全球首款完整開源的 AI Office，支援 Windows、Mac，而且完全免費、無廣告。\n但我覺得真正值得關注的，不只是它能編輯 Word、Excel、PowerPoint。 1/8",
+    "publishedTime": "2026-08-03T13:07:13.000Z",
+    "collectedAt": "2026-09-14T18:42:56.993Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbjDuVYHZOm",
+    "postUrl": "https://www.threads.com/@zyt.__0629/post/DbjDuVYHZOm",
+    "authorHandle": "@zyt.__0629",
+    "authorName": "",
+    "contentText": "8/6-14要去東京\n求推東京必吃美食（不要小紅書那種網紅店）\n還有必去的景點 小眾的city walk也可以！ 1/2",
+    "publishedTime": "2026-08-02T18:28:18.000Z",
+    "collectedAt": "2026-09-14T18:42:56.993Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbi9ruUk0ep",
+    "postUrl": "https://www.threads.com/@sob.n_ing/post/Dbi9ruUk0ep",
+    "authorHandle": "@sob.n_ing",
+    "authorName": "",
+    "contentText": "有人可以跟我解釋一下一整個復仇者聯盟的故事嗎？感覺會很長 但我真的很喜歡這次蜘蛛人重生日的電影 很想要了解之前的一整篇故事 還有推薦的番外跟電影",
+    "publishedTime": "2026-08-02T17:35:31.000Z",
+    "collectedAt": "2026-09-14T18:42:56.993Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbjzHPvDiRT",
+    "postUrl": "https://www.threads.com/@oference2.0/post/DbjzHPvDiRT",
+    "authorHandle": "@oference2.0",
+    "authorName": "",
+    "contentText": "Obsidian真的要給我錢：）",
+    "publishedTime": "2026-08-03T01:22:25.000Z",
+    "collectedAt": "2026-09-14T18:42:58.639Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbkz02sDuq8",
+    "postUrl": "https://www.threads.com/@s_h_u_ooo/post/Dbkz02sDuq8",
+    "authorHandle": "@s_h_u_ooo",
+    "authorName": "",
+    "contentText": "每日分享實用工具直到去當兵 Day 89\nMac 內建截圖已經很好用\n但每次加箭頭、文字、馬賽克\n內建的使用體驗就不怎麼好了？\n我用了幾天 Snapzy\n截完可以直接在畫面上標記\n而且免費、開源\n還是 Swift 寫的原生 Mac App 1/3",
+    "publishedTime": "2026-08-03T10:52:53.000Z",
+    "collectedAt": "2026-09-14T18:42:58.639Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbknVB9EzQu",
+    "postUrl": "https://www.threads.com/@hao0321_studio/post/DbknVB9EzQu",
+    "authorHandle": "@hao0321_studio",
+    "authorName": "",
+    "contentText": "正在回覆@hao0321_studio\ngithub.com/Hao03… 2/2",
+    "publishedTime": "2026-08-03T08:58:39.000Z",
+    "collectedAt": "2026-09-14T18:42:58.639Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbkg898myT2",
+    "postUrl": "https://www.threads.com/@cosnaye/post/Dbkg898myT2",
+    "authorHandle": "@cosnaye",
+    "authorName": "",
+    "contentText": "正在回覆@alexiaoooo\ninstagram.com/p/DbU…\n這裡有免費的\n很抱歉，播放此影片時發生問題。\n瞭解詳情\nkiao_tw",
+    "publishedTime": "2026-08-03T08:02:56.000Z",
+    "collectedAt": "2026-09-14T18:43:00.132Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbkBs1IERIr",
+    "postUrl": "https://www.threads.com/@clementtang/post/DbkBs1IERIr",
+    "authorHandle": "@clementtang",
+    "authorName": "",
+    "contentText": "正在回覆@bodaiji.studio\n那就順便開發 iOS 然後用 App Store Connect CLI？\ngithub.com/rorka…",
+    "publishedTime": "2026-08-03T03:29:51.000Z",
+    "collectedAt": "2026-09-14T18:43:01.698Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbivDEsEvi6",
+    "postUrl": "https://www.threads.com/@pesterino/post/DbivDEsEvi6",
+    "authorHandle": "@pesterino",
+    "authorName": "",
+    "contentText": "「東京Tabelog百名店2096店全紀錄」\n我以為這麼多人去日本，這麼簡單的清單網路上一定有，結果不是要付錢、偷懶用圖層pin，資料不是2026最新的，再不然就是根本不完整... 乾脆自己順手做了。共35類如下：\n1、豬排（43家）\nmaps.app.goo.gl/72yeD…\n2、亞洲異國料理（100家）\nmaps.app.goo.gl/ePCcA…\n3、西班牙料理（32家）\nmaps.app.goo.gl/w2J8o…\n4、漢堡（44家）\nmaps.app.goo.gl/B2sGD…\n5、麵包（100家）\nmaps.app.goo.gl/PTj5A… 1/2\n1.5 萬",
+    "publishedTime": "2026-08-02T15:27:38.000Z",
+    "collectedAt": "2026-09-14T18:43:01.699Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbkAhunDLVx",
+    "postUrl": "https://www.threads.com/@ckj_josef/post/DbkAhunDLVx",
+    "authorHandle": "@ckj_josef",
+    "authorName": "",
+    "contentText": "正在回覆@ckj_josef\n十幾年來的直播生涯，龍領主除了創造了許許多多的迷因之餘，也讓人看到黑粉跟直播主直接互相撻伐，帶來的行為可以多要命。幾十戶人住的小鎮因此不堪其擾，因為每週都有上百人湧入這個小鎮，只為了得到跟龍領主互相叫罵的機會\n終於在幾年前，龍領主離開了老家，把老家賤價賣出。居民而後將已經髒亂污穢不堪的龍宅邸給夷為平地。但每年不時還是會有朝聖者回到這裡朝聖當年傳奇。\n而龍領主在之後還是時常被Hater跟蹤，甚至他們會到他下榻的旅館鬧事，讓他被趕出去。龍領主因此一度成為無家可歸，甚至很多人看到他的腿因為體重跟長久站立而嚴重水腫。直到幾年前龍領主總算找到了願意讓他長居的屋主，才安定下來，他也逐漸消失在大眾視野裡\n紀錄片也說了雙方十幾年的鬥爭，就像是在玩一場曠日費時且沒有贏家的遊戲。我自己是覺得他蠻可憐的（雖然他的脫序行為好像包括當暴露狂、拍跟充氣娃娃嘿咻的影片、持有未成年色情相關物件）我覺得是我的話，不是跑去自沙就是跑去沙人報復社會了，而他則是也\n變成了一個傳奇\n我總覺得，德化是再怎麼努力都沒有盡頭的旅程一天，到頭來我始終就是異鄉人，但至少這幾天下來還是學到了不少可以跟德國朋友產生共鳴的事情 😆 2/2",
+    "publishedTime": "2026-08-03T03:19:36.000Z",
+    "collectedAt": "2026-09-14T18:43:03.274Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbiLkvqk64F",
+    "postUrl": "https://www.threads.com/@coolkid_lab/post/DbiLkvqk64F",
+    "authorHandle": "@coolkid_lab",
+    "authorName": "",
+    "contentText": "我開源了十幾種小東西\n包含了\nThread機器人\nLine機器人\nIG機器人\n以及一些SEO，Claude.md的一些小東西\n還有一大堆新手使用AI的新手教學\n在網站中搜尋關鍵字應該都能夠找到答案！\n找不到再來跟我說我來更新\n小秘寶就藏在網站中了\n有幫忙幫我點個心\n也歡迎高手們幫我看看有什麼錯誤🙏 1/2",
+    "publishedTime": "2026-08-02T10:17:39.000Z",
+    "collectedAt": "2026-09-14T18:43:03.275Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbjEm1XklhE",
+    "postUrl": "https://www.threads.com/@kppk152024/post/DbjEm1XklhE",
+    "authorHandle": "@kppk152024",
+    "authorName": "",
+    "contentText": "依個二連長傳真心勁！\nbow -> 00k -> mint\nGC2026 1/2",
+    "publishedTime": "2026-08-02T18:38:55.000Z",
+    "collectedAt": "2026-09-14T18:43:03.275Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbjue0njSjr",
+    "postUrl": "https://www.threads.com/@readus_org/post/Dbjue0njSjr",
+    "authorHandle": "@readus_org",
+    "authorName": "",
+    "contentText": "〈神秘學史上最恐怖的怪物〉\n頻道：Toon Explainer ｜ 日期：2026-07-12 ｜ 觀看：3072\n這支影片以條理清晰的敘述方式，依序介紹神秘學歷史上六種極具代表性的超自然實體：巴風特、精靈、科倫佐、克里弗、使魔與舍迪姆。主持人並未單純羅列傳說，而是將每種實體置於其產生的歷史、神學與儀式魔法脈絡中，說明它們如何從特定文化語境演變、被重構，甚至在流行文化中被誤讀或消費。\n巴風特：從酷刑供詞到流行文化吉祥物\n巴風特擁有神秘學史上最奇特的「職業生涯」。 1/20",
+    "publishedTime": "2026-08-03T00:42:00.000Z",
+    "collectedAt": "2026-09-14T18:43:03.275Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbhaCmpERhw",
+    "postUrl": "https://www.threads.com/@a11122201/post/DbhaCmpERhw",
+    "authorHandle": "@a11122201",
+    "authorName": "",
+    "contentText": "這段影片看到了一個很有趣的地方\nLingling 的玩鬧都是找熟悉的人\n尤其是飛吻這種，那炸妹是Orm 的閨蜜\n如果要逗一下Orm的話，這是一個很好的炮灰🤣\nOrm 是很會吃醋的女孩，lingling 知道\n她輕易的拿捏了愛情中的趣味\n可以看到炸妹的驚恐😱\n可以看到Orm的小表情微垮😤\n可以看到鄺直男哄女友的方式😏\n可以看到Orm跑完後又去找炸妹鬧🤣\n這段真的很好玩",
+    "publishedTime": "2026-08-02T03:04:49.000Z",
+    "collectedAt": "2026-09-14T18:43:03.275Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbgdmO4EmlQ",
+    "postUrl": "https://www.threads.com/@vivianchen0406/post/DbgdmO4EmlQ",
+    "authorHandle": "@vivianchen0406",
+    "authorName": "",
+    "contentText": "這段影片看到了一個很有趣的地方\nLingling 的玩鬧都是找熟悉的人\n尤其是飛吻這種，那炸妹是Orm 的閨蜜\n如果要逗一下Orm的話，這是一個很好的炮灰🤣\nOrm 是很會吃醋的女孩，lingling 知道\n她輕易的拿捏了愛情中的趣味\n可以看到炸妹的驚恐😱\n可以看到Orm的小表情微垮😤\n可以看到鄺直男哄女友的方式😏\n可以看到Orm跑完後又去找炸妹鬧🤣\n這段真的很好玩",
+    "publishedTime": "",
+    "collectedAt": "2026-09-14T18:43:03.275Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbhL1xSAgVu",
+    "postUrl": "https://www.threads.com/@twogirls_lab/post/DbhL1xSAgVu",
+    "authorHandle": "@twogirls_lab",
+    "authorName": "",
+    "contentText": "昨天搭公車的時候，聞到旁邊男生真的香到不行\n我忍不住問他：「不好意思…請問你噴什麼香水？」\n他超熱情的說：「Creed的銀色山泉。」\n然後下一秒...\n他直接把手腕放到我鼻子前讓我聞。\n我當下雙眼瞪大（？？？？？）\n但不得不說...真的超好聞！！\n以前靠櫃聞過這個味道，好像沒特別喜歡\n結果噴在不同人身上完全是另一個感覺🤯\n果然香水還是要噴在身上才知道\n2.6 萬",
+    "publishedTime": "2026-08-02T01:00:44.000Z",
+    "collectedAt": "2026-09-14T18:43:04.782Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbiri7kgBht",
+    "postUrl": "https://www.threads.com/@raymond0917/post/Dbiri7kgBht",
+    "authorHandle": "@raymond0917",
+    "authorName": "",
+    "contentText": "依個二連長傳真心勁！\nbow -> 00k -> mint\nGC2026 1/2\n〈神秘學史上最恐怖的怪物〉\n頻道：Toon Explainer ｜ 日期：2026-07-12 ｜ 觀看：3072\n這支影片以條理清晰的敘述方式，依序介紹神秘學歷史上六種極具代表性的超自然實體：巴風特、精靈、科倫佐、克里弗、使魔與舍迪姆。主持人並未單純羅列傳說，而是將每種實體置於其產生的歷史、神學與儀式魔法脈絡中，說明它們如何從特定文化語境演變、被重構，甚至在流行文化中被誤讀或消費。\n巴風特：從酷刑供詞到流行文化吉祥物\n巴風特擁有神秘學史上最奇特的「職業生涯」。 1/20\n這段影片看到了一個很有趣的地方\nLingling 的玩鬧都是找熟悉的人\n尤其是飛吻這種，那炸妹是Orm 的閨蜜\n如果要逗一下Orm的話，這是一個很好的炮灰🤣\nOrm 是很會吃醋的女孩，lingling 知道\n她輕易的拿捏了愛情中的趣味\n可以看到炸妹的驚恐😱\n可以看到Orm的小表情微垮😤\n可以看到鄺直男哄女友的方式😏\n可以看到Orm跑完後又去找炸妹鬧🤣\n這段真的很好玩\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n昨天搭公車的時候，聞到旁邊男生真的香到不行\n我忍不住問他：「不好意思…請問你噴什麼香水？」\n他超熱情的說：「Creed的銀色山泉。」\n然後下一秒...\n他直接把手腕放到我鼻子前讓我聞。\n我當下雙眼瞪大（？？？？？）\n但不得不說...真的超好聞！！\n以前靠櫃聞過這個味道，好像沒特別喜歡\n結果噴在不同人身上完全是另一個感覺🤯\n果然香水還是要噴在身上才知道\n2.6 萬\n【WhatCable：一眼分辨你的 USB-C 線的品質、速度】\n​\n家裡一堆傳輸、充電線，但分不清哪些是 USB 2.0 的小廢品？\n哪些長很醜卻是 USB 3.2，傳輸速度有 10 Gbps，240W 充電\n​\n現在，這個工具可以清楚告訴你這條線能做什麼，速度、充電限制和已連接的裝置。\n​\nPRO 版本還可以給線命名，讓它持續跟蹤實際表現，之後就能知道為什麼這根線充電慢，或為什麼接不了顯示器。\n​\n這是我一直很想要做的一個工具，本來想說這幾天拿剩下的 AI 額度來做，結果發現有人做得非常好，核心功能還完全免費，但我還是直接付錢打賞支持 PRO 了。（已劃掉我的想法清單之一 🤣） 1/2\n當ㄢㄤ不分的朋友挑戰繞口令：\n（拜託開聲音聽 笑到瘋掉） 1/2\n\"誰贏了這一球 就是獲勝了\"\n\"(っˊᗜˋ*)つ🏐\"\n\"(*´• д •)????\"\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-08-02T14:57:35.000Z",
+    "collectedAt": "2026-09-14T18:43:08.098Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbiLta0Dy55",
+    "postUrl": "https://www.threads.com/@ji1lin/post/DbiLta0Dy55",
+    "authorHandle": "@ji1lin",
+    "authorName": "",
+    "contentText": "當ㄢㄤ不分的朋友挑戰繞口令：\n（拜託開聲音聽 笑到瘋掉） 1/2",
+    "publishedTime": "2026-08-02T10:19:43.000Z",
+    "collectedAt": "2026-09-14T18:43:08.099Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbjHnWpiqqd",
+    "postUrl": "https://www.threads.com/@vein_0o/post/DbjHnWpiqqd",
+    "authorHandle": "@vein_0o",
+    "authorName": "",
+    "contentText": "\"誰贏了這一球 就是獲勝了\"\n\"(っˊᗜˋ*)つ🏐\"\n\"(*´• д •)????\"\n很抱歉，播放此影片時發生問題。\n瞭解詳情",
+    "publishedTime": "2026-08-02T19:04:07.000Z",
+    "collectedAt": "2026-09-14T18:43:08.099Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbinjwPE7FP",
+    "postUrl": "https://www.threads.com/@thintoast_/post/DbinjwPE7FP",
+    "authorHandle": "@thintoast_",
+    "authorName": "",
+    "contentText": "這2017年的片段根本精準預言😳\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n2.3 萬",
+    "publishedTime": "2026-08-02T14:22:40.000Z",
+    "collectedAt": "2026-09-14T18:43:09.694Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbiyU-ZGqDG",
+    "postUrl": "https://www.threads.com/@ethansavemoneydairy/post/DbiyU-ZGqDG",
+    "authorHandle": "@ethansavemoneydairy",
+    "authorName": "",
+    "contentText": "今天終於把 Codex 的 Subagent 用法整理成熟了。\n一開始很多人建立子代理，只會設定模型名稱。\n但真正影響品質的，其實是 角色定位、工作邊界，以及回報格式。\n如果沒有定義清楚，Subagent 很容易越做越多、改到不該改的地方，最後還要主代理收拾殘局。\n我在下面整理一份可以重複使用的模板\n未來可以推演成terra or sol的版本 1/4",
+    "publishedTime": "2026-08-02T15:56:17.000Z",
+    "collectedAt": "2026-09-14T18:43:09.694Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbimXIJkkYl",
+    "postUrl": "https://www.threads.com/@this_is_my_yuniverse/post/DbimXIJkkYl",
+    "authorHandle": "@this_is_my_yuniverse",
+    "authorName": "",
+    "contentText": "我們小公主Orm第一個直男式一日vlog\n當然要上字幕💜 1/2",
+    "publishedTime": "2026-08-02T14:12:34.000Z",
+    "collectedAt": "2026-09-14T18:43:09.694Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbhFN-EE8B7",
+    "postUrl": "https://www.threads.com/@arrchhiee_0rm0rm_/post/DbhFN-EE8B7",
+    "authorHandle": "@arrchhiee_0rm0rm_",
+    "authorName": "",
+    "contentText": "跟你說多少次不要這樣笑\n坑底已經很滿\nLINGORM CH3 SPORT DAY 2026\n#CH3GirlsCup2026\n#หลิงออม‌ #LingOrm\nvalentinephoto",
+    "publishedTime": "2026-08-02T00:02:52.000Z",
+    "collectedAt": "2026-09-14T18:43:09.694Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbhigOGkf1c",
+    "postUrl": "https://www.threads.com/@johnoty/post/DbhigOGkf1c",
+    "authorHandle": "@johnoty",
+    "authorName": "",
+    "contentText": "鄺直男是把老婆比的愛心\n用空氣投籃投出去嗎😗😗 1/2\n很抱歉，播放此影片時發生問題。\n瞭解詳情",
+    "publishedTime": "2026-08-02T04:19:36.000Z",
+    "collectedAt": "2026-09-14T18:43:11.240Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbhcIXOilqc",
+    "postUrl": "https://www.threads.com/@vein_0o/post/DbhcIXOilqc",
+    "authorHandle": "@vein_0o",
+    "authorName": "",
+    "contentText": "\"🫶🏻\"\n\"那是怎樣\"\n\"Prigkhing不能暗戀朋友的女朋友啊\"\n很抱歉，播放此影片時發生問題。\n瞭解詳情",
+    "publishedTime": "2026-08-02T03:23:46.000Z",
+    "collectedAt": "2026-09-14T18:43:11.240Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbhjcr4jmPZ",
+    "postUrl": "https://www.threads.com/@squarepantsbaron/post/Dbhjcr4jmPZ",
+    "authorHandle": "@squarepantsbaron",
+    "authorName": "",
+    "contentText": "-鬼滅之刃  無限城 粉絲製作動畫-\n國外粉絲耗時一年半製作出來的 無限城片段\n太誇張了 這個水準竟然是同人製作\n超級喜歡這裡對幻日虹的詮釋 太有創意了\nCredits\n導演: Fusilade Studios\n敘事: Fusilade Studios\n2DFX 動畫: @Nhaeta.rt on X, @jaén Villa on Instagram, Fusilade Studios\n3D 動畫: Fusilade Studios 1/2\n1.0 萬",
+    "publishedTime": "2026-08-02T04:33:47.000Z",
+    "collectedAt": "2026-09-14T18:43:11.240Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbfk1ECkT-h",
+    "postUrl": "https://www.threads.com/@tcl2013ebook/post/Dbfk1ECkT-h",
+    "authorHandle": "@tcl2013ebook",
+    "authorName": "",
+    "contentText": "正在回覆@doomscroll.baby\n我們是「台灣雲端書庫」電子書借閱平台\n免排隊、免預約，隨時隨地都可以閱讀～\n閱讀女子＆閱讀男子歡迎來借閱",
+    "publishedTime": "2026-08-01T10:00:37.000Z",
+    "collectedAt": "2026-09-14T18:43:11.240Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbdIMD-H5w_",
+    "postUrl": "https://www.threads.com/@doomscroll.baby/post/DbdIMD-H5w_",
+    "authorHandle": "@doomscroll.baby",
+    "authorName": "",
+    "contentText": "2026 年，30 歲女子都用哪些 App？\n我先：\nRadiooooo：在地圖上選國家和年代，隨機收聽那個時空的音樂，適合聽膩自己歌單ㄉ人\nYouBike：有時候忘記帶悠遊卡，直接用 App 掃碼借車，真的超方便\nCuple：可以看別人的咖啡清單，收藏到超多酷酷咖啡廳，也可以認識喜歡跑咖的朋友\nLetterboxd：記錄自己看過哪些電影，也可以看看大家都留下什麼有趣ㄉ評論\nEmoticon Dictionary：有時候不想用emoji，但又想讓文字有點溫度的時候.. 很可愛…(`σ̴̶̷̤ ̫ ᴗ̤´)",
+    "publishedTime": "2026-07-31T11:11:52.000Z",
+    "collectedAt": "2026-09-14T18:43:12.731Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbgXyylk_5p",
+    "postUrl": "https://www.threads.com/@gxiang_3_14/post/DbgXyylk_5p",
+    "authorHandle": "@gxiang_3_14",
+    "authorName": "",
+    "contentText": "這幾天一直在找一個開源的私人筆記軟體，終於被我找到一個幾乎滿足我所有條件的了：\n1. 開源、可自架設伺服器，可離線編輯\n2. 富文本編輯器，支援 markdown, embed, Canvas\n3. 跨平台同步，支援網頁、手機、桌面客戶端\n4. 社群活躍\n5. 支援整份資料庫匯入匯出\n6. MCP＋AI provider 串接\n似乎還有其他好用的功能，期待之後與它的相處。\ngithub.com/Trili…\n麻煩的是把 1000+ 個筆記從 AFFiNE 遷移過去...，寫了一個 exporter 成功把整個 workspace 導進去了，還好內容排版跟文件反向連結都沒丟，皆大歡喜ヽ( ° ▽°)ノ",
+    "publishedTime": "2026-08-01T17:25:57.000Z",
+    "collectedAt": "2026-09-14T18:43:14.290Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbfC3ZcGd0Y",
+    "postUrl": "https://www.threads.com/@leeunhn/post/DbfC3ZcGd0Y",
+    "authorHandle": "@leeunhn",
+    "authorName": "",
+    "contentText": "大家都在拿 AI 寫扣、當工程 agent，這個人反而把 Codex 調成一個戀愛軍師，你把一段感情糾結丟進去，它不急著幫你分對錯，是先接住你的情緒、再拆你們之間的關係、給你真的照著做得下去的下一步，裡面還塞了心理、法律、社會、哲學、婚姻家庭一整套知識庫，多元關係也聊得，1368 顆星～說真的比一堆工程工具更戳人 XD",
+    "publishedTime": "2026-08-01T05:03:58.000Z",
+    "collectedAt": "2026-09-14T18:43:14.291Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbftGxIkQgk",
+    "postUrl": "https://www.threads.com/@rubylx.herchiww/post/DbftGxIkQgk",
+    "authorHandle": "@rubylx.herchiww",
+    "authorName": "",
+    "contentText": "老實說我沒看過有人這樣擋人的\n她的寶貝抱上去後\n她戰場上的鷹眼變成乖順的小狗眼\n動作也慢了下來\n很抱歉，播放此影片時發生問題。\n瞭解詳情\nlingormkor.xs",
+    "publishedTime": "2026-08-01T11:12:56.000Z",
+    "collectedAt": "2026-09-14T18:43:15.804Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbcmgHAkW4X",
+    "postUrl": "https://www.threads.com/@kwuntonggirl/post/DbcmgHAkW4X",
+    "authorHandle": "@kwuntonggirl",
+    "authorName": "",
+    "contentText": "老實說我沒看過有人這樣擋人的\n她的寶貝抱上去後\n她戰場上的鷹眼變成乖順的小狗眼\n動作也慢了下來\n很抱歉，播放此影片時發生問題。\n瞭解詳情\nlingormkor.xs\n紀錄在史冊入面頭號百看不厭的名畫面\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n你覺得工作選擇很少，\n只是因為你還沒把職稱解壓縮！\n✿ 下方提供超好用 Prompt ✿\n讓 AI 幫你把工作解壓縮，並推薦 3–5 個適合的工作\n許多人思考工作轉換時，\n只是從角色名稱出發而受到侷限：\n→ 我是行銷\n→ 我是 PM\n→ 我是工程師\n但那其實只是一個被壓縮過的檔名！ 1/6\n正在回覆@heywhiteran\n手機不進臥室：使用傳統鬧鐘醒來，將手機放在遠離床頭、甚至另一個房間的地方。\n設定 30 分鐘解鎖期：醒來後的前 30 分鐘，絕對不打開任何具有社交、娛樂、遊戲屬性的 App。把這 30 分鐘劃為大腦的「神經緩衝區」。\n💡 2. 用「低成本的主動刺激」替代「被動快感」\nADHD 早上確實需要刺激才能開機，但請用主動的生理刺激來取代手機：\n微型身體點火：試試看起床後聽著重節奏音樂快跳 15 秒、做幾組深蹲，或是洗個冷水臉/冷水澡。透過本體覺（Proprioception）與皮膚溫差來溫和喚醒大腦，這種多巴胺釋放是平緩且健康的。\n光線喚醒：起床後立刻拉開窗簾或走到陽台晒太陽 5~10 分鐘，光線透過視網膜能天然地調節皮質醇與多巴胺的自然節律。\n💡 3. 將高刺激手遊/手機降級為「完成任務後的獎賞」\n不要把手遊當作「開機工具」，而是將它擺在**「完成了早上第一件核心微任務（Micro-task）」之後的獎勵**。\n當多巴胺是作為「付出了行動後的反饋」被釋放時，大腦建立的是健康的預測模型，不會引發基線的混亂狂飆。\n💡 4. 吃高蛋白質早餐，提供持久的神經燃料 4/5\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-07-31T06:17:30.000Z",
+    "collectedAt": "2026-09-14T18:43:15.811Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DN-UcwnkVts",
+    "postUrl": "https://www.threads.com/@billiecheung/post/DN-UcwnkVts",
+    "authorHandle": "@billiecheung",
+    "authorName": "",
+    "contentText": "紀錄在史冊入面頭號百看不厭的名畫面\n很抱歉，播放此影片時發生問題。\n瞭解詳情",
+    "publishedTime": "",
+    "collectedAt": "2026-09-14T18:43:15.811Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbdhK1tE0k0",
+    "postUrl": "https://www.threads.com/@take.career/post/DbdhK1tE0k0",
+    "authorHandle": "@take.career",
+    "authorName": "",
+    "contentText": "你覺得工作選擇很少，\n只是因為你還沒把職稱解壓縮！\n✿ 下方提供超好用 Prompt ✿\n讓 AI 幫你把工作解壓縮，並推薦 3–5 個適合的工作\n許多人思考工作轉換時，\n只是從角色名稱出發而受到侷限：\n→ 我是行銷\n→ 我是 PM\n→ 我是工程師\n但那其實只是一個被壓縮過的檔名！ 1/6",
+    "publishedTime": "2026-07-31T14:50:09.000Z",
+    "collectedAt": "2026-09-14T18:43:15.811Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbdbotKlY1n",
+    "postUrl": "https://www.threads.com/@heywhiteran/post/DbdbotKlY1n",
+    "authorHandle": "@heywhiteran",
+    "authorName": "",
+    "contentText": "正在回覆@heywhiteran\n手機不進臥室：使用傳統鬧鐘醒來，將手機放在遠離床頭、甚至另一個房間的地方。\n設定 30 分鐘解鎖期：醒來後的前 30 分鐘，絕對不打開任何具有社交、娛樂、遊戲屬性的 App。把這 30 分鐘劃為大腦的「神經緩衝區」。\n💡 2. 用「低成本的主動刺激」替代「被動快感」\nADHD 早上確實需要刺激才能開機，但請用主動的生理刺激來取代手機：\n微型身體點火：試試看起床後聽著重節奏音樂快跳 15 秒、做幾組深蹲，或是洗個冷水臉/冷水澡。透過本體覺（Proprioception）與皮膚溫差來溫和喚醒大腦，這種多巴胺釋放是平緩且健康的。\n光線喚醒：起床後立刻拉開窗簾或走到陽台晒太陽 5~10 分鐘，光線透過視網膜能天然地調節皮質醇與多巴胺的自然節律。\n💡 3. 將高刺激手遊/手機降級為「完成任務後的獎賞」\n不要把手遊當作「開機工具」，而是將它擺在**「完成了早上第一件核心微任務（Micro-task）」之後的獎勵**。\n當多巴胺是作為「付出了行動後的反饋」被釋放時，大腦建立的是健康的預測模型，不會引發基線的混亂狂飆。\n💡 4. 吃高蛋白質早餐，提供持久的神經燃料 4/5",
+    "publishedTime": "2026-07-31T14:01:48.000Z",
+    "collectedAt": "2026-09-14T18:43:15.811Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbd4-GKk0-7",
+    "postUrl": "https://www.threads.com/@are_u_ppaul/post/Dbd4-GKk0-7",
+    "authorHandle": "@are_u_ppaul",
+    "authorName": "",
+    "contentText": "看到脆上面好多大大在針對別人用Claude開發出來的東西有問題，我很想問脆上的資深工程師們，這些vibecoder，最常搞不清楚狀況的knowledge gap在哪\n題外話我就算是自用的系統也開發了超過三個月，當然以前可能寫過code也當過公司系統測試的pi ，但還是想知道，各位在業界的資深大大們，覺得現在這些人可最需要去彌補及學習的問題是什麼\n不然他們一直被噴也不是辦法Xd",
+    "publishedTime": "2026-07-31T18:18:07.000Z",
+    "collectedAt": "2026-09-14T18:43:17.469Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbcXRpmFFq3",
+    "postUrl": "https://www.threads.com/@hedula.tw/post/DbcXRpmFFq3",
+    "authorHandle": "@hedula.tw",
+    "authorName": "",
+    "contentText": "老實說我沒看過有人這樣擋人的\n她的寶貝抱上去後\n她戰場上的鷹眼變成乖順的小狗眼\n動作也慢了下來\n很抱歉，播放此影片時發生問題。\n瞭解詳情\nlingormkor.xs\n紀錄在史冊入面頭號百看不厭的名畫面\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n你覺得工作選擇很少，\n只是因為你還沒把職稱解壓縮！\n✿ 下方提供超好用 Prompt ✿\n讓 AI 幫你把工作解壓縮，並推薦 3–5 個適合的工作\n許多人思考工作轉換時，\n只是從角色名稱出發而受到侷限：\n→ 我是行銷\n→ 我是 PM\n→ 我是工程師\n但那其實只是一個被壓縮過的檔名！ 1/6\n正在回覆@heywhiteran\n手機不進臥室：使用傳統鬧鐘醒來，將手機放在遠離床頭、甚至另一個房間的地方。\n設定 30 分鐘解鎖期：醒來後的前 30 分鐘，絕對不打開任何具有社交、娛樂、遊戲屬性的 App。把這 30 分鐘劃為大腦的「神經緩衝區」。\n💡 2. 用「低成本的主動刺激」替代「被動快感」\nADHD 早上確實需要刺激才能開機，但請用主動的生理刺激來取代手機：\n微型身體點火：試試看起床後聽著重節奏音樂快跳 15 秒、做幾組深蹲，或是洗個冷水臉/冷水澡。透過本體覺（Proprioception）與皮膚溫差來溫和喚醒大腦，這種多巴胺釋放是平緩且健康的。\n光線喚醒：起床後立刻拉開窗簾或走到陽台晒太陽 5~10 分鐘，光線透過視網膜能天然地調節皮質醇與多巴胺的自然節律。\n💡 3. 將高刺激手遊/手機降級為「完成任務後的獎賞」\n不要把手遊當作「開機工具」，而是將它擺在**「完成了早上第一件核心微任務（Micro-task）」之後的獎勵**。\n當多巴胺是作為「付出了行動後的反饋」被釋放時，大腦建立的是健康的預測模型，不會引發基線的混亂狂飆。\n💡 4. 吃高蛋白質早餐，提供持久的神經燃料 4/5\n看到脆上面好多大大在針對別人用Claude開發出來的東西有問題，我很想問脆上的資深工程師們，這些vibecoder，最常搞不清楚狀況的knowledge gap在哪\n題外話我就算是自用的系統也開發了超過三個月，當然以前可能寫過code也當過公司系統測試的pi ，但還是想知道，各位在業界的資深大大們，覺得現在這些人可最需要去彌補及學習的問題是什麼\n不然他們一直被噴也不是辦法Xd\n我的體感上也是如此，\nSol 反而太多慮，\n耗掉太多 token 但執行出來的效果\n沒有比較好。\nJKR:除了jeje我們是最了解Orm的人了🙂‍↕️\nlingorm_free\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-07-31T04:04:27.000Z",
+    "collectedAt": "2026-09-14T18:43:17.479Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "Dbanl2pFDKv",
+    "postUrl": "https://www.threads.com/@aec930101/post/Dbanl2pFDKv",
+    "authorHandle": "@aec930101",
+    "authorName": "",
+    "contentText": "老實說我沒看過有人這樣擋人的\n她的寶貝抱上去後\n她戰場上的鷹眼變成乖順的小狗眼\n動作也慢了下來\n很抱歉，播放此影片時發生問題。\n瞭解詳情\nlingormkor.xs\n紀錄在史冊入面頭號百看不厭的名畫面\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n你覺得工作選擇很少，\n只是因為你還沒把職稱解壓縮！\n✿ 下方提供超好用 Prompt ✿\n讓 AI 幫你把工作解壓縮，並推薦 3–5 個適合的工作\n許多人思考工作轉換時，\n只是從角色名稱出發而受到侷限：\n→ 我是行銷\n→ 我是 PM\n→ 我是工程師\n但那其實只是一個被壓縮過的檔名！ 1/6\n正在回覆@heywhiteran\n手機不進臥室：使用傳統鬧鐘醒來，將手機放在遠離床頭、甚至另一個房間的地方。\n設定 30 分鐘解鎖期：醒來後的前 30 分鐘，絕對不打開任何具有社交、娛樂、遊戲屬性的 App。把這 30 分鐘劃為大腦的「神經緩衝區」。\n💡 2. 用「低成本的主動刺激」替代「被動快感」\nADHD 早上確實需要刺激才能開機，但請用主動的生理刺激來取代手機：\n微型身體點火：試試看起床後聽著重節奏音樂快跳 15 秒、做幾組深蹲，或是洗個冷水臉/冷水澡。透過本體覺（Proprioception）與皮膚溫差來溫和喚醒大腦，這種多巴胺釋放是平緩且健康的。\n光線喚醒：起床後立刻拉開窗簾或走到陽台晒太陽 5~10 分鐘，光線透過視網膜能天然地調節皮質醇與多巴胺的自然節律。\n💡 3. 將高刺激手遊/手機降級為「完成任務後的獎賞」\n不要把手遊當作「開機工具」，而是將它擺在**「完成了早上第一件核心微任務（Micro-task）」之後的獎勵**。\n當多巴胺是作為「付出了行動後的反饋」被釋放時，大腦建立的是健康的預測模型，不會引發基線的混亂狂飆。\n💡 4. 吃高蛋白質早餐，提供持久的神經燃料 4/5\n看到脆上面好多大大在針對別人用Claude開發出來的東西有問題，我很想問脆上的資深工程師們，這些vibecoder，最常搞不清楚狀況的knowledge gap在哪\n題外話我就算是自用的系統也開發了超過三個月，當然以前可能寫過code也當過公司系統測試的pi ，但還是想知道，各位在業界的資深大大們，覺得現在這些人可最需要去彌補及學習的問題是什麼\n不然他們一直被噴也不是辦法Xd\n我的體感上也是如此，\nSol 反而太多慮，\n耗掉太多 token 但執行出來的效果\n沒有比較好。\nJKR:除了jeje我們是最了解Orm的人了🙂‍↕️\nlingorm_free\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-07-30T11:48:33.000Z",
+    "collectedAt": "2026-09-14T18:43:17.490Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbW8auKCcyn",
+    "postUrl": "https://www.threads.com/@ruofanglin/post/DbW8auKCcyn",
+    "authorHandle": "@ruofanglin",
+    "authorName": "",
+    "contentText": "台灣話是結合閩南，河洛，原住民，客語，日語，外來語，很不簡單的語言🤔😊\n很抱歉，播放此影片時發生問題。\n瞭解詳情",
+    "publishedTime": "2026-07-29T01:34:31.000Z",
+    "collectedAt": "2026-09-14T18:43:18.997Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbYZEjKkqIL",
+    "postUrl": "https://www.threads.com/@33.2o26/post/DbYZEjKkqIL",
+    "authorHandle": "@33.2o26",
+    "authorName": "",
+    "contentText": "朋友去日本帶了這顆布拉塔起司\n聽說這個切開會爆漿😍\n求問這顆起司的最高境界吃法是什麼？\n只淋橄欖油會不會太浪費🤤\n很抱歉，播放此影片時發生問題。\n瞭解詳情",
+    "publishedTime": "2026-07-29T15:03:11.000Z",
+    "collectedAt": "2026-09-14T18:43:18.998Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbX-8kRjsIr",
+    "postUrl": "https://www.threads.com/@s_h_u_ooo/post/DbX-8kRjsIr",
+    "authorHandle": "@s_h_u_ooo",
+    "authorName": "",
+    "contentText": "每日分享實用工具直到去當兵 Day 86\nMac 容量快滿的時候\n還要自己翻快取資料夾？\n我剛試了 MOLE\n他可以先掃描文件\n最後才確認要不要清\n原作者也有出GUI版本介面很美觀 買斷制\nCLI版則是開源免費（超佛）～～ 1/3\n很抱歉，播放此影片時發生問題。\n瞭解詳情",
+    "publishedTime": "2026-07-29T11:21:56.000Z",
+    "collectedAt": "2026-09-14T18:43:18.998Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbYjZhgiZVz",
+    "postUrl": "https://www.threads.com/@dustin_gmat/post/DbYjZhgiZVz",
+    "authorHandle": "@dustin_gmat",
+    "authorName": "",
+    "contentText": "下午看到推特上有人把Codex+Hyperframes+IndexTTS2+HeyGen串在一起成為一條自媒體流水線，弄了一個有50幾個SKILL的repo開源分享，我就拉下來做做看（剛好heygen有我一年前做的Avatar）\n沒想到效果出奇的好！嘴型都有對到，講話也很清楚，動畫更是做得驚艷。雖然口播還是有AI感，但好像我真人放慢速度念稿也是這個感覺（？）\n而且說一句不好聽的，我看那些IG Reel，感覺很多人不如請AI寫稿，請數位醫美過的Avatar上鏡，還比他們真人做得不尬...（我就是其中之一）\n之後考慮部分的概念分享或短口播用這個做 1/2\n很抱歉，播放此影片時發生問題。\n瞭解詳情",
+    "publishedTime": "2026-07-29T16:37:33.000Z",
+    "collectedAt": "2026-09-14T18:43:18.998Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbYYyNDlLun",
+    "postUrl": "https://www.threads.com/@whatslulu/post/DbYYyNDlLun",
+    "authorHandle": "@whatslulu",
+    "authorName": "",
+    "contentText": "▫️24年8月\nOrm: 「我很喜歡黏著你」\n玲：「我根本沒察覺到」\n▫️26年4月\n一臉驕傲的\n「Orm很黏我」￼\n果然是當局者迷嗎\n兩人都是從粉絲視角才察覺到一些￼細節(?\n然後玲知道自己每秒都在N’Orm yu nai嗎?\n😂\n很抱歉，播放此影片時發生問題。\n瞭解詳情",
+    "publishedTime": "2026-07-29T15:00:41.000Z",
+    "collectedAt": "2026-09-14T18:43:20.713Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbW8AGFiUiA",
+    "postUrl": "https://www.threads.com/@i.m.ethan/post/DbW8AGFiUiA",
+    "authorHandle": "@i.m.ethan",
+    "authorName": "",
+    "contentText": "問諸位大神，現在業界主流用AI生成motion graphic/ 產品介紹影片的輔助工具是什麼～想聽聽大家最推最有效率的工具～ 🙂🙂\n目前在uiux 設計領域，有製作動畫經驗（之前AE手刻居多），但不是動畫專職人員，想找找加速工具🧰",
+    "publishedTime": "2026-07-29T01:29:56.000Z",
+    "collectedAt": "2026-09-14T18:43:20.713Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbVnQU1k_OE",
+    "postUrl": "https://www.threads.com/@ice_3721/post/DbVnQU1k_OE",
+    "authorHandle": "@ice_3721",
+    "authorName": "",
+    "contentText": "如果你Claude還在靠\n「壓縮對話、交接摘要、延續同一個聊天室」\n那AI遲早會開始忘東忘西\n我後來改成一套長期記憶工作流\n穩定不丟失，專案也能一直延續開發",
+    "publishedTime": "2026-07-28T13:09:24.000Z",
+    "collectedAt": "2026-09-14T18:43:20.714Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbWCPuEn2lT",
+    "postUrl": "https://www.threads.com/@rosemarythyme326/post/DbWCPuEn2lT",
+    "authorHandle": "@rosemarythyme326",
+    "authorName": "",
+    "contentText": "rosemarythyme326鬼滅之刃2026-7-28",
+    "publishedTime": "2026-07-28T17:05:15.000Z",
+    "collectedAt": "2026-09-14T18:43:20.714Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbVuMn2k3dI",
+    "postUrl": "https://www.threads.com/@es_serendipity555/post/DbVuMn2k3dI",
+    "authorHandle": "@es_serendipity555",
+    "authorName": "",
+    "contentText": "當喜歡洗熱水澡但家裡沒熱水器\n鄺玲玲的解決辦法：\n跑兩圈讓身體熱了，再來洗冷水澡\n不知道該說是聰明還是憨 真的是怪到好喜☺️\n很抱歉，播放此影片時發生問題。\n瞭解詳情",
+    "publishedTime": "2026-07-28T14:11:01.000Z",
+    "collectedAt": "2026-09-14T18:43:22.176Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbVmvSBEaMQ",
+    "postUrl": "https://www.threads.com/@acsoar/post/DbVmvSBEaMQ",
+    "authorHandle": "@acsoar",
+    "authorName": "",
+    "contentText": "上週五在 YT 上，意外地看到了介紹大神 SKill 的影片，影片講解的具體有邏輯，深深地引起我的共鳴。\n因為我最近協同開發的專案是我沒有學過的 nodejs，我需要修改一小部分的功能，我知道我要改動的邊界在哪裡，也知道要怎麼改，然後我請 Claude 幫我寫。\n跟 Claude 的協作，依循目標、計畫、修改、實作、測試、驗證，但還是需要來來回回的調整，畢竟每個節點的選擇都會產生不一樣的結果。\n直到看到 GitHub 19 萬星的 /grill-me 專案，TypeScript 大神 Matt Pocock 的 AI 工作流拆解，分享幾個很棒的觀點：\n1.  把決策權搶回來，拒絕「Vibe Coding」 很多人把模糊的想法丟給 AI 就直接動工，結果 AI 為了討好你，常寫出極難維護的架構。/grill-me 這個 skill 只有 5 行字，核心就是：不准偷跑寫 code！ AI 必須不斷拷問你、挖出你的邏輯盲點，直到達成共識為止。 1/3",
+    "publishedTime": "2026-07-28T13:04:54.000Z",
+    "collectedAt": "2026-09-14T18:43:22.176Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbVz5-5mmCf",
+    "postUrl": "https://www.threads.com/@formosalee/post/DbVz5-5mmCf",
+    "authorHandle": "@formosalee",
+    "authorName": "",
+    "contentText": "讓各位關注的朋友們久等了，經過這段時間的不斷改良與調整，那個最 #台 的防災包，即將強勢回歸、重磅出擊👊🏻🎒\n​\n文總與青文創強強聯手，繼今日公開本次漢光42號演習的周邊全品項後，延續正式演習以及全體防衛韌性的氣勢和強度，在一個背包裡隆重呈現設計與製作的最強台灣隊，全體同學請注意，#We備包 真的要登場啦！\n​\n【全台灣製造機能 #防災包「We備包」】\n📍不只是防災包，全體機能外出、通勤一包搞定\n📍全包體1000丹CORDURA® 布料\n📍YKK拉鍊\n📍MOLLE戰術模組系統\n📍聯名台灣插畫家，繪製獨一無二We back防水布\n​\n不論是日常或無常，讓「照顧自己」成為我們最要緊的第一任務。還在觀望最適合自己的那款防災包嗎？防災不難，只要你開始準備！\n​\nWe備包，We back up，𝟮𝟬𝟮𝟲/𝟴/𝟭𝟳正式開賣。\n更多詳情請持續鎖定文總及青文創官方社群。\n（去年有登記預約折扣碼的朋友也別擔心，我們都有好好把大家放在心上💕）",
+    "publishedTime": "2026-07-28T14:59:57.000Z",
+    "collectedAt": "2026-09-14T18:43:22.176Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbT4h_ioN3N",
+    "postUrl": "https://www.threads.com/@daaaabeiu/post/DbT4h_ioN3N",
+    "authorHandle": "@daaaabeiu",
+    "authorName": "",
+    "contentText": "我今天跟朋友推的Facebook上的算命師諮詢的時候是視訊。他原本有分享螢幕給我看東西忘記關掉，他說他要先排盤，我就看到他把我的出生資料輸入一個紫色的網站，叫Asta什麼。那個網站就產出文字版的八字盤，內容很長一整段。我問的是下週有一個面試，他還可以直接選日期，排出當天的。然後他就把那段排盤文字貼進Claude裡面算，再用自己的話講給我聽…\n我當下沒說什麼還是付了錢，如果被所有人知道，到底會有多少算命師失業，又會有多少知道這個方法的人，直接變成新的算命師……賺錢都是賺信息差。",
+    "publishedTime": "2026-07-27T21:01:53.000Z",
+    "collectedAt": "2026-09-14T18:43:23.786Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbS7RerjIdv",
+    "postUrl": "https://www.threads.com/@cyber_cloud77/post/DbS7RerjIdv",
+    "authorHandle": "@cyber_cloud77",
+    "authorName": "",
+    "contentText": "正在回覆@anna.ly2000\nTerminal:\nTurn off lid sleep:\nsudo pmset -a disablesleep 1\nTurn lid sleep back on:\nsudo pmset -a disablesleep 0\nSaved you bucks :)  翻譯",
+    "publishedTime": "2026-07-27T12:06:36.000Z",
+    "collectedAt": "2026-09-14T18:43:23.786Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbTV61CmFct",
+    "postUrl": "https://www.threads.com/@little.fulfillment.project/post/DbTV61CmFct",
+    "authorHandle": "@little.fulfillment.project",
+    "authorName": "",
+    "contentText": "little.fulfillment.project2026-7-27",
+    "publishedTime": "2026-07-27T15:59:26.000Z",
+    "collectedAt": "2026-09-14T18:43:23.786Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbTTbbnCd_n",
+    "postUrl": "https://www.threads.com/@xi_ber_ber/post/DbTTbbnCd_n",
+    "authorHandle": "@xi_ber_ber",
+    "authorName": "",
+    "contentText": "媽咪完全就是直女下手沒輕沒重這句話最完美的範例\nsnitchery",
+    "publishedTime": "2026-07-27T15:37:41.000Z",
+    "collectedAt": "2026-09-14T18:43:23.786Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbTOh5BkrEv",
+    "postUrl": "https://www.threads.com/@littleb20/post/DbTOh5BkrEv",
+    "authorHandle": "@littleb20",
+    "authorName": "",
+    "contentText": "看完繁中之後⋯\n其實你們已經偷偷訂婚💍對吧\nNong Orm ㄧ講到Ling Ling Kwong時\n眼睛就會非常自然的散發出❤️與光芒\n#謝謝Lin大",
+    "publishedTime": "2026-07-27T14:54:52.000Z",
+    "collectedAt": "2026-09-14T18:43:25.523Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbTGbxujAo-",
+    "postUrl": "https://www.threads.com/@lin.2567.in.thai/post/DbTGbxujAo-",
+    "authorHandle": "@lin.2567.in.thai",
+    "authorName": "",
+    "contentText": "看完繁中之後⋯\n其實你們已經偷偷訂婚💍對吧\nNong Orm ㄧ講到Ling Ling Kwong時\n眼睛就會非常自然的散發出❤️與光芒\n#謝謝Lin大",
+    "publishedTime": "",
+    "collectedAt": "2026-09-14T18:43:25.523Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbSwHorEm-b",
+    "postUrl": "https://www.threads.com/@zhj__n/post/DbSwHorEm-b",
+    "authorHandle": "@zhj__n",
+    "authorName": "",
+    "contentText": "大散光人實測\n光對策+速攻藍莓超有用\n看出去的畫面真的是4K\n這次好好的用眼睛記住你們了🥹 1/2",
+    "publishedTime": "2026-07-27T10:29:08.000Z",
+    "collectedAt": "2026-09-14T18:43:25.523Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbTGC_sEuPO",
+    "postUrl": "https://www.threads.com/@this_is_my_yuniverse/post/DbTGC_sEuPO",
+    "authorHandle": "@this_is_my_yuniverse",
+    "authorName": "",
+    "contentText": "「打給誰都可以 但就是不要打給Orm」\n「直接從晚上九點聊到凌晨三點」\n「他還化過八種妝給我看」\n「就沒有朋友啊」\n熟人局就是好看 整場我一直笑🤣",
+    "publishedTime": "2026-07-27T13:44:18.000Z",
+    "collectedAt": "2026-09-14T18:43:25.523Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbSJnBmmCzj",
+    "postUrl": "https://www.threads.com/@cab_late/post/DbSJnBmmCzj",
+    "authorHandle": "@cab_late",
+    "authorName": "",
+    "contentText": "最近越來越多人提到：\n面對現在的模型，不要再寫滿各種 rules。\n其實這就是我年初講座提過的：\n「陳述原則，不要窮舉規則」\n當模型用死記硬背規則的方式處理任務，就很容易變成「你沒講不行＝可以，你沒講可以＝不行，一個口令一個動作。」\n窮舉規則的好處，是能讓模型在特定任務裡照著你的方式走；壞處則是通常只能把少數情境做好，一旦任務有變化、資訊不足或遇到突發狀況，就容易直接變智障。\n那是不是完全不要寫規範？當然不是。\n真正要做的，是從「列出每一條規則」，改成讓模型理解你的原則、目標。\n這是一套會持續影響你怎麼使用 AI、設計 Skill 與 Agent 的底層方法。\n如果你也覺得自己越寫越多，模型卻沒有變得更好用，很推薦你回頭看看這場講座的完整回放： 1/2",
+    "publishedTime": "2026-07-27T04:52:38.000Z",
+    "collectedAt": "2026-09-14T18:43:25.523Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbRhm-yAeI2",
+    "postUrl": "https://www.threads.com/@dingyi/post/DbRhm-yAeI2",
+    "authorHandle": "@dingyi",
+    "authorName": "",
+    "contentText": "CleanMyMac 也推出 CLI 了，估计是看到很多用户都被 Mole 抢走了😂",
+    "publishedTime": "2026-07-26T23:03:13.000Z",
+    "collectedAt": "2026-09-14T18:43:27.173Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbSKdazApT-",
+    "postUrl": "https://www.threads.com/@bing_sunzhi/post/DbSKdazApT-",
+    "authorHandle": "@bing_sunzhi",
+    "authorName": "",
+    "contentText": "最近看到一個滿有意思的網站：Transitions. dev。\n簡單說，它不是要教你做很炫的動畫，而是把 Web App 裡常見、但很容易被忽略的「轉場細節」整理出來。\n－像 dropdown、modal、card resize 這些互動\n－可以直接看動效該怎麼做比較自然\n－也有給 AI coding 工具用的 skill\n－適合前端、產品設計師、Vibe Coding 玩家參考\n我覺得它有趣的地方，是很多產品看起來「有質感」，其實差的就是這些小動效。 1/2",
+    "publishedTime": "2026-07-27T05:00:04.000Z",
+    "collectedAt": "2026-09-14T18:43:27.173Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbRoONRE6pw",
+    "postUrl": "https://www.threads.com/@11.6_d_m_b_/post/DbRoONRE6pw",
+    "authorHandle": "@11.6_d_m_b_",
+    "authorName": "",
+    "contentText": "30 本免費 AI／ML 教科書整理成一個 repo，這件事比你想像中更值得花五分鐘去看。\nAwesome Free AI Books 這個 GitHub 專案解決了一個很具體的問題：那些作者親自公開授權、可以合法免費閱讀的經典教材，原本散落在各個大學網頁和個人網站，大多數人根本不知道去哪找。現在有人幫你全部整理好了，涵蓋深度學習、強化學習、NLP 與 LLM、機率 ML、電腦視覺、Causal Inference、GNN、AI 安全等方向，Goodfellow 的 Deep Learning 也在裡面。\n如果你正在自學 AI，或是想系統補某一塊基礎，這個 repo 值得存起來，今天先挑一本翻開第一章。 1/2",
+    "publishedTime": "2026-07-27T00:01:27.000Z",
+    "collectedAt": "2026-09-14T18:43:27.173Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbRVzFtE3yx",
+    "postUrl": "https://www.threads.com/@nyanako0129/post/DbRVzFtE3yx",
+    "authorHandle": "@nyanako0129",
+    "authorName": "",
+    "contentText": "推薦一個反AI的網頁設計skill\ngithub.com/nutlo…",
+    "publishedTime": "2026-07-26T21:19:54.000Z",
+    "collectedAt": "2026-09-14T18:43:28.797Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbPO099mfae",
+    "postUrl": "https://www.threads.com/@masonywu/post/DbPO099mfae",
+    "authorHandle": "@masonywu",
+    "authorName": "",
+    "contentText": "發現MAC系統資料佔據了300G以上的空間。\n網路上方法：更新系統到最新、重新開機、刪除時光機本地快照、清除使用者快取通通試過沒用，只好一個一個找。\n我個人Profile 根目錄變400G，但沒看到那個膨脹的資料夾。\n依照AI指示，按下快捷鍵：Command + Shift + . (點)，讓所有隱藏資料夾顯現，發現了那過大的資料夾叫資源庫(Library)，裡頭的Containers 和Group Containers。\n逐個資料夾看大小，也再三跟AI確認能否刪除。發現了先前早已在應用程式資料夾刪除的崩壞3，這邊還佔了37.2G。\n到資料庫的Group Containers資料夾，看到 Onedrive (UBF8T346G9.OneDriveSyncClientSuite)檔案佔了116G，得改成使用時才下載的設定了..\n以上MAC瘦身經歷留存網路，供有需求者參考",
+    "publishedTime": "2026-07-26T01:40:31.000Z",
+    "collectedAt": "2026-09-14T18:43:28.797Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbQ3D-KEncL",
+    "postUrl": "https://www.threads.com/@jaxoncoder/post/DbQ3D-KEncL",
+    "authorHandle": "@jaxoncoder",
+    "authorName": "",
+    "contentText": "Your $2000 MacBook can be found for 24 hours even when it is dead.\nLid closed.\nBattery dead.\nCompletely shut down.\nApple added this quietly in 2021.\n90% of stolen MacBooks are never found because 2 switches are OFF by default.\nIf you have an M1 / M2 / M3 / M4 MacBook, check this tonight:  翻譯 1/9",
+    "publishedTime": "2026-07-26T16:51:19.000Z",
+    "collectedAt": "2026-09-14T18:43:28.797Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbPUeocGzmm",
+    "postUrl": "https://www.threads.com/@cooljerrett/post/DbPUeocGzmm",
+    "authorHandle": "@cooljerrett",
+    "authorName": "",
+    "contentText": "Claude 5 時代，你的 context engineering 該怎麼改，Anthropic 核心開發團隊 Thariq Shihipar 寫下這篇 Claude 5 時代的 context engineering 的調整方式，同時他們將最佳實踐收錄在claude doctor，Claude code中使用 /doctor 指令，即可調整你的Skill與 CLAUDE md 檔案。 1/2",
+    "publishedTime": "2026-07-26T02:29:53.000Z",
+    "collectedAt": "2026-09-14T18:43:28.797Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbMljiHE9PO",
+    "postUrl": "https://www.threads.com/@steventsf429/post/DbMljiHE9PO",
+    "authorHandle": "@steventsf429",
+    "authorName": "",
+    "contentText": "/\n很抱歉，播放此影片時發生問題。\n瞭解詳情\nuneedstretch\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n1.9 萬",
+    "publishedTime": "2026-07-25T01:01:23.000Z",
+    "collectedAt": "2026-09-14T18:43:30.444Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbPnWkTESh3",
+    "postUrl": "https://www.threads.com/@johnoty/post/DbPnWkTESh3",
+    "authorHandle": "@johnoty",
+    "authorName": "",
+    "contentText": "這段劇宣真的讓我笑好久🤣\nOrm跟P’Kik真的不能合體\n除了講話太快以外 又太好笑\n一開始明明在聊Ling本人很搞笑\n而且是那種完全不刻意 自然散發笑點的人\n結果聊到某個點 兩個人突然對看一眼\n直接笑到停不下來（笑到是爆笑那種🤣）\n最後變成Orm當場爆料P’Kik以前教她怎麼假笑\n結果兩個人自己又笑翻 全場根本失控\n好愛兩個人超級無敵自然的笑",
+    "publishedTime": "2026-07-26T05:23:04.000Z",
+    "collectedAt": "2026-09-14T18:43:30.444Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbMQQNRkmx6",
+    "postUrl": "https://www.threads.com/@blue.lu2/post/DbMQQNRkmx6",
+    "authorHandle": "@blue.lu2",
+    "authorName": "",
+    "contentText": "^ ^\n3.3 萬",
+    "publishedTime": "2026-07-24T21:55:15.000Z",
+    "collectedAt": "2026-09-14T18:43:30.444Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbOY3n6EwDC",
+    "postUrl": "https://www.threads.com/@dawson54068/post/DbOY3n6EwDC",
+    "authorHandle": "@dawson54068",
+    "authorName": "",
+    "contentText": "Day 207 省最多 token 的那個工具,答錯最多題\nAI 幫你改 code 之前,得先「看懂」你的專案。\n方法很土:關鍵字搜檔案,再把整份讀進去。\n檔案一多,光搞懂現況就先燒掉幾萬 token。\n你問題都還沒問呢。\n所以冒出一類工具,想法一樣:\n先把整個 codebase 掃成一張圖(誰呼叫誰、誰 import 誰)。\n之後 AI 要問「這函式被誰用到」,查圖回三行就好。\nGitHub 上兩個做這件事的專案,都掛著很唬人的數字。\ncodebase-memory-mcp、graphify,前者首頁直接寫「省 99% token」。\n我不太信這種數字。\n所以拿自己在做的小專案兩套都裝,設計 6 種問題各跑一次。\n順便量了一件大家常忘記的事:答案到底對不對。\n完整測法和逐題數據我放在最後的連結,先講結論。 1/4",
+    "publishedTime": "2026-07-25T17:49:01.000Z",
+    "collectedAt": "2026-09-14T18:43:30.445Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbN9hFvm1QA",
+    "postUrl": "https://www.threads.com/@nyanako0129/post/DbN9hFvm1QA",
+    "authorHandle": "@nyanako0129",
+    "authorName": "",
+    "contentText": "resume-skills 跟 Grok 的 /resume，差別在「續接原本的 session」和「把上下文交給新 session」。\nGrok /resume：\n- 回到 Grok 保存的 session\n- 原生對話歷史與 session 身分仍在\n- 由 Grok 自己接續\nresume-skills：\n- 從 Claude、Codex、Cursor、Grok 等本機紀錄擷取對話\n- 清理成 handoff，交給另一個全新的 session\n- 原本的 session 身分、執行中工具與程序狀態不會搬過去\n它的定位是跨 agent 交接層。能搬的是可讀上下文，執行狀態仍留在來源端。\n這次我修了 Codex reader：原本會漏掉 parent sessions，也會拒絕大型 rollout。PR 合併後，7 個 sessions 全數可見，14.8 MB 到 27.4 MB 的紀錄也能正常讀取。\nresume 能不能用，關鍵不只在讀得到，還要說清楚哪些狀態沒有被續接。\n後續還有兩個issue要修，有空會再協助貢獻，感謝 @sam_lung2077 的開源分享。 1/2",
+    "publishedTime": "2026-07-25T13:50:00.000Z",
+    "collectedAt": "2026-09-14T18:43:31.932Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbLmJljk0AG",
+    "postUrl": "https://www.threads.com/@sam_lung2077/post/DbLmJljk0AG",
+    "authorHandle": "@sam_lung2077",
+    "authorName": "",
+    "contentText": "resume-skills 跟 Grok 的 /resume，差別在「續接原本的 session」和「把上下文交給新 session」。\nGrok /resume：\n- 回到 Grok 保存的 session\n- 原生對話歷史與 session 身分仍在\n- 由 Grok 自己接續\nresume-skills：\n- 從 Claude、Codex、Cursor、Grok 等本機紀錄擷取對話\n- 清理成 handoff，交給另一個全新的 session\n- 原本的 session 身分、執行中工具與程序狀態不會搬過去\n它的定位是跨 agent 交接層。能搬的是可讀上下文，執行狀態仍留在來源端。\n這次我修了 Codex reader：原本會漏掉 parent sessions，也會拒絕大型 rollout。PR 合併後，7 個 sessions 全數可見，14.8 MB 到 27.4 MB 的紀錄也能正常讀取。\nresume 能不能用，關鍵不只在讀得到，還要說清楚哪些狀態沒有被續接。\n後續還有兩個issue要修，有空會再協助貢獻，感謝 @sam_lung2077 的開源分享。 1/2",
+    "publishedTime": "2026-07-24T15:47:20.000Z",
+    "collectedAt": "2026-09-14T18:43:31.932Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbNwIWzG6K0",
+    "postUrl": "https://www.threads.com/@ihower/post/DbNwIWzG6K0",
+    "authorHandle": "@ihower",
+    "authorName": "",
+    "contentText": "正在回覆@ihower\nblog.aihao.tw/2026… 2/2",
+    "publishedTime": "2026-07-25T11:53:02.000Z",
+    "collectedAt": "2026-09-14T18:43:33.521Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbM8f92GDX8",
+    "postUrl": "https://www.threads.com/@ai.work.smarter/post/DbM8f92GDX8",
+    "authorHandle": "@ai.work.smarter",
+    "authorName": "",
+    "contentText": "我把 Claude 接上 Codex 後，第一條規則不是「互相幫忙」，是：不准一起改稿。\nMCP 只保證它們叫得到彼此，不保證不打架。真正接通後，最麻煩的反而是誰能改、誰只能審、進度要留在哪裡。\n我現在讓 Codex 當唯一 writer，Claude 只拆任務＋唯讀審稿。接線只要一行；真正讓它們像團隊的，是後面的門禁和交接。\n三段實際 prompt 我整理在 IG 輪播。你會讓 Claude 還是 Codex 當 writer？\nAI工作流",
+    "publishedTime": "2026-07-25T04:21:59.000Z",
+    "collectedAt": "2026-09-14T18:43:33.522Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbLeXM-jzyS",
+    "postUrl": "https://www.threads.com/@dustin_gmat/post/DbLeXM-jzyS",
+    "authorHandle": "@dustin_gmat",
+    "authorName": "",
+    "contentText": "Day 207 省最多 token 的那個工具,答錯最多題\nAI 幫你改 code 之前,得先「看懂」你的專案。\n方法很土:關鍵字搜檔案,再把整份讀進去。\n檔案一多,光搞懂現況就先燒掉幾萬 token。\n你問題都還沒問呢。\n所以冒出一類工具,想法一樣:\n先把整個 codebase 掃成一張圖(誰呼叫誰、誰 import 誰)。\n之後 AI 要問「這函式被誰用到」,查圖回三行就好。\nGitHub 上兩個做這件事的專案,都掛著很唬人的數字。\ncodebase-memory-mcp、graphify,前者首頁直接寫「省 99% token」。\n我不太信這種數字。\n所以拿自己在做的小專案兩套都裝,設計 6 種問題各跑一次。\n順便量了一件大家常忘記的事:答案到底對不對。\n完整測法和逐題數據我放在最後的連結,先講結論。 1/4\nresume-skills 跟 Grok 的 /resume，差別在「續接原本的 session」和「把上下文交給新 session」。\nGrok /resume：\n- 回到 Grok 保存的 session\n- 原生對話歷史與 session 身分仍在\n- 由 Grok 自己接續\nresume-skills：\n- 從 Claude、Codex、Cursor、Grok 等本機紀錄擷取對話\n- 清理成 handoff，交給另一個全新的 session\n- 原本的 session 身分、執行中工具與程序狀態不會搬過去\n它的定位是跨 agent 交接層。能搬的是可讀上下文，執行狀態仍留在來源端。\n這次我修了 Codex reader：原本會漏掉 parent sessions，也會拒絕大型 rollout。PR 合併後，7 個 sessions 全數可見，14.8 MB 到 27.4 MB 的紀錄也能正常讀取。\nresume 能不能用，關鍵不只在讀得到，還要說清楚哪些狀態沒有被續接。\n後續還有兩個issue要修，有空會再協助貢獻，感謝 @sam_lung2077 的開源分享。 1/2\n正在回覆@ihower\nblog.aihao.tw/2026… 2/2\n我把 Claude 接上 Codex 後，第一條規則不是「互相幫忙」，是：不准一起改稿。\nMCP 只保證它們叫得到彼此，不保證不打架。真正接通後，最麻煩的反而是誰能改、誰只能審、進度要留在哪裡。\n我現在讓 Codex 當唯一 writer，Claude 只拆任務＋唯讀審稿。接線只要一行；真正讓它們像團隊的，是後面的門禁和交接。\n三段實際 prompt 我整理在 IG 輪播。你會讓 Claude 還是 Codex 當 writer？\nAI工作流\n我真的覺得發明Hook上面我有天份：\n我設計的hook是只要偵測到模型宣稱驗證、測試、實測（或者各種同類關鍵字），就立刻檢查模型剛剛用了什麼工具跟指令，如果沒有相關的指令就有可能是模型亂掰的，當下直接叫模型拿出證據，拿不出就老老實實回去驗證。\n同樣的，模型宣稱「找不到」「不存在」「查無」等等，也會直接檢查他到底有沒有用搜尋工具，沒有一樣擋下來叫模型老老實實去查。\n他每天都可以幫我咬到至少十起Claude的隱形作弊行為。對付Claude這種喜歡來陰的模型，就是需要Hook、Sandbox、permission list等等都上滿，絕對不能只靠自然語言規則。\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-07-24T14:39:18.000Z",
+    "collectedAt": "2026-09-14T18:43:33.541Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbLJcjBk7uY",
+    "postUrl": "https://www.threads.com/@apricity_diary_111/post/DbLJcjBk7uY",
+    "authorHandle": "@apricity_diary_111",
+    "authorName": "",
+    "contentText": "有在用Obsidian的大家，有什麼推薦的外掛嗎！",
+    "publishedTime": "2026-07-24T11:36:31.000Z",
+    "collectedAt": "2026-09-14T18:43:35.206Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbLgJibD7El",
+    "postUrl": "https://www.threads.com/@largitdata/post/DbLgJibD7El",
+    "authorHandle": "@largitdata",
+    "authorName": "",
+    "contentText": "什麼時候讓便宜模型接手最好？！\n讓聰明但昂貴的模型讀程式碼、寫下精確計畫，再交給便宜模型執行聽起來很理想。\nCan Bölük 實測後發現這不成立。同一個SWE-Bench Pro任務，Opus 4.8 規劃、Flash 執行要 $3.18；Opus自己做完只要 $2.78，通過率一模一樣，看似省錢的架構反而貴了14%。\n經過研究18.1億token的用量統計後，他發現編輯與寫入只佔9%，Agent 的開銷不在思考或修改，主要在於閱讀。\n所以過往支持只要聰明模型先跑 /plan 再交接的理由全部推翻，如果讓聰明模型生成的計畫書只是數千token的摘要。執行者只收到摘要、沒有軌跡，只好再重新閱讀完整程式碼一次，這樣不但沒節省成本，反而重工兩次。\n作者提出 /prewalk，以交接Context為主。先讓聰明模型會深入規劃、寫todo list、然後動手；等第一次編輯落地，立刻換成便宜模型，並刪掉那條規劃指令。這時候便宜模型不會困惑，因為指令已經不在了，從它的視角看，是自己探索、自己列了計畫。\n透過這樣修改，成果相當於97%全聰明模型的表現、成本還降41%、速度還快1.9倍。 1/2",
+    "publishedTime": "2026-07-24T14:54:54.000Z",
+    "collectedAt": "2026-09-14T18:43:35.206Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbIW9z_kRND",
+    "postUrl": "https://www.threads.com/@melody_0319/post/DbIW9z_kRND",
+    "authorHandle": "@melody_0319",
+    "authorName": "",
+    "contentText": "我在太宰府買的御朱印帳準備要用完了！\n請大家來推薦好看的帳！！！\n❤️❤️❤️❤️❤️❤️❤️",
+    "publishedTime": "2026-07-23T09:36:56.000Z",
+    "collectedAt": "2026-09-14T18:43:35.206Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbLo6J9Ehzh",
+    "postUrl": "https://www.threads.com/@chiao_hsieh/post/DbLo6J9Ehzh",
+    "authorHandle": "@chiao_hsieh",
+    "authorName": "",
+    "contentText": "前天跟朋友去高雄吃晚餐 離開前我雀躍地跟老闆說\n：你們餐點很特別也很好吃\n：謝謝\n：請問（指照片）裡面配料是怎麼決定的呢~\n：我們是用前面幾道料理的邊角或內臟 xxoo…\n：好厲害！\n：沒錯 這樣食材的每一個部位都能被充分利用 剩下不能食用的部分則會被做成器皿 xxoo…\n（此時聽到呆愣住的我 看著旁邊的友人 他對我說） 1/2",
+    "publishedTime": "2026-07-24T16:11:27.000Z",
+    "collectedAt": "2026-09-14T18:43:35.206Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbK2ts8FDzc",
+    "postUrl": "https://www.threads.com/@cw.lin_/post/DbK2ts8FDzc",
+    "authorHandle": "@cw.lin_",
+    "authorName": "",
+    "contentText": "跟朋友聊到一套他的 Low Cost AI 創業成本 的 tech stack：\nClaude = 寫程式 ($20/月)\n*Opus 規劃 + Sonnet 吃到飽\nChat GPT = 產圖、Logo、主視覺 (免費)\nGemini = AI 短影片 （$20/月）\nInsforge = 後端 + 部署 (免費)\nPortaly Payment = 刷卡金流、開發票、交易介面、會員管理 (6%/筆)\nObsidian = 管理知識庫 (免費)\nGitHub = 版本控制、雲端備份 (免費)\nGA / Posthog = 數據分析 (免費)\nThreads = go to market (免費)\nAI 時代沒有最便宜，只有知不知道怎麼組合 1/2",
+    "publishedTime": "2026-07-24T08:52:50.000Z",
+    "collectedAt": "2026-09-14T18:43:36.826Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbKF3RaiTSs",
+    "postUrl": "https://www.threads.com/@sliven0722/post/DbKF3RaiTSs",
+    "authorHandle": "@sliven0722",
+    "authorName": "",
+    "contentText": "Peter Yang 把一個專門清 AI 寫作壞習慣的 skill 開源了。\n叫 /no-ai-slop，目標是從任何草稿裡砍掉 20 多種典型的 AI 句型。\n最常見的包括「不是 X，而是 Y」的對立句、先清喉嚨再講重點的「沒人告訴你的是」、以及結尾突然來一句假裝深刻的金句。除此之外還有冒號後突然揭曉、同義詞一直輪流換、負面列舉「不是 A 不是 B 是 C」這類寫法。\n使用方式很簡單。在 Claude Code 或 Codex 貼上 GitHub 連結就能全域安裝，之後直接打 /no-ai-slop 加上你的草稿，它會回傳改完的版本，並附上一段「改了什麼」。也可以只問它「這段是不是 AI 味」，它會把找到的模式逐一標出來。\nYang 自己的用法是 25/50/25。前 25% 完全手動寫草稿，中間 50% 才丟給 AI 處理文法與清晰度，最後 25% 再自己逐行過一次。\n他很明確地說，這跟讓 AI 從頭到尾自動產出是兩回事。 1/2",
+    "publishedTime": "2026-07-24T01:45:59.000Z",
+    "collectedAt": "2026-09-14T18:43:36.826Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbKSk8umKFn",
+    "postUrl": "https://www.threads.com/@w_ang_h/post/DbKSk8umKFn",
+    "authorHandle": "@w_ang_h",
+    "authorName": "",
+    "contentText": "一進門就被調侃🤣\n：要被取笑了吧，那隻狗到底是有多可愛啊，孩子？\nORM笑容立刻微垮（😆\n她大概也沒想過\n要用頭髮遮著自己的臉進電梯吧\n❌素顏害羞\n⭕️跟姐姐約會 全世界都知道",
+    "publishedTime": "2026-07-24T03:37:04.000Z",
+    "collectedAt": "2026-09-14T18:43:36.826Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbJul1iIL7f",
+    "postUrl": "https://www.threads.com/@heywhiteran/post/DbJul1iIL7f",
+    "authorHandle": "@heywhiteran",
+    "authorName": "",
+    "contentText": "「我以為全世界都跟我一樣怕癢」：AuDHD 體內的感官防禦與隱形過敏\n你小時候是不是也有過這樣的體驗？\n只要別人輕輕碰一下你的腋下、腰側、甚至只是手指劃過腳底，你的整個身體就會像被高壓電擊中一樣瞬間彈開，伴隨而來的是不受控制的尖叫或爆笑。\n小時候，你理所當然地以為**「怕癢是所有人類的本能」**，甚至以為大家在面對碰觸時，體內都承受著同樣劇烈的神經風暴。\n直到有一天，你在學校或家裡看到有些人被捏腰、搔癢時，竟然能面不改色、毫無反應地站在原地，你才被深深震憾了——原來看起來普通的「怕癢」，在不同人的神經系統裡，竟然完全是兩個世界！\n大人只會開玩笑說你「肉嫩」、「嬌氣」、「反應太誇張」。但如果從神經多樣性（Neurodiversity）的角度來看，這種對「癢」極度敏感、近乎防禦性的反應，其實是無數 AuDHD（自閉特質 ASD + 動禪/過動特質 ADHD） 族群身上極為常見的**感官防禦（Sensory Defensiveness）**特徵。\n一、 這不是「肉嫩」，是大腦的感官警報器過於敏銳\n在神經學上，「癢感（Itch/Tickle）」本質上是一種輕微的痛覺與危險訊號。 1/5",
+    "publishedTime": "2026-07-23T22:22:37.000Z",
+    "collectedAt": "2026-09-14T18:43:36.827Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbIyfhgkeaR",
+    "postUrl": "https://www.threads.com/@sliven0722/post/DbIyfhgkeaR",
+    "authorHandle": "@sliven0722",
+    "authorName": "",
+    "contentText": "看到這個 repo 時，第一眼注意到的是它給 Claude Code 跟 Codex 裝的 skill 直接把 AI 變成動效導演。\n106 張鏡頭卡、162 種動效樣式、161 條動態預覽，還附一支可直接套用的成片模板。專案用 Remotion 實作，目標很明確：產品宣傳片、launch video 這類需要鏡頭語言跟節奏的東西。\n實際翻了 README 跟 Gallery，鏡頭卡不是空泛的描述，每張都標了用途、建議時長、參數、已知坑點。模板叫 Ink Press，36 秒左右，紙墨琥珀調，已經把 2.5D 頁面運鏡、標題卡、轉場跟配樂都釘好了。你丟產品截圖跟文案進去，agent 就照流程走。\n這種東西之前多半要自己堆 prompt 或找剪輯師。現在 skill 把分鏡、動效、音效整套包進去，安裝方式也單純，直接把 repo 丟給 agent 就行。\n然後輸入提示詞「Use video-shotcraft to make a promo for my product with the Ink Press template.」\n就可以產生出範例影片的效果。 1/2\n很抱歉，播放此影片時發生問題。\n瞭解詳情",
+    "publishedTime": "2026-07-23T13:37:34.000Z",
+    "collectedAt": "2026-09-14T18:43:38.399Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbJP2bmk3Tf",
+    "postUrl": "https://www.threads.com/@whiteboardyy/post/DbJP2bmk3Tf",
+    "authorHandle": "@whiteboardyy",
+    "authorName": "",
+    "contentText": "要爬資料餵 AI 的 別再自己刻爬蟲了 這十個開源專案直接拿去用 firecrawl 那個十三萬星\n先看前三個就夠\n1. firecrawl 指一個網站給它 它整站爬完 JavaScript 也會幫你渲染 回傳的東西 AI 直接讀得懂\n2. crawl4ai 把網頁轉成給 LLM 用的 markdown 不用 API key 不用帳號\n3. browser-use 讓 AI 像真人一樣操作瀏覽器 會點會滾會登入會填表 一般爬蟲進不去的頁面靠它\n三個都開源 同樣的能力有些公司一個月收你兩千鎂\n剩下七個放留言 專門對付各種爬不到的狀況 等你被擋了再回來翻 1/2",
+    "publishedTime": "2026-07-23T17:54:04.000Z",
+    "collectedAt": "2026-09-14T18:43:38.399Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbF1U_MlGJ4",
+    "postUrl": "https://www.threads.com/@kiminbrush/post/DbF1U_MlGJ4",
+    "authorHandle": "@kiminbrush",
+    "authorName": "",
+    "contentText": "Agent AI可以幫我把檢舉違規停車這件事變得超簡單嗎\n填檢舉的那個網頁有夠難填\n我希望可以拍完照後十秒鐘內就可以完成 1/2",
+    "publishedTime": "2026-07-22T10:04:31.000Z",
+    "collectedAt": "2026-09-14T18:43:38.399Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbISYyuEYWQ",
+    "postUrl": "https://www.threads.com/@mytvsuper/post/DbISYyuEYWQ",
+    "authorHandle": "@mytvsuper",
+    "authorName": "",
+    "contentText": "mytvsuper已驗證LingOrm2026-7-23",
+    "publishedTime": "2026-07-23T08:57:46.000Z",
+    "collectedAt": "2026-09-14T18:43:38.399Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbGB9PMGegN",
+    "postUrl": "https://www.threads.com/@xu.l_548/post/DbGB9PMGegN",
+    "authorHandle": "@xu.l_548",
+    "authorName": "",
+    "contentText": "前陣子去日本，發現除了 Uniqulo, GU 一時不知道要逛什麼\n雖然省了不少錢，但還是覺得有點可惜\n大家有推薦適合新手逛的日本服飾品牌或店家嗎？ 1/2\n1.4 萬",
+    "publishedTime": "2026-07-22T11:54:53.000Z",
+    "collectedAt": "2026-09-14T18:43:38.399Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbGUY1Rkhnv",
+    "postUrl": "https://www.threads.com/@mengru_lin/post/DbGUY1Rkhnv",
+    "authorHandle": "@mengru_lin",
+    "authorName": "",
+    "contentText": "奧德賽懶人包🙌🏻\n看戲之前先認識他們，幫助你更快入戲\n2.7 萬",
+    "publishedTime": "2026-07-22T14:35:56.000Z",
+    "collectedAt": "2026-09-14T18:43:40.027Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbE7TowAetC",
+    "postUrl": "https://www.threads.com/@bing_sunzhi/post/DbE7TowAetC",
+    "authorHandle": "@bing_sunzhi",
+    "authorName": "",
+    "contentText": "最近看到一個滿適合 AI 產品介面的元件：Thinking Orbs。\n簡單說，它是在做那種「AI 正在思考」的動態球體效果，不是功能本身，但很影響產品給人的感覺。\n－適合放在 AI 助理、Agent、語音介面\n－比單純 loading spinner 更有情境感\n－可以讓等待時間看起來比較像「正在處理」\n－對做 SaaS、AI 工具、作品集頁面的人滿實用\n我覺得這種小元件有趣的地方是，它沒有改變模型能力，但會改變使用者對產品的信任感。\n很多 AI 產品差的不是功能，而是互動狀態太冷冰冰。 1/2",
+    "publishedTime": "2026-07-22T01:38:08.000Z",
+    "collectedAt": "2026-09-14T18:43:40.027Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbFDs2LAYBv",
+    "postUrl": "https://www.threads.com/@bing_sunzhi/post/DbFDs2LAYBv",
+    "authorHandle": "@bing_sunzhi",
+    "authorName": "",
+    "contentText": "最近看到一個滿適合前端介面加質感的小元件：Border Beam。\n簡單說，它可以幫 React 元件加上一圈會流動的光束邊框，像卡片、按鈕、輸入框、搜尋列都能套用。\n－適合放在 pricing card、AI 搜尋框、CTA 按鈕\n－不用自己從零刻 CSS 動畫\n－可以調大小、顏色、強度\n－讓重點區塊看起來更像「產品主視覺」\n我覺得這種元件很適合用在 SaaS landing page 或 AI 工具首頁。\n它不會讓功能變強，但會讓使用者第一眼覺得：這個產品有在打磨細節。 1/2",
+    "publishedTime": "2026-07-22T02:51:21.000Z",
+    "collectedAt": "2026-09-14T18:43:40.027Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbD8112mi1G",
+    "postUrl": "https://www.threads.com/@janejohndoe8964/post/DbD8112mi1G",
+    "authorHandle": "@janejohndoe8964",
+    "authorName": "",
+    "contentText": "現在我的狀態：卡在〈一九四五〉那句「等飛行機袂閣來，想欲牽你的手聽海湧的聲」的歌詞裡出不來。\n.\n他沒有說轟炸機跟警報聲響太大，所以聽不見海浪聲。沒有說因為戰爭的威脅，所以沒辦法無憂說愛，到海邊看浪花。他都沒有說，可是都說了。\n.\n我真的很受不了這種不在場的潛台詞描繪。幹，看完一場老滅演唱會跟失戀一樣。",
+    "publishedTime": "2026-07-21T16:31:42.000Z",
+    "collectedAt": "2026-09-14T18:43:41.594Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbDyuefFbqd",
+    "postUrl": "https://www.threads.com/@heywhiteran/post/DbDyuefFbqd",
+    "authorHandle": "@heywhiteran",
+    "authorName": "",
+    "contentText": "「普通人看書是越看越少，AuDHD 看書是越看越多」：我們大腦裡那個關不掉的超連結\n你有沒有過這種體驗？\n一個普通人買了一本書，從第一頁順順地看到最後一頁，進度條推進到 100%，這本書就算圓滿「看完」了——對他們來說，書是越看越少的。\n但對於 AuDHD（自閉症 ASD + 注意力缺陷過動症 ADHD） 來說，看書簡直是一場「發散式災難」：\n本來你只是想翻開一本**《如何改善睡眠》**，想解決自己最近失誤連連的失眠問題。\n結果讀到第一章「露營與戶外光線對晝夜節律的影響」，你的大腦瞬間被點燃了：\n1. 你立刻放下書，打開手機搜尋：「最適合新手露營的帳篷」。\n2. 搜尋帳篷時，你看到某個開箱影片裡的露營咖啡壺好美，於是你又跑去研究：「手沖咖啡的粉水比與萃取率」。\n3. 為了弄懂萃取率，你順手下單了一本《咖啡聖經》，還順便開了 15 個關於豆子產地的網頁分頁……\n半小時過去了，原本那本《如何改善睡眠》還停留在第 3 頁，而你的書桌上已經多出了三本書，手機瀏覽器的分頁拉都拉不完。\n對 AuDHD 來說，看書這件事，就像細胞分裂一樣——越看越多，永遠沒有完工的那一天。 1/4",
+    "publishedTime": "2026-07-21T15:03:19.000Z",
+    "collectedAt": "2026-09-14T18:43:41.594Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbD23spADoM",
+    "postUrl": "https://www.threads.com/@raymond0917/post/DbD23spADoM",
+    "authorHandle": "@raymond0917",
+    "authorName": "",
+    "contentText": "我做了個免費工具 🆓\n交友軟體的順滑操作，讓你篩選社群貼文、快速上標籤。\n​\n⬇️​\n​\n【別急著把整個臉書、社群廢文都餵給 AI】\n​\n想訓練 AI 分身？多數人的直覺是：把臉書、Threads 貼文全數匯出丟給 AI 學習。\n​\n等等～\n​\n你隨手發的廢文、轉發別人的連結、跟風的心情文，可能很多沒有你的觀點、故事和價值判斷。這些對 AI 來說反而是種雜訊。餵得越多，它學到的「你」反而越模糊，到最後還是趨於大眾。\n​​\n你如果要 AI 員工有品味，你得先幫他挑選。\n​\n---\n​\n我做了免註冊線上工具，幫你省下麻煩事：\n​\n✅ 匯入 Meta 官方匯出檔（FB／Threads／IG）\n✅ 像交友軟體一樣審稿：右滑精選、左滑略過，可自定義標籤，用鍵盤快速打標\n✅ 審到一半關掉？不擔心，進度存在瀏覽器裡，下次自動接續，可分好幾天慢慢挑\n✅ 挑完一鍵匯出「語氣參考庫」，直接丟進你的 AI 知識庫\n✅ 隱私友善，零上傳，你的內容不會離開你的電腦\n​\n挑出來的，就是你的寫作風格、你的判斷、你看世界的珍貴材料。\n​\n剛好備課過程，先把工具做好，接下來再教學員們一步步做出高品質 AI 分身。 1/2",
+    "publishedTime": "2026-07-21T15:41:31.000Z",
+    "collectedAt": "2026-09-14T18:43:41.595Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbDuJDoEmTa",
+    "postUrl": "https://www.threads.com/@_osean.2513/post/DbDuJDoEmTa",
+    "authorHandle": "@_osean.2513",
+    "authorName": "",
+    "contentText": "正在回覆@_osean.2513\nYo大家 其實這個有點難所以我也不知道怎麼教 因為Mac是不能自訂影片的哈哈哈\n但我有找到教學的影片！唯一的問題是每台筆電存放動態桌布的地方好像不一樣（像我的就不是存在影片裡說的地方）\n我的解方是跑去問Gemini然後多嘗試幾個不同的資料夾名稱 總會找到的 2/3\n很抱歉，播放此影片時發生問題。\n瞭解詳情\nfoodiefoodiego",
+    "publishedTime": "2026-07-21T14:23:15.000Z",
+    "collectedAt": "2026-09-14T18:43:43.092Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbDKbrekcc_",
+    "postUrl": "https://www.threads.com/@pusung.305/post/DbDKbrekcc_",
+    "authorHandle": "@pusung.305",
+    "authorName": "",
+    "contentText": "pusung.305AItools2026-7-21",
+    "publishedTime": "2026-07-21T09:11:13.000Z",
+    "collectedAt": "2026-09-14T18:43:43.092Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbDJNvdiizv",
+    "postUrl": "https://www.threads.com/@liq_media/post/DbDJNvdiizv",
+    "authorHandle": "@liq_media",
+    "authorName": "",
+    "contentText": "一句 prompt 生出「完整分鏡表」，再直接變成產品開箱影片！\n第一張是 AI 生的分鏡表，第二個就是照著分鏡生成的 30 秒成品\n這篇在 X 上 27 萬觀看\n（素材來源：X @Ciri_ai） 1/2",
+    "publishedTime": "2026-07-21T09:00:44.000Z",
+    "collectedAt": "2026-09-14T18:43:44.660Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbC-YVclDL2",
+    "postUrl": "https://www.threads.com/@panda_life_diary/post/DbC-YVclDL2",
+    "authorHandle": "@panda_life_diary",
+    "authorName": "",
+    "contentText": "因為實際上 Claude Code / Codex 都會有一些廢話等內容或是晶晶體，所以我 fork 了 i-have-adhd，製作了一繁體中文版\ngithub.com/panda… 1/2",
+    "publishedTime": "2026-07-21T07:25:54.000Z",
+    "collectedAt": "2026-09-14T18:43:44.660Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbCOCiAFOc8",
+    "postUrl": "https://www.threads.com/@amanda_lin.tp/post/DbCOCiAFOc8",
+    "authorHandle": "@amanda_lin.tp",
+    "authorName": "",
+    "contentText": "我最近用這個方式在練我的核心\n我的腰真的比較不會酸了\n呼吸會更加深更順暢！\n腳也比較不會有沉重感\n而且真的會把小腹的內臟往後填回去\n因為我太胖了🤣🤣\n腹部的脂肪都把我的腹部的器官都往前推了！\n做了幾天之後\n我發現我的小腹有變比較平\n因為減低了腹壓！\n1.4 萬",
+    "publishedTime": "2026-07-21T00:23:32.000Z",
+    "collectedAt": "2026-09-14T18:43:44.660Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbA74XEiUE7",
+    "postUrl": "https://www.threads.com/@joanne7776/post/DbA74XEiUE7",
+    "authorHandle": "@joanne7776",
+    "authorName": "",
+    "contentText": "最近很紅LeBron James的訓練法，但其實他的睡眠法也很值得學習，我只是好奇改了一項：睡前一小時把冷氣溫度調到18度，就意外的增長了睡眠時間。另外還有讓臥房全黑、睡前吃250g甘氨酸鎂、睡前兩道三小時不要進食這些我都有做到，他還會喝酸櫻桃汁，這個我還沒買。唯一還沒辦法戒除的就是睡前一小時不要滑手機，真的很難。 1/2",
+    "publishedTime": "2026-07-20T12:25:35.000Z",
+    "collectedAt": "2026-09-14T18:43:46.137Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbC34Lzj_L2",
+    "postUrl": "https://www.threads.com/@chihyu.yeh/post/DbC34Lzj_L2",
+    "authorHandle": "@chihyu.yeh",
+    "authorName": "",
+    "contentText": "這部影片在說作者為什麼從 Stripe 換到 Polar.sh，還有實際遷移時遇到的差異與做法。\n一開始他先說明 Stripe 有多好：它不只是刷卡金流，而是完整的「金融基礎設施平台」。Stripe 幫你處理信用卡、數位錢包、詐欺防護、加密、PCI 規範、結算，還有客戶管理、訂閱、發票、收據、退款等，所以多數開發者做 SaaS 會直接選 Stripe。\n真正的問題出在「銷售稅」。Stripe 可以幫你自動計算並代收各國/各州的銷售稅，也會提醒你在哪些地區超過門檻需要註冊稅籍，但它不幫你做「稅款申報與繳納」（tax remittance）。對於跨國賣數位商品的人來說，稅務規則是根據「客戶所在國」而不是「公司所在國」，像 EU/UK 只要你在那裡有任何一筆銷售就要處理 VAT，而且通常要「每季申報」。這代表你得自己去各國/各區註冊、季申報、避免延遲罰款，還要自行開符合規定的發票（EU 要 VAT invoice，Stripe 免費版不幫你做）。 1/8",
+    "publishedTime": "2026-07-21T06:29:05.000Z",
+    "collectedAt": "2026-09-14T18:43:47.752Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbBESifj17V",
+    "postUrl": "https://www.threads.com/@jasonxtsai/post/DbBESifj17V",
+    "authorHandle": "@jasonxtsai",
+    "authorName": "",
+    "contentText": "Claude Code 裝了五個外掛之後，我幾乎沒再手動翻過 repo。\n最扯的那個其實不算外掛。它就是一個資料夾。\n把 Claude 指向你的 Obsidian vault，它每一次新對話都讀得到你以前寫的東西，也會自己寫回去。等於直接接上長期記憶。\n留言「插件」，設定檔給你。 1/2",
+    "publishedTime": "2026-07-20T13:39:04.000Z",
+    "collectedAt": "2026-09-14T18:43:47.752Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbBBRQVAZ7S",
+    "postUrl": "https://www.threads.com/@gggodlin/post/DbBBRQVAZ7S",
+    "authorHandle": "@gggodlin",
+    "authorName": "",
+    "contentText": "一句 prompt 生出「完整分鏡表」，再直接變成產品開箱影片！\n第一張是 AI 生的分鏡表，第二個就是照著分鏡生成的 30 秒成品\n這篇在 X 上 27 萬觀看\n（素材來源：X @Ciri_ai） 1/2\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n因為實際上 Claude Code / Codex 都會有一些廢話等內容或是晶晶體，所以我 fork 了 i-have-adhd，製作了一繁體中文版\ngithub.com/panda… 1/2\n我最近用這個方式在練我的核心\n我的腰真的比較不會酸了\n呼吸會更加深更順暢！\n腳也比較不會有沉重感\n而且真的會把小腹的內臟往後填回去\n因為我太胖了🤣🤣\n腹部的脂肪都把我的腹部的器官都往前推了！\n做了幾天之後\n我發現我的小腹有變比較平\n因為減低了腹壓！\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n1.4 萬\n最近很紅LeBron James的訓練法，但其實他的睡眠法也很值得學習，我只是好奇改了一項：睡前一小時把冷氣溫度調到18度，就意外的增長了睡眠時間。另外還有讓臥房全黑、睡前吃250g甘氨酸鎂、睡前兩道三小時不要進食這些我都有做到，他還會喝酸櫻桃汁，這個我還沒買。唯一還沒辦法戒除的就是睡前一小時不要滑手機，真的很難。 1/2\n這部影片在說作者為什麼從 Stripe 換到 Polar.sh，還有實際遷移時遇到的差異與做法。\n一開始他先說明 Stripe 有多好：它不只是刷卡金流，而是完整的「金融基礎設施平台」。Stripe 幫你處理信用卡、數位錢包、詐欺防護、加密、PCI 規範、結算，還有客戶管理、訂閱、發票、收據、退款等，所以多數開發者做 SaaS 會直接選 Stripe。\n真正的問題出在「銷售稅」。Stripe 可以幫你自動計算並代收各國/各州的銷售稅，也會提醒你在哪些地區超過門檻需要註冊稅籍，但它不幫你做「稅款申報與繳納」（tax remittance）。對於跨國賣數位商品的人來說，稅務規則是根據「客戶所在國」而不是「公司所在國」，像 EU/UK 只要你在那裡有任何一筆銷售就要處理 VAT，而且通常要「每季申報」。這代表你得自己去各國/各區註冊、季申報、避免延遲罰款，還要自行開符合規定的發票（EU 要 VAT invoice，Stripe 免費版不幫你做）。 1/8\nClaude Code 裝了五個外掛之後，我幾乎沒再手動翻過 repo。\n最扯的那個其實不算外掛。它就是一個資料夾。\n把 Claude 指向你的 Obsidian vault，它每一次新對話都讀得到你以前寫的東西，也會自己寫回去。等於直接接上長期記憶。\n留言「插件」，設定檔給你。 1/2\ngithub.com/ayghr… 發現一個有趣的skill，引入cc試用了幾個小時確實蠻舒服的，對gpt系模型效果更是妙不可言\n大致上來說會讓AI的回答變成如圖所示，再也不用看claude一大坨的晶晶體天書和gpt假裝有排版的長篇廢話了\n剛好我吃了十幾年利他能，很有資格裝這個skill🤣\n© 2026\n《Threads 使用條款》\n《隱私政策》\n《Cookie 政策》",
+    "publishedTime": "2026-07-20T13:12:40.000Z",
+    "collectedAt": "2026-09-14T18:43:47.767Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbBHrWikhUN",
+    "postUrl": "https://www.threads.com/@anniehan0221/post/DbBHrWikhUN",
+    "authorHandle": "@anniehan0221",
+    "authorName": "",
+    "contentText": "「炎上展」好好玩，大家都戲精上身很愛演😂😂😂\n引體向上也太難了吧！！！ 1/3\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n很抱歉，播放此影片時發生問題。\n瞭解詳情\n很抱歉，播放此影片時發生問題。\n瞭解詳情",
+    "publishedTime": "2026-07-20T14:08:40.000Z",
+    "collectedAt": "2026-09-14T18:43:49.318Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbAnYOwmbfi",
+    "postUrl": "https://www.threads.com/@android_baby_/post/DbAnYOwmbfi",
+    "authorHandle": "@android_baby_",
+    "authorName": "",
+    "contentText": "只有 iOS 版的 App 護城河可能正在變矮……💥\nGoogle 最近展示了 Android 的 Migration 工具\n可以讓 AI 分析既有的 iOS App\n協助重新產生 Kotlin＋Jetpack Compose 的 Android 專案\n當然\n這不代表別人可以合法把你的 App 原封不動搬走\n程式碼、圖片、文案、品牌、UI 設計\n該有的著作權和商標問題一個都不會消失\n但比較值得注意的是：\n以前一款 App 只有 iOS 版\n其他人想做 Android 類似產品\n可能還要從頭研究、設計、重寫\n現在 AI 開始把「跨平台重建」的成本越壓越低\n你的 App 如果長期沒有 Android 版\n未來可能不是沒有人想做\n而是有人比你更快把類似服務補上去\n所以小小呼籲一下：\n有能力的話 真的可以早點考慮雙平台服務 🥹\n不是因為 Android 開發者想搶 App\n是因為安卓使用者也真的很需要那些好用、漂亮、但永遠只有 iOS 版的 App༼⁠;⁠´⁠༎ຶ⁠ ⁠۝ ⁠༎ຶ⁠༽ 1/2",
+    "publishedTime": "2026-07-20T09:26:26.000Z",
+    "collectedAt": "2026-09-14T18:43:50.976Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbAq6p2Em24",
+    "postUrl": "https://www.threads.com/@1es4.l/post/DbAq6p2Em24",
+    "authorHandle": "@1es4.l",
+    "authorName": "",
+    "contentText": "大家，如果你常聽樂團、音樂祭、演唱會\n建議各位一定都要購入專門降噪的耳塞\n保證戴上去是會讓音樂聽得更清楚，不會阻礙你享受音樂\n並且，走出場不會耳鳴或者耳朵痛三天\n我自己是用 Alpine MusicSafe Pro （沒有連結自己找地方買）\n去小巨蛋聽滅火器忘記帶出門，到現在耳朵還在痛ㅠㅠㅠㅠ 1/3",
+    "publishedTime": "2026-07-20T09:57:21.000Z",
+    "collectedAt": "2026-09-14T18:43:50.976Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbAYRTXmGix",
+    "postUrl": "https://www.threads.com/@midori_enjoycooking/post/DbAYRTXmGix",
+    "authorHandle": "@midori_enjoycooking",
+    "authorName": "",
+    "contentText": "今年夏天我肯定會煮很多次！！",
+    "publishedTime": "2026-07-20T07:14:25.000Z",
+    "collectedAt": "2026-09-14T18:43:52.610Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbABALKEtaa",
+    "postUrl": "https://www.threads.com/@linyh98/post/DbABALKEtaa",
+    "authorHandle": "@linyh98",
+    "authorName": "",
+    "contentText": "如果你已經有產品, 想要做一個網站又不想花大錢請人做,你又有訂閱AI工具(ChatGpt,Claude 之類的) ,你也覺得你自己可以動手可以參考以下\n1. 直接請Codex,Claude Code 幫你做一個網站, 跟他討論你希望的樣子\n2. 申請一個github 帳號, 讓AI幫你把網站的程式碼同步上去\n3. 申請一個vercel帳號, 綁定github 專案, 當github 改動會自動重新部署到網站上\n4. 購買網域, 我是用Cloud Flare 購買,覺得便宜好用\n5. 把vercel 加入自定義網域設定DNS, 這比較複雜可以請AI協助 1/3",
+    "publishedTime": "2026-07-20T03:51:06.000Z",
+    "collectedAt": "2026-09-14T18:43:52.611Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbAAcEZknZI",
+    "postUrl": "https://www.threads.com/@pipepuin/post/DbAAcEZknZI",
+    "authorHandle": "@pipepuin",
+    "authorName": "",
+    "contentText": "github.com/Grati…\n用Agent在Linkedin幫你找工作\n有chrome extension可以自己安裝\n獲取登入session來直接搜尋\n也能直接幫你修改headline等等\n讓你更容易被HR看見！\n註：Headline怎麼改Linkedin風網路上有skill",
+    "publishedTime": "2026-07-20T03:46:10.000Z",
+    "collectedAt": "2026-09-14T18:43:52.611Z",
+    "sourcePage": "https://www.threads.com/saved"
+  },
+  {
+    "postId": "DbAJOzEmiOJ",
+    "postUrl": "https://www.threads.com/@leeunhn/post/DbAJOzEmiOJ",
+    "authorHandle": "@leeunhn",
+    "authorName": "",
+    "contentText": "以前想用程式碰一個沒開 API 的桌面 app，只能硬爬畫面或抓封包超痛苦，結果有人做了個 mimic，直接攔截那個 app，然後在 Python 裡把它當函式庫 import 進來用，等於幫每個沒 API 的軟體現場長一個 API 出來，1216 顆星，這招有點犯規但真的讚～",
+    "publishedTime": "2026-07-20T05:03:07.000Z",
+    "collectedAt": "2026-09-14T18:43:52.611Z",
+    "sourcePage": "https://www.threads.com/saved"
+  }
+]
