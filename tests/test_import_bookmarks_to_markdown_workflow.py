@@ -302,8 +302,8 @@ class FakeProgressReporter:
     def start(self, total: int) -> None:
         self.calls.append(("start", total))
 
-    def item(self, index: int, total: int, topic: str, category: str, status: str) -> None:
-        self.calls.append(("item", index, total, topic, category, status))
+    def item(self, index: int, total: int, topic: str, category: str, status: str, **extra) -> None:
+        self.calls.append(("item", index, total, topic, category, status, extra))
 
     def finish(self, summary, output_dir) -> None:
         self.calls.append(("finish", summary.processed_count, str(output_dir)))
@@ -356,7 +356,7 @@ def test_workflow_reports_written_and_skipped_progress(tmp_path: Path) -> None:
 
     workflow.run()
 
-    assert reporter.calls == [
+    assert [c[:6] for c in reporter.calls] == [
         ("start", 2),
         ("item", 1, 2, "AI topic", "AI", "skipped"),
         ("item", 2, 2, "title-p_food", "Food", "written"),
@@ -371,8 +371,8 @@ def test_workflow_reports_failed_progress_with_snippet(tmp_path: Path) -> None:
 
     workflow.run()
 
-    assert reporter.calls[1] == ("item", 1, 2, "title-p_ai", "AI", "written")
-    assert reporter.calls[2] == ("item", 2, 2, "Food topic", "—", "failed")
+    assert reporter.calls[1][:6] == ("item", 1, 2, "title-p_ai", "AI", "written")
+    assert reporter.calls[2][:6] == ("item", 2, 2, "Food topic", "—", "failed")
 
 
 def test_workflow_without_reporter_still_runs(tmp_path: Path) -> None:
@@ -481,5 +481,43 @@ def test_workflow_reports_failed_after_classification_with_category(tmp_path: Pa
 
     workflow.run()
 
-    assert reporter.calls[1] == ("item", 1, 2, "title-p_ai", "AI", "written")
-    assert reporter.calls[2] == ("item", 2, 2, "Food topic", "Food", "failed")
+    assert reporter.calls[1][:6] == ("item", 1, 2, "title-p_ai", "AI", "written")
+    assert reporter.calls[2][:6] == ("item", 2, 2, "Food topic", "Food", "failed")
+
+
+def test_workflow_passes_post_url_and_output_path_to_reporter(tmp_path: Path) -> None:
+    reporter = FakeProgressReporter()
+    workflow = _make_workflow(tmp_path, reporter, {"p_ai": "AI", "p_food": "美食"})
+    workflow.run()
+    item_calls = [c for c in reporter.calls if c[0] == "item"]
+    assert item_calls[0][6]["post_url"] == "https://threads/post/1"
+    assert item_calls[0][6]["output_path"].endswith(".md")
+    assert item_calls[1][6]["post_url"] == "https://threads/post/2"
+
+
+def test_from_config_accepts_page_client_and_reporter_overrides(monkeypatch, tmp_path):
+    from note_generator.config import load_config
+
+    class StubPageClient:
+        def fetch_body_text(self, url): return ""
+        def fetch_image_urls(self, url): return []
+        def fetch_page_snapshot(self, url): raise RuntimeError("stub")
+
+    class StubReporter:
+        def start(self, total): pass
+        def item(self, *a, **k): pass
+        def finish(self, summary, output_dir): pass
+
+    config_path = tmp_path / "config.json"
+    config_path.write_text('{"categories": ["AI", "Tech"]}', encoding="utf-8")
+    monkeypatch.setenv("THREADSIEVE_CONFIG", str(config_path))
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    monkeypatch.setenv("THREADS_PLAYWRIGHT_ENABLED", "false")
+    config = load_config(dotenv_path=None)
+    page_client = StubPageClient()
+    reporter = StubReporter()
+    workflow = ImportBookmarksToMarkdownWorkflow.from_config(
+        config, page_client=page_client, progress_reporter=reporter
+    )
+    assert workflow._progress_reporter is reporter
+    assert workflow._enricher._page_client is page_client

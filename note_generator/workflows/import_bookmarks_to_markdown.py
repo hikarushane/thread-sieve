@@ -90,7 +90,17 @@ class _ProgressReporter(Protocol):
     def start(self, total: int) -> None:
         ...
 
-    def item(self, index: int, total: int, topic: str, category: str, status: str) -> None:
+    def item(
+        self,
+        index: int,
+        total: int,
+        topic: str,
+        category: str,
+        status: str,
+        *,
+        post_url: str = "",
+        output_path: str = "",
+    ) -> None:
         ...
 
     def finish(self, summary: ImportSummary, output_dir: Path) -> None:
@@ -101,7 +111,17 @@ class _NullProgressReporter:
     def start(self, total: int) -> None:
         pass
 
-    def item(self, index: int, total: int, topic: str, category: str, status: str) -> None:
+    def item(
+        self,
+        index: int,
+        total: int,
+        topic: str,
+        category: str,
+        status: str,
+        *,
+        post_url: str = "",
+        output_path: str = "",
+    ) -> None:
         pass
 
     def finish(self, summary: ImportSummary, output_dir: Path) -> None:
@@ -174,13 +194,20 @@ class ImportBookmarksToMarkdownWorkflow:
         self._progress_reporter = progress_reporter or _NullProgressReporter()
 
     @classmethod
-    def from_config(cls, config: AppConfig) -> "ImportBookmarksToMarkdownWorkflow":
+    def from_config(
+        cls,
+        config: AppConfig,
+        *,
+        page_client: object | None = None,
+        progress_reporter: object | None = None,
+    ) -> "ImportBookmarksToMarkdownWorkflow":
         llm_client = build_llm_client(config.llm_provider, config.llm_api_keys)
-        page_client = (
-            PlaywrightThreadPageClient(headless=config.playwright_headless)
-            if config.playwright_enabled
-            else _DisabledThreadPageClient()
-        )
+        if page_client is None:
+            page_client = (
+                PlaywrightThreadPageClient(headless=config.playwright_headless)
+                if config.playwright_enabled
+                else _DisabledThreadPageClient()
+            )
         ocr_enricher = (
             ImageOCREnricher(
                 llm_client=llm_client,
@@ -223,7 +250,7 @@ class ImportBookmarksToMarkdownWorkflow:
             unsave_output_path=config.unsave_path,
             source_file_name=config.input_path.name,
             classification_model=config.model_for_classification,
-            progress_reporter=ConsoleProgressReporter(),
+            progress_reporter=progress_reporter or ConsoleProgressReporter(),
             tag_generator=TagGenerator(
                 llm_client=llm_client,
                 model_name=config.model_for_title,
@@ -284,6 +311,7 @@ class ImportBookmarksToMarkdownWorkflow:
                         _topic_snippet(source.content_text),
                         classified.category,
                         "skipped",
+                        post_url=source.post_url,
                     )
                     continue
 
@@ -301,6 +329,7 @@ class ImportBookmarksToMarkdownWorkflow:
                         _topic_snippet(source.content_text),
                         classified.category,
                         "skipped",
+                        post_url=source.post_url,
                     )
                     continue
 
@@ -343,6 +372,8 @@ class ImportBookmarksToMarkdownWorkflow:
                     titled.generated_title,
                     classified.category,
                     "written",
+                    post_url=source.post_url,
+                    output_path=str(written_path),
                 )
             except Exception:
                 failed_count += 1
@@ -361,6 +392,7 @@ class ImportBookmarksToMarkdownWorkflow:
                     _topic_snippet(source.content_text),
                     classified.category if classified is not None else "—",
                     "failed",
+                    post_url=source.post_url,
                 )
 
         if self._unsave_output_path is not None:
