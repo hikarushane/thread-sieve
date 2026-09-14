@@ -1,5 +1,10 @@
 # 版本更新（Release Notes）
 
+## 2026-09-15（userscript 0.6.0）
+
+- userscript 新增 host adapter：偵測到 `window.__threadSieveHost` 時，抓取結果、取消儲存清單與狀態改走桌面版 app；沒有 host 時行為與 0.5.5 相同。
+- pipeline 新增 `--snapshots` 與 `--progress jsonl`，供桌面版 sidecar 使用。lite 使用者不受影響。
+
 ## 2026-09-15
 
 **修正抓取時貼文內文黏在一起的問題**（userscript 0.5.5）。
