@@ -16,9 +16,10 @@ If a code change modifies user-visible behavior, setup, or the single SOP in a w
 
 ```
 pytest tests/
+node --test tests/userscript/*.test.mjs
 ```
 
-Run from project root with venv active (`.\.venv\Scripts\Activate.ps1`). Note: `.gitignore` lists `tests/`, but the test files are tracked (added before the ignore rule) and SHOULD be committed — new test files need `git add -f tests/...`; verify with `git show --stat HEAD` that they made it into the commit.
+The second line runs the userscript unit tests (plain Node, no deps; they load `userscripts/threads-scriber-auto.user.js` and exercise parser methods against a fake DOM chain). Run from project root with venv active (`.\.venv\Scripts\Activate.ps1`). Note: `.gitignore` lists `tests/`, but the test files are tracked (added before the ignore rule) and SHOULD be committed — new test files need `git add -f tests/...`; verify with `git show --stat HEAD` that they made it into the commit.
 
 ## Scope guardrail (lite branch)
 
