@@ -185,3 +185,87 @@ def test_unsave_run_uses_host_list_and_reports_results(browser) -> None:
     assert finished["data"]["unsaved"] == len(POST_IDS)
     assert finished["data"]["stopReason"] == "completed"
     assert page.evaluate(f"() => document.getElementById('{PANEL_ID}-error').textContent") == ""
+
+
+def test_no_host_path_uses_pickers_and_confirm(browser) -> None:
+    """Without window.__threadSieveHost, the unsave flow must still go through
+    showOpenFilePicker and window.confirm exactly as it did before the host
+    adapter existed."""
+    context = browser.new_context()
+    context.route(
+        f"{SAVED_URL}*",
+        lambda route: route.fulfill(
+            status=200, content_type="text/html; charset=utf-8", body=build_fixture_html(POST_IDS)
+        ),
+    )
+    context.route(
+        "https://www.threads.com/@tester/post/*",
+        lambda route: route.fulfill(
+            status=200, content_type="text/html; charset=utf-8", body=WORKER_STUB_HTML
+        ),
+    )
+    page = context.new_page()
+    page.goto(SAVED_URL)
+    payload = make_unsave_payload(POST_IDS)
+    page.evaluate(
+        """(payload) => {
+          window.__confirmMessages = [];
+          window.confirm = (m) => { window.__confirmMessages.push(m); return true; };
+          window.showOpenFilePicker = async () => [{
+            name: "unsave.json",
+            getFile: async () => ({ text: async () => JSON.stringify(payload) })
+          }];
+        }""",
+        payload,
+    )
+    page.add_script_tag(path=str(USERSCRIPT_PATH))
+    page.wait_for_selector(f"#{PANEL_ID}-unsave-run")
+
+    page.click(f"#{PANEL_ID}-unsave-run")
+    # No __threadSieveHost means no reportToHost events to observe; poll the
+    # rendered meta panel's per-post unsave counters (they start at 0/0/0 and
+    # can only reach {len(POST_IDS)}/0/0 once every queued post has been
+    # resolved by the permalink stub) together with the run button's label,
+    # which only flips back once the whole run() call -- including the final
+    # UI.update() after its finally block -- has completed. Polling the
+    # counters alone races the brief window between the last per-item
+    # UI.update() (counts already final, `running` still true) and that
+    # last UI.update(), so require both.
+    page.wait_for_function(
+        f"() => document.getElementById('{PANEL_ID}-meta').textContent.includes("
+        f"'逐篇取消 已取消/跳過/失敗: {len(POST_IDS)}/0/0') && "
+        f"document.getElementById('{PANEL_ID}-unsave-run').textContent === '取消儲存'",
+        timeout=60000,
+    )
+    assert page.evaluate(f"() => document.getElementById('{PANEL_ID}-unsave-run').textContent") == "取消儲存"
+
+    confirm_messages = page.evaluate("() => window.__confirmMessages")
+    assert len(confirm_messages) == 1
+    assert str(len(POST_IDS)) in confirm_messages[0]
+    assert page.evaluate(f"() => document.getElementById('{PANEL_ID}-error').textContent") == ""
+    context.close()
+
+
+def test_capture_writes_catch_through_host(browser) -> None:
+    """Scroller.start()/stop() must reach AutoSaveUtils.saveItems -> HostFileHandle
+    -> host.saveCatch without ever touching showSaveFilePicker, and the saved
+    catch.json content must contain the posts the fixture page renders."""
+    page = _open(browser)
+
+    page.fill(f"#{PANEL_ID}-date", "2026-01-01")
+    page.eval_on_selector(f"#{PANEL_ID}-date", "(el) => el.dispatchEvent(new Event('change'))")
+
+    page.click(f"#{PANEL_ID}-autosave")
+    page.wait_for_function(
+        f"() => document.getElementById('{PANEL_ID}-meta').textContent.includes('catch.json')"
+    )
+
+    page.click(f"#{PANEL_ID}-start")
+    page.wait_for_function("() => typeof window.__savedCatch === 'string'", timeout=60000)
+
+    saved = json.loads(page.evaluate("() => window.__savedCatch"))
+    assert isinstance(saved, list)
+    assert sorted(item["postId"] for item in saved) == sorted(POST_IDS)
+
+    kinds = page.evaluate("() => window.__hostEvents.map((e) => e.kind)")
+    assert "catch_saved" in kinds
