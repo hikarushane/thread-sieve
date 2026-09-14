@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ThreadSieve (Auto)
 // @namespace    https://local-only.example/threads-sieve/
-// @version      0.5.4
+// @version      0.5.5
 // @description  ThreadSieve captures Threads saved posts and runs the AI-post unsave flow from a single pick-and-run button.
 // @author       threads-sieve
 // @match        https://threads.com/*
@@ -16,7 +16,7 @@
   "use strict";
 
   const STORAGE_KEY = "threadsSavedExportState";
-  const SCRIPT_VERSION = "0.5.4";
+  const SCRIPT_VERSION = "0.5.5";
   const PANEL_ID = "threads-saved-export-panel";
   const FILE_HANDLE_DB = "threadsSavedExportFileDb";
   const FILE_HANDLE_STORE = "handles";
@@ -2165,7 +2165,10 @@
         if (!targetHref || !uniquePostHrefs.includes(targetHref)) {
           continue;
         }
-        if (uniquePostHrefs.length > 12) {
+        // 只接受「只含這一篇」的祖先。/saved 是虛擬捲動，同時掛載的貼文常不到
+        // 12 篇，舊的「≤12 篇」上限擋不住版面根容器，會把整頁（鄰近貼文＋頁尾）
+        // 當成這篇的內文。祖先的貼文數只會遞增，遇到第二篇就能停。
+        if (uniquePostHrefs.length > 1) {
           break;
         }
 
