@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 import json
 import os
@@ -53,6 +53,7 @@ class AppConfig:
     playwright_enabled: bool
     playwright_headless: bool
     event_log_filename: str
+    concept_tags: list[str] = field(default_factory=list)
     skip_markdown_categories: set[str] = frozenset()
     max_title_length: int = 80
     thread_context_enabled: bool = True
@@ -261,6 +262,7 @@ def load_config(dotenv_path: Path | None = Path(".env")) -> AppConfig:
         categories=read_str_list_setting(config_data, "categories"),
         unsaved_categories=set(read_str_list_setting(config_data, "unsaved-categories")),
         skip_markdown_categories=set(read_str_list_setting(config_data, "skip-markdown-categories")),
+        concept_tags=read_str_list_setting(config_data, "concept_tags"),
         hints=read_str_list_setting(config_data, "hints"),
         category_overrides=parse_category_overrides(config_data),
         llm_provider=provider,

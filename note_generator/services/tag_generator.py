@@ -13,21 +13,37 @@ _TRAILING_WRAP_RE = re.compile(r'[\s"\'」』）)\]]+$')
 
 
 class TagGenerator:
-    def __init__(self, llm_client: LLMClient, model_name: str) -> None:
+    def __init__(
+        self,
+        llm_client: LLMClient,
+        model_name: str,
+        concept_tags: list[str] | None = None,
+    ) -> None:
         self._llm_client = llm_client
         self._model_name = model_name
+        self._concept_tags = concept_tags or []
 
     def generate(self, item: ClassifiedBookmark) -> list[str]:
+        if self._concept_tags:
+            vocab_line = (
+                "3. 優先從以下受控詞彙挑選：" + "、".join(self._concept_tags) + "。"
+                "專有名詞（工具名、專案名、品牌名）用官方正式拼寫與大小寫。\n"
+            )
+        else:
+            vocab_line = (
+                "3. 優先使用已存在的常見 tag，例如：Claude Code、求職、省錢、旅遊、"
+                "程式開發、設定配置、CLI、除錯踩坑、入門教學、效率、自動化、"
+                "開發流程、架構設計、AI Agent、LLM、Prompt、瀏覽器、部署。\n"
+            )
         prompt = (
             "你正在為個人筆記庫的一則筆記產生 tags。\n\n"
             "## 規則\n"
-            "1. 產生 2 到 4 個主題 tag（不含分類名稱，分類會自動加）。\n"
+            "1. 產生 1 到 4 個主題 tag（不含分類名稱，分類會自動加）。\n"
             "2. tag 是短詞，不是句子。用繁體中文，但工具名、專案名、品牌名保留英文。\n"
-            "3. 優先使用已存在的常見 tag，例如：Claude Code、求職、省錢、旅遊、"
-            "程式開發、設定配置、CLI、除錯踩坑、入門教學、效率、自動化、"
-            "開發流程、架構設計、AI Agent、LLM、Prompt、瀏覽器、部署。\n"
-            "4. 不要把分類名稱重複當 tag。\n"
-            "5. 只輸出 JSON array，例如：[\"Claude Code\", \"自動化\", \"CLI\"]\n\n"
+            + vocab_line
+            + "4. 不要把分類名稱重複當 tag。\n"
+            "5. 中英混排用一個半形空格分隔，純中文不加空格。\n"
+            "6. 只輸出 JSON array，例如：[\"Claude Code\", \"自動化\", \"CLI\"]\n\n"
             f"分類：{item.category}\n"
             f"內容：\n{item.enriched.llm_content[:3000]}"
         )

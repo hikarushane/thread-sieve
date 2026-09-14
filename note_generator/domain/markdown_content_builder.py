@@ -58,31 +58,44 @@ class MarkdownContentBuilder:
     def build(self, item: TitledBookmark, output_path: Path) -> MarkdownDocumentOutput:
         enriched = item.classified.enriched
         category = item.classified.category
-        content_block = enriched.combined_content.strip()
+
+        if item.rewritten_content:
+            main_content = item.rewritten_content.strip()
+        else:
+            main_content = enriched.combined_content.strip()
+
         ocr_texts = item.classified.ocr_texts
         if ocr_texts:
-            content_block += "\n\n## 圖片文字\n\n" + "\n\n---\n\n".join(ocr_texts)
+            main_content += "\n\n## 圖片文字\n\n" + "\n\n---\n\n".join(ocr_texts)
 
         context_section = _build_context_section(enriched)
         if context_section:
-            content_block += "\n\n" + context_section
+            main_content += "\n\n" + context_section
 
         replies_callout = _build_replies_callout(enriched)
         if replies_callout:
-            content_block += "\n\n" + replies_callout
+            main_content += "\n\n" + replies_callout
 
         tags = item.tags
         tags_line = "tags: [" + ", ".join(_yaml_str(t) for t in tags) + "]\n" if tags else ""
+        status_line = f"status: {item.status}\n" if item.status else ""
+
+        summary_block = ""
+        if item.summary:
+            summary_block = item.summary.strip() + "\n\n## Main Content\n\n"
 
         markdown_body = (
             "---\n"
+            f"title: {_yaml_str(item.generated_title)}\n"
             f"url: {_yaml_str(enriched.source.post_url)}\n"
             f"author: {_yaml_str(enriched.source.author_handle)}\n"
             f"clip_type: {_yaml_str(category)}\n"
             f"saved_kind: {_yaml_str(enriched.saved_kind)}\n"
             + tags_line
+            + status_line
             + "---\n\n"
-            f"{content_block}\n"
+            + summary_block
+            + f"{main_content}\n"
         )
 
         return MarkdownDocumentOutput(

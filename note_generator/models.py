@@ -73,6 +73,9 @@ class TitledBookmark:
     generated_title: str
     tags: list[str] = field(default_factory=list)
     resolved_filename: str | None = None
+    rewritten_content: str = ""
+    summary: str = ""
+    status: str = ""
 
 
 @dataclass(frozen=True)

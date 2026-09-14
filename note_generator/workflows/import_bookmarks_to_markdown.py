@@ -21,6 +21,7 @@ from note_generator.services.threads_reply_enricher import (
     PlaywrightThreadPageClient,
     ThreadsReplyEnricher,
 )
+from note_generator.services.content_rewriter import ContentRewriter
 from note_generator.services.tag_generator import TagGenerator
 from note_generator.services.title_generator import TitleGenerator
 from note_generator.services.unsave_writer import build_unsave_payload, write_unsave_payload
@@ -57,6 +58,11 @@ class _TitleGenerator(Protocol):
 
 class _TagGenerator(Protocol):
     def generate(self, item: object) -> list[str]:
+        ...
+
+
+class _ContentRewriter(Protocol):
+    def rewrite(self, item: object) -> object:
         ...
 
 
@@ -145,6 +151,7 @@ class ImportBookmarksToMarkdownWorkflow:
         classification_model: str = "",
         progress_reporter: _ProgressReporter | None = None,
         tag_generator: _TagGenerator | None = None,
+        content_rewriter: _ContentRewriter | None = None,
         skip_markdown_categories: set[str] | None = None,
     ) -> None:
         self._reader = reader
@@ -153,6 +160,7 @@ class ImportBookmarksToMarkdownWorkflow:
         self._ocr_enricher = ocr_enricher
         self._title_generator = title_generator
         self._tag_generator = tag_generator
+        self._content_rewriter = content_rewriter
         self._filename_builder = filename_builder
         self._content_builder = content_builder
         self._writer = writer
@@ -217,6 +225,11 @@ class ImportBookmarksToMarkdownWorkflow:
             classification_model=config.model_for_classification,
             progress_reporter=ConsoleProgressReporter(),
             tag_generator=TagGenerator(
+                llm_client=llm_client,
+                model_name=config.model_for_title,
+                concept_tags=config.concept_tags,
+            ),
+            content_rewriter=ContentRewriter(
                 llm_client=llm_client,
                 model_name=config.model_for_title,
             ),
@@ -296,6 +309,14 @@ class ImportBookmarksToMarkdownWorkflow:
                 if self._tag_generator is not None:
                     tags = self._tag_generator.generate(classified)
                     titled = replace(titled, tags=tags)
+                if self._content_rewriter is not None:
+                    rewrite = self._content_rewriter.rewrite(classified)
+                    titled = replace(
+                        titled,
+                        rewritten_content=rewrite.content,
+                        summary=rewrite.summary,
+                        status=rewrite.status,
+                    )
                 filename = self._filename_builder.build(titled.generated_title)
                 titled = replace(
                     titled,
