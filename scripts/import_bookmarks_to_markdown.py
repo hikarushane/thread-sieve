@@ -17,22 +17,52 @@ def configure_logging() -> None:
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s [%(name)s] %(message)s",
+        stream=sys.stderr,
     )
     logging.getLogger("google_genai").setLevel(logging.WARNING)
     logging.getLogger("httpx").setLevel(logging.WARNING)
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Import Threads bookmarks into local markdown notes.")
     parser.add_argument("--env-file", default=".env")
-    return parser.parse_args()
+    parser.add_argument(
+        "--snapshots",
+        default=None,
+        help="Path to snapshots.json produced by the desktop app; replaces Playwright page fetches.",
+    )
+    parser.add_argument(
+        "--progress",
+        choices=("console", "jsonl"),
+        default="console",
+        help="Progress output format. jsonl emits one JSON object per line for machine consumers.",
+    )
+    return parser.parse_args(argv)
+
+
+def build_workflow(config, args: argparse.Namespace) -> ImportBookmarksToMarkdownWorkflow:
+    page_client = None
+    if args.snapshots:
+        from note_generator.services.snapshot_file_client import SnapshotFileThreadPageClient
+
+        page_client = SnapshotFileThreadPageClient(Path(args.snapshots))
+
+    progress_reporter = None
+    if args.progress == "jsonl":
+        from note_generator.services.progress_reporter import JsonlProgressReporter
+
+        progress_reporter = JsonlProgressReporter()
+
+    return ImportBookmarksToMarkdownWorkflow.from_config(
+        config, page_client=page_client, progress_reporter=progress_reporter
+    )
 
 
 def main() -> None:
     args = parse_args()
     configure_logging()
     config = load_config(PROJECT_ROOT / args.env_file)
-    workflow = ImportBookmarksToMarkdownWorkflow.from_config(config)
+    workflow = build_workflow(config, args)
     summary = workflow.run()
     logging.getLogger(__name__).info(
         "Import complete: processed=%s written=%s skipped=%s failed=%s",
