@@ -22,12 +22,12 @@ SUPPORTED_PROVIDERS = ("gemini", "anthropic", "openai")
 DEFAULT_PROVIDER = "gemini"
 
 _DEFAULT_TEXT_MODELS = {
-    "gemini": "gemini-2.5-flash",
+    "gemini": "gemini-3.6-flash",
     "anthropic": "claude-sonnet-4-6",
     "openai": "gpt-4o-mini",
 }
 _DEFAULT_VISION_MODELS = {
-    "gemini": "gemini-2.5-flash",
+    "gemini": "gemini-3.6-flash",
     "anthropic": "claude-sonnet-4-6",
     "openai": "gpt-4o",
 }
