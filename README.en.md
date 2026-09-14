@@ -148,16 +148,18 @@ Then double-click the shortcut from anywhere.
 
 This classifies every post once and writes both markdown notes and `unsave.json`. Image OCR runs automatically for posts whose category matches `config.json` → `image-ocr.trigger-categories`.
 
-Fallback for shell users:
+Fallback for shell users (run from the project root: `data/catch.json`, `data/unsave.json`, and the markdown output dir are resolved relative to the current directory):
 
 ```powershell
 # Windows
+cd <path-to-thread-sieve>
 .\.venv\Scripts\Activate.ps1
 python scripts/import_bookmarks_to_markdown.py
 ```
 
 ```bash
 # macOS
+cd <path-to-thread-sieve>
 source .venv/bin/activate
 python scripts/import_bookmarks_to_markdown.py
 ```

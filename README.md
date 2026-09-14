@@ -148,16 +148,18 @@ cp config.json.example config.json
 
 這支 script 對每篇貼文分類一次，並用同一批分類結果寫出 markdown 筆記和 `unsave.json`。若分類結果符合 `config.json` → `image-ocr.trigger-categories`，圖片 OCR 也會自動執行。
 
-備案：偏好用指令列：
+備案：偏好用指令列（務必在專案根目錄執行，`data/catch.json`、`data/unsave.json` 與 markdown 輸出目錄都是相對於目前所在目錄）：
 
 ```powershell
 # Windows
+cd <thread-sieve 專案根目錄>
 .\.venv\Scripts\Activate.ps1
 python scripts/import_bookmarks_to_markdown.py
 ```
 
 ```bash
 # macOS
+cd <thread-sieve 專案根目錄>
 source .venv/bin/activate
 python scripts/import_bookmarks_to_markdown.py
 ```
