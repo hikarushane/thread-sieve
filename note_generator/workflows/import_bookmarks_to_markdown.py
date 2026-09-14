@@ -145,6 +145,7 @@ class ImportBookmarksToMarkdownWorkflow:
         classification_model: str = "",
         progress_reporter: _ProgressReporter | None = None,
         tag_generator: _TagGenerator | None = None,
+        skip_markdown_categories: set[str] | None = None,
     ) -> None:
         self._reader = reader
         self._enricher = enricher
@@ -161,6 +162,7 @@ class ImportBookmarksToMarkdownWorkflow:
         self._unsave_output_path = unsave_output_path
         self._source_file_name = source_file_name
         self._classification_model = classification_model
+        self._skip_markdown_categories = skip_markdown_categories or set()
         self._progress_reporter = progress_reporter or _NullProgressReporter()
 
     @classmethod
@@ -218,6 +220,7 @@ class ImportBookmarksToMarkdownWorkflow:
                 llm_client=llm_client,
                 model_name=config.model_for_title,
             ),
+            skip_markdown_categories=config.skip_markdown_categories,
         )
 
     def run(self) -> ImportSummary:
@@ -252,6 +255,24 @@ class ImportBookmarksToMarkdownWorkflow:
 
                 classified = self._classifier.classify(enriched)
                 classified_items.append(classified)
+
+                if classified.category in self._skip_markdown_categories:
+                    skipped_count += 1
+                    self._event_logger.emit(
+                        "bookmark_skipped_category",
+                        post_url=source.post_url,
+                        author_handle=source.author_handle,
+                        category=classified.category,
+                        status="skipped_category",
+                    )
+                    self._progress_reporter.item(
+                        index,
+                        total,
+                        _topic_snippet(source.content_text),
+                        classified.category,
+                        "skipped",
+                    )
+                    continue
 
                 if source.post_url in existing_output_urls:
                     skipped_count += 1
