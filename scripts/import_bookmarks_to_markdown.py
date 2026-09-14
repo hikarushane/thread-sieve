@@ -40,7 +40,22 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def _validate_snapshots_path(args: argparse.Namespace) -> None:
+    """Fail fast when --snapshots points at a path that does not exist.
+
+    Without this, a typo'd or stale path degrades silently: the workflow
+    falls back to primary content for every post instead of erroring out.
+    """
+    if not args.snapshots:
+        return
+    path = Path(args.snapshots)
+    if not path.exists():
+        raise SystemExit(f"--snapshots file not found: {path}")
+
+
 def build_workflow(config, args: argparse.Namespace) -> ImportBookmarksToMarkdownWorkflow:
+    _validate_snapshots_path(args)
+
     page_client = None
     if args.snapshots:
         from note_generator.services.snapshot_file_client import SnapshotFileThreadPageClient

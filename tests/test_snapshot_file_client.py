@@ -57,18 +57,44 @@ def test_entry_with_error_raises(tmp_path: Path) -> None:
 
 def test_fetch_image_urls_filters_records_like_playwright_client(tmp_path: Path) -> None:
     records = [
-        {"src": "https://scontent.cdninstagram.com/v/t51/big.jpg", "w": 1080, "h": 1350, "alt": ""},
+        {
+            "src": "https://scontent.cdninstagram.com/v/t51.82787-15/big.jpg",
+            "w": 1080,
+            "h": 1350,
+            "alt": "",
+        },
         {"src": "https://scontent.cdninstagram.com/v/t51/avatar.jpg", "w": 40, "h": 40, "alt": "頭像"},
     ]
     client = SnapshotFileThreadPageClient(_write(tmp_path, {URL: _entry(imageRecords=records)}))
     from note_generator.services.threads_reply_enricher import extract_post_image_urls_from_image_records
 
+    expected = ["https://scontent.cdninstagram.com/v/t51.82787-15/big.jpg"]
+    assert client.fetch_image_urls(URL) == expected
     assert client.fetch_image_urls(URL) == extract_post_image_urls_from_image_records(records)
 
 
-def test_file_is_read_once_and_cached(tmp_path: Path) -> None:
+def test_constructor_reads_file_once_and_caches(tmp_path: Path) -> None:
     path = _write(tmp_path, {URL: _entry()})
     client = SnapshotFileThreadPageClient(path)
-    client.fetch_body_text(URL)
     path.write_text("{}", encoding="utf-8")
     assert client.fetch_body_text(URL) == "body text here"
+
+
+def test_missing_file_raises_at_construction(tmp_path: Path) -> None:
+    path = tmp_path / "does-not-exist.json"
+    with pytest.raises(SnapshotMissingError, match="not found"):
+        SnapshotFileThreadPageClient(path)
+
+
+def test_invalid_json_raises_at_construction(tmp_path: Path) -> None:
+    path = tmp_path / "snapshots.json"
+    path.write_text("{not json", encoding="utf-8")
+    with pytest.raises(SnapshotMissingError, match="invalid JSON"):
+        SnapshotFileThreadPageClient(path)
+
+
+def test_missing_items_dict_raises_at_construction(tmp_path: Path) -> None:
+    path = tmp_path / "snapshots.json"
+    path.write_text(json.dumps({"generatedAt": "2026-09-14T20:00:00Z"}), encoding="utf-8")
+    with pytest.raises(SnapshotMissingError, match="items"):
+        SnapshotFileThreadPageClient(path)

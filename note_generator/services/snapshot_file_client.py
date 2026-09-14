@@ -24,7 +24,24 @@ class SnapshotFileThreadPageClient:
 
     def __init__(self, path: Path) -> None:
         self._path = Path(path)
-        self._items: dict[str, dict] | None = None
+        self._items: dict[str, dict] = self._load(self._path)
+
+    @staticmethod
+    def _load(path: Path) -> dict[str, dict]:
+        if not path.exists():
+            raise SnapshotMissingError(f"--snapshots file not found: {path}")
+        try:
+            raw = path.read_text(encoding="utf-8")
+        except OSError as exc:
+            raise SnapshotMissingError(f"--snapshots file could not be read: {path} ({exc})") from exc
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise SnapshotMissingError(f"--snapshots file has invalid JSON: {path} ({exc})") from exc
+        items = data.get("items") if isinstance(data, dict) else None
+        if not isinstance(items, dict):
+            raise SnapshotMissingError(f"--snapshots file is missing an 'items' object: {path}")
+        return items
 
     def fetch_body_text(self, url: str) -> str:
         return self._entry(url).get("bodyText", "") or ""
@@ -42,10 +59,6 @@ class SnapshotFileThreadPageClient:
         )
 
     def _entry(self, url: str) -> dict:
-        if self._items is None:
-            data = json.loads(self._path.read_text(encoding="utf-8"))
-            items = data.get("items") if isinstance(data, dict) else None
-            self._items = items if isinstance(items, dict) else {}
         entry = self._items.get(url)
         if not isinstance(entry, dict):
             raise SnapshotMissingError(f"no snapshot for {url}")

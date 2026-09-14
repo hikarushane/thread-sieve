@@ -56,3 +56,13 @@ def test_build_workflow_defaults_keep_console_reporter(cli) -> None:
     config = load_config(dotenv_path=None)
     workflow = cli.build_workflow(config, cli.parse_args([]))
     assert isinstance(workflow._progress_reporter, ConsoleProgressReporter)
+
+
+def test_build_workflow_rejects_missing_snapshots_path(cli, tmp_path: Path) -> None:
+    from note_generator.config import load_config
+
+    missing = tmp_path / "does-not-exist.json"
+    config = load_config(dotenv_path=None)
+    args = cli.parse_args(["--snapshots", str(missing)])
+    with pytest.raises(SystemExit):
+        cli.build_workflow(config, args)
