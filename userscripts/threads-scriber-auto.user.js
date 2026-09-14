@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ThreadSieve (Auto)
 // @namespace    https://local-only.example/threads-sieve/
-// @version      0.5.5
+// @version      0.6.0
 // @description  ThreadSieve captures Threads saved posts and runs the AI-post unsave flow from a single pick-and-run button.
 // @author       threads-sieve
 // @match        https://threads.com/*
@@ -16,7 +16,7 @@
   "use strict";
 
   const STORAGE_KEY = "threadsSavedExportState";
-  const SCRIPT_VERSION = "0.5.5";
+  const SCRIPT_VERSION = "0.6.0";
   const PANEL_ID = "threads-saved-export-panel";
   const FILE_HANDLE_DB = "threadsSavedExportFileDb";
   const FILE_HANDLE_STORE = "handles";
@@ -42,6 +42,52 @@
   const URL_UNSAVE_WORKER_FIND_TIMEOUT = 15000;
 
   const state = createState();
+
+  function getHost() {
+    const host = window.__threadSieveHost;
+    if (!host || typeof host.saveCatch !== "function") {
+      return null;
+    }
+    return host;
+  }
+
+  function reportToHost(kind, message, data) {
+    const host = getHost();
+    if (host && typeof host.reportStatus === "function") {
+      try {
+        host.reportStatus({ kind, message: message || "", data });
+      } catch (_error) {
+        // Host failures must never break the page flow.
+      }
+    }
+  }
+
+  // Stand-in for a FileSystemFileHandle when the desktop app hosts the page.
+  // Methods live on the prototype so an accidental structured clone drops them
+  // instead of throwing.
+  class HostFileHandle {
+    constructor(host) {
+      this.kind = "file";
+      this.name = "catch.json";
+      this._host = host;
+      this._lastLength = 0;
+    }
+    async queryPermission() { return "granted"; }
+    async requestPermission() { return "granted"; }
+    async createWritable() {
+      const handle = this;
+      let buffer = "";
+      return {
+        async write(chunk) { buffer = String(chunk); },
+        async close() {
+          handle._lastLength = buffer.length;
+          await handle._host.saveCatch(buffer);
+        },
+        async abort() {}
+      };
+    }
+    async getFile() { return { size: this._lastLength }; }
+  }
 
   const DateUtils = {
     parseTargetDate(value) {
@@ -128,6 +174,9 @@
     runtimeHandleWritable: false,
 
     isSupported() {
+      if (getHost()) {
+        return true;
+      }
       return typeof window.showSaveFilePicker === "function" && typeof indexedDB !== "undefined";
     },
 
@@ -210,6 +259,17 @@
     },
 
     async chooseFileHandle() {
+      const host = getHost();
+      if (host) {
+        const handle = new HostFileHandle(host);
+        this.runtimeHandle = handle;
+        this.runtimeHandleWritable = true;
+        state.autoSaveFileName = handle.name;
+        state.autoSaveReady = true;
+        UI.update();
+        reportToHost("autosave_ready", `已設定自動存檔: ${handle.name}`);
+        return handle;
+      }
       if (!this.isSupported()) {
         throw new Error("目前瀏覽器不支援 File System Access API。");
       }
@@ -241,6 +301,11 @@
 
     async getReadyHandle(options = {}) {
       const { allowPrompt = false } = options;
+      const host = getHost();
+      if (host && !(this.runtimeHandle instanceof HostFileHandle)) {
+        this.runtimeHandle = new HostFileHandle(host);
+        this.runtimeHandleWritable = true;
+      }
       if (this.runtimeHandle && this.runtimeHandleWritable) {
         state.autoSaveReady = true;
         state.autoSaveFileName = this.runtimeHandle.name || state.autoSaveFileName || "catch.json";
@@ -297,6 +362,7 @@
       }
 
       state.autoSaveLastResult = `已寫入 ${handle.name || "catch.json"}`;
+      reportToHost("catch_saved", state.autoSaveLastResult, { count: items.length });
       state.autoSaveReady = true;
       UI.update();
       return true;
@@ -304,6 +370,13 @@
 
     async refreshStatus() {
       try {
+        if (getHost()) {
+          await this.getReadyHandle();
+          state.autoSaveReady = true;
+          state.autoSaveFileName = this.runtimeHandle.name;
+          UI.update();
+          return;
+        }
         if (this.runtimeHandle && this.runtimeHandleWritable) {
           state.autoSaveReady = true;
           state.autoSaveFileName = this.runtimeHandle.name || state.autoSaveFileName || "";
@@ -1497,6 +1570,28 @@
     },
 
     async runUnsaveFromPickedFile() {
+      const host = getHost();
+      if (host) {
+        if (!isLikelySavedPage()) {
+          setError("請先切到 Threads 收藏頁（/saved）再執行取消儲存。");
+          return;
+        }
+        const list = typeof host.getUnsaveList === "function" ? await host.getUnsaveList() : null;
+        if (!list) {
+          return;
+        }
+        const payload = Array.isArray(list) ? { items: list } : list;
+        await this.loadAiResultsFromHandle({
+          name: "unsave.json",
+          getFile: async () => ({ text: async () => JSON.stringify(payload) })
+        });
+        if (state.suppressedAiKeys.size > 0) {
+          state.suppressedAiKeys = new Set();
+          saveState();
+        }
+        await UrlUnsaveUtils.run();
+        return;
+      }
       if (typeof window.showOpenFilePicker !== "function") {
         setError("目前瀏覽器不支援載入本機 JSON 檔案。");
         return;
@@ -1603,11 +1698,13 @@
         setError("unsave 分類中沒有高信心待取消項目。");
         return;
       }
-      const proceed = window.confirm(
-        `即將逐篇開啟 ${queue.length} 個貼文分頁執行取消儲存，各分頁處理完會自動關閉。\n` +
-        "需要先在 Chrome 允許 threads.com 的彈出式視窗。\n" +
-        "選單顯示「儲存」（代表原本就未收藏）的貼文會自動跳過。是否開始？"
-      );
+      const proceed = getHost()
+        ? true
+        : window.confirm(
+            `即將逐篇開啟 ${queue.length} 個貼文分頁執行取消儲存，各分頁處理完會自動關閉。\n` +
+            "需要先在 Chrome 允許 threads.com 的彈出式視窗。\n" +
+            "選單顯示「儲存」（代表原本就未收藏）的貼文會自動跳過。是否開始？"
+          );
       if (!proceed) {
         return;
       }
@@ -1678,6 +1775,14 @@
             index,
             queueLength: queue.length
           }).catch(() => {});
+          reportToHost("unsave_item", outcome, {
+            key: entry.key,
+            url: entry.url,
+            outcome,
+            detail,
+            index,
+            queueLength: queue.length
+          });
           setStatus(`逐篇取消進行中 (${index + 1}/${queue.length}): 已取消 ${counts.unsaved} / 跳過 ${counts.skipped} / 失敗 ${counts.failed}`);
           UI.update();
           if (consecutiveFailures >= URL_UNSAVE_MAX_CONSECUTIVE_FAILURES) {
@@ -1698,6 +1803,7 @@
         stopReason,
         failedKeys: failedKeys.slice(0, 20)
       }).catch(() => {});
+      reportToHost("unsave_finished", summary, { ...counts, stopReason, failedKeys: failedKeys.slice(0, 20) });
       if (stopReason === "popup_blocked") {
         // 不可被下面的失敗清單訊息蓋掉：彈窗設定是使用者必須採取的行動。
         setError(`${summary}。彈出式視窗被封鎖：請點網址列右側的封鎖圖示，選「一律允許 threads.com 的彈出式視窗」後重新執行。`);
@@ -2921,7 +3027,7 @@
         }, 0);
         if (newestCollectedMs > 0 && Date.now() - newestCollectedMs >= CAPTURE_STALE_ITEMS_WARN_MS) {
           const staleLabel = new Date(newestCollectedMs).toLocaleString();
-          const proceed = window.confirm(
+          const proceed = getHost() ? true : window.confirm(
             `偵測到 ${state.items.length} 筆先前收集的舊資料（最後收集於 ${staleLabel}）。\n` +
             "繼續抓取會把舊資料一起累積寫入 catch.json；若上次抓取後已執行過「取消儲存」，" +
             "已取消的貼文會再次被列入待取消清單。\n" +
@@ -3297,11 +3403,15 @@
 
   function setStatus(message) {
     state.status = message;
+    reportToHost("status", message);
     UI.update();
   }
 
   function setError(message) {
     state.lastError = message;
+    if (message) {
+      reportToHost("error", message);
+    }
     UI.update();
   }
 
