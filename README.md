@@ -2,7 +2,7 @@
 
 [English](README.en.md)
 
-> **最新更新（2026-09-15）**：修正抓取時貼文內文黏在一起的問題（userscript 0.5.5）——`/saved` 是虛擬捲動，舊版在貼文內文一時抓不到時會把整頁文字（鄰近貼文＋頁尾）當成內文，導致分類錯誤；現在只從該篇自己的容器補內文。請在 Tampermonkey 重新安裝 userscript。完整紀錄見 [RELEASE_NOTES.md](RELEASE_NOTES.md)。
+> **最新更新（2026-09-15）**：userscript 0.6.0。① 修正抓取時貼文內文黏在一起的問題（0.5.5）：`/saved` 是虛擬捲動，舊版在貼文內文一時抓不到時會把整頁文字（鄰近貼文＋頁尾）當成內文，導致分類錯誤；現在只從該篇自己的容器補內文。② 新增桌面版 app 用的 host adapter（0.6.0），Tampermonkey 使用者行為不變。請在 Tampermonkey 重新安裝 userscript。完整紀錄見 [RELEASE_NOTES.md](RELEASE_NOTES.md)。
 
 > 一般使用者版本：免裝 superpowers-chrome、免開 watcher、免 Chrome debug port。  
 > 完整自動化版本（terminal watcher + agent-driven scrape + Chandra OCR）請切到 `full` 分支。
