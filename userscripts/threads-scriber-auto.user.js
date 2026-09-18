@@ -1323,6 +1323,32 @@
       return Boolean(button.querySelector('svg[aria-label="排序"], svg[aria-label="Sort"]'));
     },
 
+    // 主貼文「⋯」鈕的 DOM 是 <div role="button" aria-haspopup="menu"><svg><title>更多</title>…</svg></div>：
+    // svg 沒有 aria-label，只有 <title>更多</title>。這顆鈕的 innerText 是
+    // ""（svg/title 不算可見文字），但 textContent 會撿到 "更多"。
+    // `innerText || textContent` 這種寫法在 innerText 為空字串（falsy）時
+    // 會誤落到 textContent，把這顆鈕當成「有文字」排除掉——實機驗證
+    // sawButton=false 就是這裡誤判。真正該看的是「可見文字」：
+    // - 瀏覽器環境一律信任 innerText（就算是空字串，也代表真的沒有可見文字）；
+    // - 假 DOM（測試用）沒有 innerText 語意時，退而求其次用 textContent
+    //   扣掉所有 svg > title 子孫的文字，避免圖示的 <title> 被當成內文。
+    visibleButtonText(element) {
+      if (!element) {
+        return "";
+      }
+      if (typeof element.innerText === "string") {
+        return element.innerText.trim();
+      }
+      let text = String(element.textContent || "");
+      const titleTexts = Array.from(element.querySelectorAll("svg title")).map((node) => String(node.textContent || ""));
+      for (const titleText of titleTexts) {
+        if (titleText) {
+          text = text.split(titleText).join("");
+        }
+      }
+      return text.trim();
+    },
+
     listPermalinkPostMenuButtons(root = document) {
       const isExcluded = (element) => {
         if (!element || element.isConnected === false) {
@@ -1334,8 +1360,7 @@
         if (this.isSortButtonElement(element)) {
           return true;
         }
-        const text = String(element.innerText || element.textContent || "").trim();
-        if (text) {
+        if (this.visibleButtonText(element)) {
           return true;
         }
         return false;

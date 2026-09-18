@@ -21,12 +21,14 @@ function extractMethod(name) {
 }
 
 const isSortButtonElement = extractMethod("isSortButtonElement");
+const visibleButtonText = extractMethod("visibleButtonText");
 const listPermalinkPostMenuButtons = extractMethod("listPermalinkPostMenuButtons");
 const findPermalinkPostMenuButton = extractMethod("findPermalinkPostMenuButton");
 
 function makeUtils() {
   return {
     isSortButtonElement,
+    visibleButtonText,
     listPermalinkPostMenuButtons,
     findPermalinkPostMenuButton
   };
@@ -38,12 +40,17 @@ function makeUtils() {
 // combinators (`[data-pressable-container] [aria-haspopup="menu"]`).
 
 class El {
-  constructor(tag, attrs = {}, { text = "", connected = true } = {}) {
+  constructor(tag, attrs = {}, { text = "", innerText, connected = true } = {}) {
     this.tagName = tag.toUpperCase();
     this.attributes = attrs;
     this.children = [];
     this.parentElement = null;
     this._text = text;
+    // Real DOM's innerText (layout-based, "" for a button whose only content
+    // is an invisible <svg><title>) differs from textContent (includes the
+    // title text). Elements below only set this explicitly when the
+    // distinction matters for the case under test.
+    this._innerText = innerText;
     this.isConnected = connected;
   }
 
@@ -71,7 +78,7 @@ class El {
   }
 
   get innerText() {
-    return this.textContent;
+    return this._innerText !== undefined ? this._innerText : this.textContent;
   }
 
   querySelectorAll(selector) {
@@ -179,6 +186,20 @@ function svg(ariaLabel) {
   return new El("svg", { "aria-label": ariaLabel });
 }
 
+// Real shape (confirmed on-page 2026-09-18): the post "..." icon carries no
+// aria-label at all, only a <title>更多</title> child. Its DOM textContent
+// picks up "更多" from that title, but its rendered innerText is "" since an
+// <svg><title> is not visible text.
+function svgWithTitle(titleText) {
+  return new El("svg", {}).append(new El("title", {}, { text: titleText }));
+}
+
+function postMenuButtonWithSvgTitle() {
+  return new El("div", { role: "button", "aria-haspopup": "menu" }, { innerText: "" }).append(
+    svgWithTitle("更多")
+  );
+}
+
 function realisticPageDom() {
   const documentRoot = new El("html");
 
@@ -196,11 +217,11 @@ function realisticPageDom() {
   sortContainer.append(sortButton);
 
   const mainPostContainer = new El("div", { "data-pressable-container": "true" });
-  const mainPostMenuButton = new El("div", { role: "button", "aria-haspopup": "menu" });
+  const mainPostMenuButton = postMenuButtonWithSvgTitle();
   mainPostContainer.append(mainPostMenuButton);
 
   const replyContainer = new El("div", { "data-pressable-container": "true" });
-  const replyMenuButton = new El("div", { role: "button", "aria-haspopup": "menu" });
+  const replyMenuButton = postMenuButtonWithSvgTitle();
   replyContainer.append(replyMenuButton);
 
   documentRoot.append(nav, columnHeader, sortContainer, mainPostContainer, replyContainer);
@@ -249,4 +270,23 @@ test("listPermalinkPostMenuButtons orders main post before replies and excludes 
   const { documentRoot, mainPostMenuButton, replyMenuButton } = realisticPageDom();
   const list = makeUtils().listPermalinkPostMenuButtons(documentRoot);
   assert.deepEqual(list, [mainPostMenuButton, replyMenuButton]);
+});
+
+test("a post menu button with empty innerText but textContent from svg title ('更多') is still selected", () => {
+  // Real on-page shape: <div role=button aria-haspopup=menu><svg><title>更多</title></svg></div>.
+  // innerText is "" (svg/title render no visible text); textContent is "更多".
+  // A naive `innerText || textContent` text check falls through to
+  // textContent when innerText is the falsy "", wrongly treating this as a
+  // "has text, exclude it" case.
+  const documentRoot = new El("html");
+  const postContainer = new El("div", { "data-pressable-container": "true" });
+  const postMenuButton = postMenuButtonWithSvgTitle();
+  postContainer.append(postMenuButton);
+  documentRoot.append(postContainer);
+
+  assert.equal(postMenuButton.innerText, "");
+  assert.equal(postMenuButton.textContent, "更多");
+
+  const found = makeUtils().findPermalinkPostMenuButton(documentRoot);
+  assert.equal(found, postMenuButton);
 });
