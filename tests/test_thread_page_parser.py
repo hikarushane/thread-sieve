@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 
-from note_generator.services.thread_page_parser import parse_thread_page
+from note_generator.services.thread_page_parser import parse_dom_thread, parse_thread_page
 
 
 def _item(code: str, username: str, text: str, reply_to: str | None = None) -> dict:
@@ -122,3 +122,61 @@ def test_items_without_code_or_user_are_dropped() -> None:
     data = parse_thread_page([blob], "FOCAL01")
     assert data.focal is not None
     assert data.ancestor_chain == []
+
+
+def _dom_post(code: str, handle: str, text: str, role: str, group: int = 0) -> dict:
+    return {
+        "code": code,
+        "authorHandle": handle,
+        "text": text,
+        "datetime": "2026-09-18T00:00:00.000Z",
+        "role": role,
+        "group": group,
+    }
+
+
+def test_parse_dom_thread_saved_root_with_two_reply_groups() -> None:
+    posts = [
+        _dom_post("FOCAL01", "original_poster", "母帖全文", "focal"),
+        _dom_post("R1", "commenter_a", "第一組回覆", "reply", group=1),
+        _dom_post("R2", "commenter_b", "第二組第一則", "reply", group=2),
+        _dom_post("R3", "commenter_c", "第二組第二則（同鏈）", "reply", group=2),
+    ]
+    data = parse_dom_thread(posts, "FOCAL01")
+    assert data.focal is not None
+    assert data.focal.code == "FOCAL01"
+    assert data.ancestor_chain == []
+    assert [p.code for p in data.reply_threads[0]] == ["R1"]
+    assert [p.code for p in data.reply_threads[1]] == ["R2", "R3"]
+    assert data.reply_threads[1][1].author_handle == "commenter_c"
+
+
+def test_parse_dom_thread_saved_reply_with_two_level_ancestors() -> None:
+    posts = [
+        _dom_post("ROOT01", "original_poster", "母帖全文", "ancestor"),
+        _dom_post("MID01", "replier_a", "中間層", "ancestor"),
+        _dom_post("FOCAL01", "replier_b", "收藏的回應", "focal"),
+    ]
+    data = parse_dom_thread(posts, "FOCAL01")
+    assert data.focal is not None
+    assert [p.code for p in data.ancestor_chain] == ["ROOT01", "MID01"]
+    assert data.ancestor_chain[0].author_handle == "original_poster"
+    assert data.reply_threads == []
+
+
+def test_parse_dom_thread_empty_posts_returns_no_focal() -> None:
+    data = parse_dom_thread([], "FOCAL01")
+    assert data.focal is None
+    assert data.ancestor_chain == []
+    assert data.reply_threads == []
+
+
+def test_parse_dom_thread_no_focal_role_returns_no_focal() -> None:
+    posts = [
+        _dom_post("ROOT01", "original_poster", "母帖全文", "ancestor"),
+        _dom_post("R1", "commenter_a", "回覆", "reply", group=1),
+    ]
+    data = parse_dom_thread(posts, "FOCAL01")
+    assert data.focal is None
+    assert data.ancestor_chain == []
+    assert data.reply_threads == []

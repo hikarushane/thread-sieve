@@ -1,5 +1,11 @@
 # 版本更新（Release Notes）
 
+## 2026-09-18（pipeline：回覆脈絡改由 DOM 抽取）
+
+- **背景**：Threads 改版後，貼文內頁內嵌 JSON 不再把主貼文放進 `thread_items`（主貼文改到 `…__bbox.result.data.media`；登入版完全沒有 `thread_items`），`thread_page_parser` 因此找不到主貼文，`ThreadsReplyEnricher` 一律退回純文字 fallback，筆記失去上文脈絡與回覆區。
+- **修正**：新增 `note_generator/services/dom_thread_extract.js`，改從已渲染的 DOM（貼文容器、作者連結、時間戳、內文 span）直接抽出串文結構（上文／主貼文／回覆分組），不再依賴內嵌 JSON 的欄位名稱。`PlaywrightThreadPageClient` 在既有抽取之後另外跑這段 DOM 抽取並附進 `PageSnapshot.dom_thread`；`ThreadsReplyEnricher` 原本走的內嵌 JSON 結構化路徑（`parse_thread_page`）找不到主貼文時，改用新的 `parse_dom_thread` 當備援，其餘規則（作者回覆歸類、字數門檻、回覆數上限、`saved_kind` 判斷）完全沿用。
+- 桌面版 app／lite 的 Playwright client 共用同一份 `dom_thread_extract.js`。
+
 ## 2026-09-18（userscript 0.6.1）
 
 - **修正逐篇取消儲存誤點排序鈕**：Threads 改版拿掉了貼文內頁主貼文「⋯」選單鈕的 `aria-label`，逐篇取消儲存 worker 沿用的舊 selector（pressable container 內第一顆 `svg[aria-label="更多"]`）因此誤點到「熱門／最新」排序鈕，選單開錯、worker 回報 `menu_not_opened`。

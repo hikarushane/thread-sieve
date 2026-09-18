@@ -53,9 +53,11 @@ class SnapshotFileThreadPageClient:
     def fetch_page_snapshot(self, url: str) -> PageSnapshot:
         entry = self._entry(url)
         blobs = entry.get("embeddedJsonBlobs") or []
+        dom_thread = entry.get("domThread") or []
         return PageSnapshot(
             body_text=entry.get("bodyText", "") or "",
             embedded_json_blobs=[str(blob) for blob in blobs],
+            dom_thread=list(dom_thread),
         )
 
     def _entry(self, url: str) -> dict:

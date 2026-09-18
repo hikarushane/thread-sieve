@@ -187,3 +187,44 @@ def test_saved_reply_self_thread_goes_to_author_replies() -> None:
     assert enriched.author_replies == ["收藏回應的自串第二段"]
     assert enriched.reply_threads == []
     assert "收藏回應的自串第二段" in enriched.combined_content
+
+
+def _dom_post(code: str, handle: str, text: str, role: str, group: int = 0) -> dict:
+    return {
+        "code": code,
+        "authorHandle": handle,
+        "text": text,
+        "datetime": "2026-09-18T00:00:00.000Z",
+        "role": role,
+        "group": group,
+    }
+
+
+def test_empty_blobs_with_dom_thread_uses_dom_path() -> None:
+    dom_posts = [
+        _dom_post("ROOT01", "original_poster", "母帖全文", "ancestor"),
+        _dom_post("MID01", "replier_a", "中間層回覆", "ancestor"),
+        _dom_post("FOCAL01", "replier_b", "收藏的回應完整全文", "focal"),
+        _dom_post("C1", "commenter_c", "這是一則超過十二個字的有料留言喔", "reply", group=1),
+    ]
+    enriched = _enricher(
+        PageSnapshot(body_text="", embedded_json_blobs=[], dom_thread=dom_posts)
+    ).enrich(_source())
+
+    assert enriched.reply_fetch_status == "fetched_structured"
+    assert enriched.saved_kind == "reply"
+    assert enriched.primary_content == "收藏的回應完整全文"
+    assert [p.code for p in enriched.ancestor_chain] == ["ROOT01", "MID01"]
+    assert len(enriched.reply_threads) == 1
+    assert enriched.reply_threads[0][0].code == "C1"
+
+
+def test_dom_thread_present_but_blobs_resolve_focal_use_json_path() -> None:
+    blob = _blob([_item("FOCAL01", "original_poster", "母帖全文（JSON 版）")])
+    dom_posts = [_dom_post("FOCAL01", "original_poster", "母帖全文（DOM 版，不應被使用）", "focal")]
+    enriched = _enricher(
+        PageSnapshot(body_text="", embedded_json_blobs=[blob], dom_thread=dom_posts)
+    ).enrich(_source(handle="@original_poster"))
+
+    assert enriched.reply_fetch_status == "fetched_structured"
+    assert enriched.primary_content == "母帖全文（JSON 版）"

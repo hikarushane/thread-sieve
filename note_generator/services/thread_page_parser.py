@@ -62,6 +62,61 @@ def parse_thread_page(json_blobs: list[str], focal_code: str) -> ThreadPageData:
     )
 
 
+def parse_dom_thread(dom_posts: list[dict], focal_code: str) -> ThreadPageData:
+    """Build ThreadPageData from DOM-extracted posts (see dom_thread_extract.js).
+
+    Each dom_post carries role in {"ancestor", "focal", "reply"} and, for
+    replies, a "group" index; adjacent replies sharing a group form one chain.
+    """
+    posts: list[ThreadPost] = []
+    for raw in dom_posts:
+        post = _to_thread_post_from_dom(raw)
+        if post is not None:
+            posts.append(post)
+
+    focal_index = next(
+        (index for index, raw in enumerate(dom_posts) if raw.get("role") == "focal"),
+        -1,
+    )
+    if focal_index < 0 or focal_index >= len(posts):
+        return ThreadPageData(focal=None)
+
+    focal = posts[focal_index]
+    ancestor_chain = [
+        posts[index]
+        for index, raw in enumerate(dom_posts)
+        if raw.get("role") == "ancestor"
+    ]
+
+    reply_threads: list[list[ThreadPost]] = []
+    current_group: object = None
+    for index, raw in enumerate(dom_posts):
+        if raw.get("role") != "reply":
+            continue
+        group = raw.get("group")
+        if group != current_group or not reply_threads:
+            reply_threads.append([])
+            current_group = group
+        reply_threads[-1].append(posts[index])
+
+    return ThreadPageData(
+        focal=focal,
+        ancestor_chain=ancestor_chain,
+        reply_threads=reply_threads,
+    )
+
+
+def _to_thread_post_from_dom(raw: object) -> ThreadPost | None:
+    if not isinstance(raw, dict):
+        return None
+    code = str(raw.get("code") or "")
+    author_handle = str(raw.get("authorHandle") or "").lstrip("/").lstrip("@")
+    if not code or not author_handle:
+        return None
+    text = str(raw.get("text") or "")
+    return ThreadPost(code=code, author_handle=author_handle, text=text, reply_to_handle="")
+
+
 def _collect_chains(data: object) -> list[list[ThreadPost]]:
     chains: list[list[ThreadPost]] = []
     _walk(data, chains)

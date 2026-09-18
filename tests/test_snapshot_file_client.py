@@ -98,3 +98,25 @@ def test_missing_items_dict_raises_at_construction(tmp_path: Path) -> None:
     path.write_text(json.dumps({"generatedAt": "2026-09-14T20:00:00Z"}), encoding="utf-8")
     with pytest.raises(SnapshotMissingError, match="items"):
         SnapshotFileThreadPageClient(path)
+
+
+def test_fetch_page_snapshot_returns_dom_thread(tmp_path: Path) -> None:
+    dom_posts = [
+        {
+            "code": "FOCAL01",
+            "authorHandle": "original_poster",
+            "text": "母帖全文",
+            "datetime": "2026-09-18T00:00:00.000Z",
+            "role": "focal",
+            "group": 0,
+        }
+    ]
+    client = SnapshotFileThreadPageClient(_write(tmp_path, {URL: _entry(domThread=dom_posts)}))
+    snapshot = client.fetch_page_snapshot(URL)
+    assert snapshot.dom_thread == dom_posts
+
+
+def test_fetch_page_snapshot_defaults_dom_thread_to_empty_list(tmp_path: Path) -> None:
+    client = SnapshotFileThreadPageClient(_write(tmp_path, {URL: _entry()}))
+    snapshot = client.fetch_page_snapshot(URL)
+    assert snapshot.dom_thread == []

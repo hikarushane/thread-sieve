@@ -1,17 +1,25 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Protocol
+import json
 import re
 
 from note_generator.models import EnrichedBookmark, SourceBookmark, ThreadPost
-from note_generator.services.thread_page_parser import parse_thread_page
+from note_generator.services.thread_page_parser import parse_dom_thread, parse_thread_page
 
 
 @dataclass(frozen=True)
 class PageSnapshot:
     body_text: str
     embedded_json_blobs: list[str]
+    dom_thread: list[dict] = field(default_factory=list)
+
+
+def load_dom_thread_js() -> str:
+    """Read the DOM thread extractor's source (see dom_thread_extract.js)."""
+    return Path(__file__).with_name("dom_thread_extract.js").read_text(encoding="utf-8")
 
 
 class ThreadPageClient(Protocol):
@@ -146,9 +154,19 @@ class PlaywrightThreadPageClient:
                     ).map((node) => node.textContent || "")
                      .filter((text) => text.includes("thread_items"))"""
                 )
+                dom_thread: list[dict] = []
+                try:
+                    focal_code = _extract_post_code(url)
+                    dom_js = load_dom_thread_js()
+                    dom_result = page.evaluate(f"({dom_js})({json.dumps(focal_code)})")
+                    if isinstance(dom_result, dict):
+                        dom_thread = list(dom_result.get("posts") or [])
+                except Exception:
+                    dom_thread = []
                 return PageSnapshot(
                     body_text=body_text,
                     embedded_json_blobs=[str(blob) for blob in blobs],
+                    dom_thread=dom_thread,
                 )
             finally:
                 browser.close()
@@ -184,7 +202,9 @@ class ThreadsReplyEnricher:
                 reply_fetch_status="fallback_to_primary",
             )
 
-        if self._thread_context_enabled and snapshot.embedded_json_blobs:
+        if self._thread_context_enabled and (
+            snapshot.embedded_json_blobs or snapshot.dom_thread
+        ):
             structured = self._enrich_structured(source, snapshot, primary_content)
             if structured is not None:
                 return structured
@@ -241,6 +261,8 @@ class ThreadsReplyEnricher:
 
         try:
             page_data = parse_thread_page(snapshot.embedded_json_blobs, focal_code)
+            if page_data.focal is None and snapshot.dom_thread:
+                page_data = parse_dom_thread(snapshot.dom_thread, focal_code)
             if page_data.focal is None:
                 return None
 
