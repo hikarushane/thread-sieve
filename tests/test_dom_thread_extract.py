@@ -26,14 +26,22 @@ def browser():
         browser.close()
 
 
-def _post_html(code: str, handle: str, body_lines: list[str], rel_time: str = "2h", likes: str = "12") -> str:
+def _post_html(
+    code: str,
+    handle: str,
+    body_lines: list[str],
+    rel_time: str = "2h",
+    likes: str = "12",
+    topic_tag: str | None = None,
+) -> str:
     body_spans = "\n".join(f'<span dir="auto">{line}</span>' for line in body_lines)
+    tag_span = f'<span dir="auto">{topic_tag}</span>' if topic_tag else ""
     return f"""
       <div data-pressable-container id="c-{code}">
+        <span dir="auto">{handle}</span>
+        {tag_span}
         <a href="/@{handle}/post/{code}"><time datetime="2026-09-18T00:00:00.000Z">{rel_time}</time></a>
         <div role="button"><svg><title>更多</title></svg></div>
-        <span dir="auto">{handle}</span>
-        <span dir="auto">{rel_time}</span>
         {body_spans}
         <span dir="auto">{likes}</span>
       </div>
@@ -56,9 +64,9 @@ MAIN_THREAD_HTML = f"""<!DOCTYPE html>
 <main>
   <div class="thread-section">
     <div class="post-list">
-      {_post_html("T1FOCAL", "author_focal", ["主貼文本文，這是收藏的原帖。"])}
+      {_post_html("T1FOCAL", "author_focal", ["主貼文本文，這是收藏的原帖。"], topic_tag="jev")}
       <div class="replies">
-        {_post_html("T1R1", "commenter_x", ["第一組唯一一則回覆。"])}
+        {_post_html("T1R1", "commenter_x", ["第一組唯一一則回覆。"], topic_tag="jev")}
         <div class="reply-chain">
           {_post_html("T1R2", "commenter_y", ["第二組第一則。"])}
           {_post_html("T1R3", "commenter_z", ["第二組第二則，同一條鏈。"])}
@@ -132,7 +140,12 @@ def test_extracts_focal_and_grouped_replies_excluding_related_and_cookie(browser
     assert "author_focal" not in focal_post["text"]
     assert "2h" not in focal_post["text"]
     assert "12" not in focal_post["text"]
+    assert "jev" not in focal_post["text"]
     assert "主貼文本文" in focal_post["text"]
+
+    reply_post = next(p for p in result["posts"] if p["code"] == "T1R1")
+    assert "jev" not in reply_post["text"]
+    assert "第一組唯一一則回覆" in reply_post["text"]
 
     context.close()
 

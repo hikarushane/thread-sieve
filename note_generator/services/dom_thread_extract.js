@@ -12,12 +12,18 @@
 //   out this way.
 // - Author handle = the handle segment of that href.
 // - Body text = the container's `span[dir="auto"]` elements' `innerText`
-//   (never `textContent` — icons carry `<svg><title>` text), in order:
-//   author name, optional topic tag, relative time, body..., like/reply
-//   counts. The body is what remains after dropping spans equal to the
-//   handle, equal to the `<time>` element's text, purely numeric/count
-//   spans (e.g. "12", "1.2萬", "3.4K"), and empty spans, then joining what's
-//   left with newlines.
+//   (never `textContent` — icons carry `<svg><title>` text), in DOM order:
+//   author name, optional topic tag, then the `<time>` element itself
+//   (the visible relative time), then body..., then like/reply counts.
+//   Author name and an optional topic-tag span both sit *before* `<time>`
+//   in document order, so the body must only consider spans that come
+//   *after* `<time>` (via `time.compareDocumentPosition(span) &
+//   Node.DOCUMENT_POSITION_FOLLOWING`) — this is what keeps the topic tag
+//   (and the author name) out of the body without relying on the display
+//   name happening to equal the handle. Among those following spans, the
+//   body is what remains after dropping spans equal to the `<time>`
+//   element's own text, purely numeric/count spans (e.g. "12", "1.2萬",
+//   "3.4K"), and empty spans, then joining what's left with newlines.
 // - The focal post is the one whose href code matches the caller's
 //   `focalCode`.
 // - Thread membership: for every valid container c, compute the DOM depth
@@ -86,7 +92,9 @@
     const code = match[2];
     const timeText = (time.innerText || "").trim();
 
-    const spans = Array.from(container.querySelectorAll('span[dir="auto"]'));
+    const spans = Array.from(container.querySelectorAll('span[dir="auto"]')).filter(
+      (span) => (time.compareDocumentPosition(span) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0
+    );
     const bodyLines = [];
     for (const span of spans) {
       const text = (span.innerText || "").trim();
