@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ThreadSieve (Auto)
 // @namespace    https://local-only.example/threads-sieve/
-// @version      0.6.0
+// @version      0.6.1
 // @description  ThreadSieve captures Threads saved posts and runs the AI-post unsave flow from a single pick-and-run button.
 // @author       threads-sieve
 // @match        https://threads.com/*
@@ -16,7 +16,7 @@
   "use strict";
 
   const STORAGE_KEY = "threadsSavedExportState";
-  const SCRIPT_VERSION = "0.6.0";
+  const SCRIPT_VERSION = "0.6.1";
   const PANEL_ID = "threads-saved-export-panel";
   const FILE_HANDLE_DB = "threadsSavedExportFileDb";
   const FILE_HANDLE_STORE = "handles";
@@ -1314,6 +1314,52 @@
         }
       }
       return this.findSpatialMoreButton(article);
+    },
+
+    isSortButtonElement(button) {
+      if (!button) {
+        return false;
+      }
+      return Boolean(button.querySelector('svg[aria-label="排序"], svg[aria-label="Sort"]'));
+    },
+
+    listPermalinkPostMenuButtons(root = document) {
+      const isExcluded = (element) => {
+        if (!element || element.isConnected === false) {
+          return true;
+        }
+        if (element.closest("[data-ai-review-control='true']")) {
+          return true;
+        }
+        if (this.isSortButtonElement(element)) {
+          return true;
+        }
+        const text = String(element.innerText || element.textContent || "").trim();
+        if (text) {
+          return true;
+        }
+        return false;
+      };
+
+      // Threads 已移除主貼文「⋯」的 aria-label，改用 aria-haspopup="menu"
+      // 辨識；仍要排除排序鈕（同樣在 pressable container 內、也有一顆
+      // aria-label=更多 的箭頭 svg）與帶文字的候選。
+      const primary = Array.from(root.querySelectorAll('[data-pressable-container] [aria-haspopup="menu"]'))
+        .filter((element) => !isExcluded(element));
+      if (primary.length > 0) {
+        return primary;
+      }
+
+      // 退回舊邏輯：pressable container 內的「更多」label svg，套用同一組排除條件。
+      return Array.from(
+        root.querySelectorAll('[data-pressable-container] svg[aria-label="更多"], [data-pressable-container] svg[aria-label="More"]')
+      )
+        .map((svgNode) => svgNode.closest("[role='button'], button"))
+        .filter((button) => !isExcluded(button));
+    },
+
+    findPermalinkPostMenuButton(root = document) {
+      return this.listPermalinkPostMenuButtons(root)[0] || null;
     },
 
     findSpatialMoreButton(article) {
@@ -3496,6 +3542,9 @@
 
     const targetPostId = AiReviewUtils.extractPostIdFromUrl(task.url);
 
+    // 誤開選單的保險：若點擊後開出的不是取消儲存選單，改試候選清單下一顆
+    // （最多輪替前 3 顆），例如舊 selector 誤點到排序鈕時。
+    let permalinkCandidateIndex = 0;
     const findLiveButton = () => {
       const articles = Array.from(document.querySelectorAll("article"));
       let article = null;
@@ -3508,13 +3557,11 @@
       }
       let button = article ? findWorkerMoreButton(article) : null;
       if (!button) {
-        // 貼文內頁沒有 <article>（只有 feed 用 article）。登入版頁面上
-        // 側欄漢堡與其他非貼文位置也有「更多」svg（且排在 DOM 更前面），
-        // 判別器：貼文的「更多」一定在 [data-pressable-container] 內，
-        // 導覽列的沒有。取第一顆符合者＝主貼文（回覆都排在其後）。
-        const svg = Array.from(document.querySelectorAll('svg[aria-label="更多"], svg[aria-label="More"]'))
-          .find((node) => node.closest("[data-pressable-container]") && !node.closest("[data-ai-review-control='true']"));
-        button = svg ? svg.closest("[role='button'], button") : null;
+        // 貼文內頁沒有 <article>（只有 feed 用 article），改用共用的
+        // findPermalinkPostMenuButton／listPermalinkPostMenuButtons：
+        // 靠 aria-haspopup="menu" 辨識主貼文的「⋯」，排除排序鈕與導覽列。
+        const candidates = AiReviewUtils.listPermalinkPostMenuButtons(document);
+        button = candidates[permalinkCandidateIndex] || candidates[0] || null;
       }
       return button && button.isConnected ? button : null;
     };
@@ -3544,6 +3591,17 @@
       AiReviewUtils.triggerElementClick(button);
       clickAttempts += 1;
       menuEntry = await AiReviewUtils.waitForSaveOrUnsaveMenuItem(2500);
+      if (!menuEntry) {
+        const openedWrongMenu = Array.from(document.querySelectorAll("[role='menuitem']"))
+          .some((item) => AiReviewUtils.isElementVisible(item));
+        if (openedWrongMenu) {
+          AiReviewUtils.closeOpenMenu();
+          if (permalinkCandidateIndex < 2) {
+            permalinkCandidateIndex += 1;
+          }
+          await wait(200);
+        }
+      }
     }
     if (!menuEntry) {
       const menuItemCount = document.querySelectorAll("[role='menuitem']").length;

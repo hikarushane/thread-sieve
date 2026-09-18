@@ -1,5 +1,12 @@
 # 版本更新（Release Notes）
 
+## 2026-09-18（userscript 0.6.1）
+
+- **修正逐篇取消儲存誤點排序鈕**：Threads 改版拿掉了貼文內頁主貼文「⋯」選單鈕的 `aria-label`，逐篇取消儲存 worker 沿用的舊 selector（pressable container 內第一顆 `svg[aria-label="更多"]`）因此誤點到「熱門／最新」排序鈕，選單開錯、worker 回報 `menu_not_opened`。
+- 改用 `aria-haspopup="menu"` 辨識主貼文選單鈕，並排除排序鈕與帶文字的候選；找不到時退回舊邏輯（仍套用同一組排除條件）。
+- 新增保險：點擊後若開出的不是取消儲存選單但確實開了別的選單，會關閉後改試候選清單下一顆（最多輪替前 3 顆）。
+- `<article>` 路徑（feed／既有測試 fixture）行為不變。
+
 ## 2026-09-15（userscript 0.6.0）
 
 - userscript 新增 host adapter：偵測到 `window.__threadSieveHost` 時，抓取結果、取消儲存清單與狀態改走桌面版 app；沒有 host 時行為與 0.5.5 相同。
