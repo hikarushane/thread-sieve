@@ -232,7 +232,7 @@ ThreadSieve 的分類、標題、tag 生成、圖片 OCR 四個階段都走 LLM�
 
 ## 存回應時的上文與回覆
 
-收藏的若是一則回應（而非原帖），classify 階段會匿名開啟該貼文的 permalink，從頁面內嵌資料抽出：
+收藏的若是一則回應（而非原帖），classify 階段會匿名開啟該貼文的 permalink 抽出串文結構。來源有兩層：先試頁面內嵌資料；Threads 於 2026-09 改版後內嵌資料常不含主貼文，此時改從已渲染的頁面（DOM）抽取同一串的上文與回覆，並排除頁面下方的「相關串文」推薦。抽出的內容：
 
 - **上文脈絡**：從母帖到你收藏那則回應的完整單線，寫進筆記的 `## 上文脈絡` 區（blockquote 縮排，逐則標注 `@作者`）。
 - **回覆區**：原帖作者的回覆（連同被回覆的留言成對呈現）與長度達門檻的留言，寫進 Obsidian 可摺疊 callout（`> [!quote]- 回覆（N 則…）`），預設收合。
@@ -289,8 +289,8 @@ pipeline 會在輸出目錄寫 `threads_events.jsonl` 事件紀錄；上文／�
 - File System Access 授權視為每次日常使用前的準備步驟；「設定自動存檔」的授權遺失時重新設定即可。`unsave.json` 不做持久綁定——每次執行取消儲存都重新選檔（刻意設計）。
 - OCR 會用 Playwright render Threads post；若缺 browser binary，執行 `playwright install chromium`。
 - LLM quota：每次 classify 對每篇貼文分類一次，接著為 markdown 標題和 tag 各呼叫一次；圖片 OCR 也消耗同一把 API key 的 quota。
-- 回覆區只收「匿名可見」的回覆：深層回覆與登入後才看得到的內容不會收錄。
-- Threads 改版可能使內嵌資料解析失效；此時自動退回舊的純文字解析（該篇筆記暫時沒有上文與回覆區，主文不受影響），`saved_kind` 會以 best-effort 標為 `root`。
+- lite 版以匿名方式開啟頁面，回覆區只收「匿名可見」的回覆：深層回覆與登入後才看得到的內容不會收錄。（桌面版以你的登入 session 擷取頁面，看得到登入後可見的回覆。）只收頁面已載入的回覆，不會自動展開「查看更多回覆」。
+- Threads 改版可能同時讓內嵌資料與 DOM 抽取失效；此時自動退回純文字解析（該篇筆記暫時沒有上文與回覆區，主文不受影響），`saved_kind` 會以 best-effort 標為 `root`。
 
 ---
 

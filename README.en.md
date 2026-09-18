@@ -225,7 +225,7 @@ Note: the standalone `scripts/image_ocr_to_markdown.py` CLI currently supports o
 
 ## Ancestor context and replies for saved replies
 
-When the saved bookmark is a reply (not a root post), the classify stage opens the post permalink anonymously and extracts from the page's embedded data:
+When the saved bookmark is a reply (not a root post), the classify stage opens the post permalink anonymously and extracts the thread structure. There are two sources: the page's embedded data is tried first; since the September 2026 Threads redesign that data often no longer contains the focal post, in which case the same thread's ancestors and replies are extracted from the rendered page (DOM), excluding the "Related threads" recommendations below the thread. Extracted content:
 
 - **Ancestor context**: the full single line from the root post down to the saved reply, written into the note's `## 上文脈絡` section (nested blockquotes, each post labeled with `@author`).
 - **Reply section**: the original poster's replies (paired with the comment they answer) plus comments above a length threshold, written into a collapsible Obsidian callout (`> [!quote]- 回覆（N 則…）`), collapsed by default.
@@ -282,8 +282,8 @@ The pipeline writes a `threads_events.jsonl` event log into the output directory
 - **File System Access grants are per-run setup**. Re-pick `catch.json` for autosave if the panel loses the grant; `unsave.json` is re-picked on every unsave run by design.
 - **LLM quota**: each classify run classifies every post once, then calls the LLM again for title generation and tag generation, plus (when triggered) image OCR — all from the same API key.
 - **Playwright is required for image OCR**: if browser binaries are missing, run `playwright install chromium`.
-- **The reply section only captures anonymously visible replies**: deeply nested replies and content behind the login wall are not collected.
-- **Threads redesigns may break the embedded-data parse**: the pipeline then falls back to the previous plain-text parsing (that note temporarily has no ancestor/reply sections; the main content is unaffected), and `saved_kind` is a best-effort `root`.
+- **The lite pipeline opens pages anonymously, so the reply section only captures anonymously visible replies**: deeply nested replies and content behind the login wall are not collected. (The desktop app captures pages with your logged-in session and does see login-only replies.) Only replies already loaded on the page are captured; "view more replies" is not expanded automatically.
+- **Threads redesigns may break both the embedded-data parse and the DOM extraction**: the pipeline then falls back to plain-text parsing (that note temporarily has no ancestor/reply sections; the main content is unaffected), and `saved_kind` is a best-effort `root`.
 
 ---
 
