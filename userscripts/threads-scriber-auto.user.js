@@ -1713,6 +1713,16 @@
       }
     },
 
+    normalizeWorkerResult(result) {
+      if (!result) {
+        return { outcome: "failed", detail: "timeout" };
+      }
+      return {
+        outcome: result.outcome || "failed",
+        detail: String(result.detail ?? "")
+      };
+    },
+
     buildQueue() {
       return state.aiItems
         .filter((item) => AiReviewUtils.getDecisionTier(item) === "high")
@@ -1821,8 +1831,7 @@
           } catch (_error) {
             // Tab may have navigated or closed itself; ignore.
           }
-          const outcome = result?.outcome || "failed";
-          const detail = result?.detail || "timeout";
+          const { outcome, detail } = this.normalizeWorkerResult(result);
           if (outcome === "unsaved") {
             counts.unsaved += 1;
             consecutiveFailures = 0;
