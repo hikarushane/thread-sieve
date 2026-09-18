@@ -5,6 +5,7 @@ chromium is unavailable."""
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
@@ -101,6 +102,124 @@ SAVED_REPLY_HTML = f"""<!DOCTYPE html>
   </div>
 </main>
 </body></html>"""
+
+
+LOGGED_IN_FOCAL_HANDLE = "mct20190801"
+LOGGED_IN_FOCAL_CODE = "LOGINFOCAL"
+
+
+def _logged_in_focal_container_html() -> str:
+    # Real content spans, then logged-in-only UI chrome spans that must be
+    # stripped from the DOM fallback: sort label, "查看動態", and the
+    # reply-composer placeholder ("回覆<handle>……").
+    return f"""
+      <div data-pressable-container id="c-{LOGGED_IN_FOCAL_CODE}">
+        <span dir="auto">{LOGGED_IN_FOCAL_HANDLE}</span>
+        <a href="/@{LOGGED_IN_FOCAL_HANDLE}/post/{LOGGED_IN_FOCAL_CODE}">
+          <time datetime="2026-09-18T00:00:00.000Z">7小時</time>
+        </a>
+        <div role="button"><svg><title>更多</title></svg></div>
+        <span dir="auto">酷斃了⋯</span>
+        <span dir="auto">新的應用方式又要來了嗎？</span>
+        <span dir="auto">熱門</span>
+        <span dir="auto">查看動態</span>
+        <span dir="auto">回覆{LOGGED_IN_FOCAL_HANDLE}……</span>
+        <span dir="auto">88</span>
+      </div>
+    """
+
+
+def _nested_caption_json(code: str, text: str) -> str:
+    # Mirrors the real nesting shape (require > [] > [] > [] > __bbox >
+    # result > data > media) without hardcoding it in the extractor.
+    return json.dumps(
+        {
+            "require": [
+                [
+                    "x",
+                    0,
+                    [
+                        {
+                            "__bbox": {
+                                "result": {
+                                    "data": {
+                                        "media": {
+                                            "code": code,
+                                            "caption": {"text": text},
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                ]
+            ]
+        }
+    )
+
+
+def _logged_in_page_html(embedded_script: str = "") -> str:
+    return f"""<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head>
+<body>
+<main>
+  <div class="thread-section">
+    <div class="post-list">
+      {_logged_in_focal_container_html()}
+    </div>
+  </div>
+</main>
+{embedded_script}
+</body></html>"""
+
+
+def test_logged_in_focal_prefers_embedded_caption_over_dom(browser) -> None:
+    context = browser.new_context()
+    page = context.new_page()
+    caption_json = _nested_caption_json(LOGGED_IN_FOCAL_CODE, "完整內文\n第二行")
+    script = f'<script type="application/json">{caption_json}</script>'
+    page.set_content(_logged_in_page_html(script))
+
+    result = _extract(page, LOGGED_IN_FOCAL_CODE)
+    focal_post = next(p for p in result["posts"] if p["code"] == LOGGED_IN_FOCAL_CODE)
+
+    assert focal_post["text"] == "完整內文\n第二行"
+    assert focal_post["textSource"] == "caption"
+
+    context.close()
+
+
+def test_logged_in_focal_falls_back_to_cleaned_dom_without_embedded_json(browser) -> None:
+    context = browser.new_context()
+    page = context.new_page()
+    page.set_content(_logged_in_page_html())
+
+    result = _extract(page, LOGGED_IN_FOCAL_CODE)
+    focal_post = next(p for p in result["posts"] if p["code"] == LOGGED_IN_FOCAL_CODE)
+
+    assert focal_post["text"] == "酷斃了⋯\n新的應用方式又要來了嗎？"
+    assert focal_post["textSource"] == "dom"
+    assert "熱門" not in focal_post["text"]
+    assert "查看動態" not in focal_post["text"]
+    assert "回覆" not in focal_post["text"]
+
+    context.close()
+
+
+def test_logged_in_focal_broken_embedded_json_falls_back_without_raising(browser) -> None:
+    context = browser.new_context()
+    page = context.new_page()
+    broken = f"not actually json but mentions {LOGGED_IN_FOCAL_CODE} inline"
+    script = f'<script type="application/json">{broken}</script>'
+    page.set_content(_logged_in_page_html(script))
+
+    result = _extract(page, LOGGED_IN_FOCAL_CODE)
+    focal_post = next(p for p in result["posts"] if p["code"] == LOGGED_IN_FOCAL_CODE)
+
+    assert focal_post["text"] == "酷斃了⋯\n新的應用方式又要來了嗎？"
+    assert focal_post["textSource"] == "dom"
+
+    context.close()
 
 
 def _extract(page, focal_code: str) -> dict:

@@ -41,6 +41,30 @@
 //   starts a new group unless its LCA-depth with the previous reply is
 //   greater than blockDepth (deeper => same reply chain). With 0 or 1
 //   replies, each reply (if any) is its own group.
+//
+// Logged-in-only facts (2026-09-18, verified against a real session inside
+// the desktop app): on the logged-in page, the *focal* post's container has
+// extra interface spans after `<time>` — sort labels ("熱門"/"Top",
+// "最新"/"Recent"), "查看動態"/"View activity", "尚無回覆"/"No replies yet",
+// and a "回覆<handle>……"/"Reply to <handle>" reply-composer placeholder —
+// that the anonymous page does not render. Ancestor and reply containers are
+// unaffected. Two-layer fix, applied only to the focal post:
+//   1. Prefer the embedded JSON caption: scan
+//      `script[type="application/json"]` nodes whose textContent contains
+//      focalCode, JSON.parse them, and walk the parsed tree (depth capped at
+//      60, stopping at the first match) for a node with
+//      `node.code === focalCode` and a string `node.caption.text`. The real
+//      page nests this under `require > [] > [] > [] > __bbox > result >
+//      data > media`, but the walk does not hardcode that path. Any parse or
+//      walk failure is swallowed and falls through to the DOM text.
+//   2. DOM fallback cleanup: walking the focal container's body lines in
+//      order, the first line that exactly equals "熱門", "最新", "查看動態",
+//      "尚無回覆", "Top", "Recent", "View activity", "No replies yet", or
+//      starts with "回覆" immediately followed by the focal's own handle, or
+//      matches /^Reply to /, truncates the body there (that line and
+//      everything after it is dropped).
+// The returned focal post carries an extra `textSource: "caption" | "dom"`
+// field recording which path produced its text; other roles do not.
 (focalCode) => {
   function ancestorChain(node) {
     const chain = [];
@@ -75,6 +99,61 @@
 
   const HREF_RE = /^\/@([^/]+)\/post\/([^/?#]+)/;
   const COUNT_RE = /^[\d,.]+(?:[KkMm萬千]+)?$/;
+  const UI_CHROME_STOP_LINES = new Set([
+    "熱門",
+    "最新",
+    "查看動態",
+    "尚無回覆",
+    "Top",
+    "Recent",
+    "View activity",
+    "No replies yet",
+  ]);
+
+  function stripLoggedInChrome(lines, handle) {
+    const out = [];
+    for (const line of lines) {
+      if (UI_CHROME_STOP_LINES.has(line)) break;
+      if (line.startsWith("回覆" + handle)) break;
+      if (/^Reply to /.test(line)) break;
+      out.push(line);
+    }
+    return out;
+  }
+
+  function findFocalCaptionText(code) {
+    const scripts = Array.from(document.querySelectorAll('script[type="application/json"]'));
+    for (const script of scripts) {
+      const raw = script.textContent || "";
+      if (!raw.includes(code)) continue;
+      let data;
+      try {
+        data = JSON.parse(raw);
+      } catch (e) {
+        continue;
+      }
+      const found = walkForCaption(data, code, 0);
+      if (found !== null) return found;
+    }
+    return null;
+  }
+
+  function walkForCaption(node, code, depth) {
+    if (depth > 60 || node === null || typeof node !== "object") return null;
+    if (!Array.isArray(node)) {
+      if (node.code === code && node.caption && typeof node.caption.text === "string") {
+        return node.caption.text;
+      }
+    }
+    const values = Array.isArray(node) ? node : Object.values(node);
+    for (const value of values) {
+      if (value !== null && typeof value === "object") {
+        const found = walkForCaption(value, code, depth + 1);
+        if (found !== null) return found;
+      }
+    }
+    return null;
+  }
 
   const containers = Array.from(document.querySelectorAll("[data-pressable-container]"));
   const entries = [];
@@ -95,7 +174,7 @@
     const spans = Array.from(container.querySelectorAll('span[dir="auto"]')).filter(
       (span) => (time.compareDocumentPosition(span) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0
     );
-    const bodyLines = [];
+    let bodyLines = [];
     for (const span of spans) {
       const text = (span.innerText || "").trim();
       if (!text) continue;
@@ -103,6 +182,9 @@
       if (text === timeText) continue;
       if (COUNT_RE.test(text)) continue;
       bodyLines.push(text);
+    }
+    if (code === focalCode) {
+      bodyLines = stripLoggedInChrome(bodyLines, handle);
     }
 
     entries.push({
@@ -149,13 +231,26 @@
     });
   }
 
+  let focalText = focalEntry.text;
+  let textSource = "dom";
+  try {
+    const caption = findFocalCaptionText(focalCode);
+    if (typeof caption === "string" && caption) {
+      focalText = caption;
+      textSource = "caption";
+    }
+  } catch (e) {
+    // fall through to the DOM-derived text below
+  }
+
   posts.push({
     code: focalEntry.code,
     authorHandle: focalEntry.authorHandle,
-    text: focalEntry.text,
+    text: focalText,
     datetime: focalEntry.datetime,
     role: "focal",
     group: 0,
+    textSource,
   });
 
   const replyEntries = threadEntries.slice(focalIndex + 1);
